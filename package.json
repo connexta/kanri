@@ -1,60 +1,69 @@
 {
-  "name": "admin-ui",
-  "author": "Codice",
+  "name": "@connexta/kanri",
+  "author": "connexta",
   "description": "An administration UI for DDF",
   "version": "0.0.1",
   "license": "LGPL-3.0",
-  "keywords": [
-    "backbone",
-    "express"
-  ],
+  "keywords": [],
   "repository": {
     "type": "git",
-    "url": "https://github.com/codice/ddf.git"
+    "url": "https://github.com/connexta/kanri.git"
   },
   "engines": {
     "node": ">=0.10.5"
   },
   "devDependencies": {
+    "@types/dropzone": "5.0.6",
+    "@types/iframe-resizer": "3.5.7",
+    "@types/lodash.debounce": "4.0.6",
+    "@types/lodash.throttle": "4.1.5",
     "@types/react": "16.8.23",
     "@types/react-dom": "16.8.4",
-    "@connexta/ace": "*"
+    "@types/react-router-dom": "4.3.5",
+    "@types/react-select": "3.0.2",
+    "@types/styled-components": "4.0.3",
+    "@connexta/ace": "git://github.com/connexta/ace.git#6f1c389898a1ee94aac54b9e7d5b1073a8b5853b",
+    "@connexta/eslint-config-connexta": "git://github.com/connexta/eslint-config-connexta.git#3f0caece6210d25c16863d472026fbfa069521a6",
+    "chokidar": "3.0.2",
+    "cpx": "1.5.0",
+    "lodash.debounce": "4.0.8",
+    "rimraf": "3.0.0",
+    "ts-node": "8.3.0",
+    "typescript": "3.5.3"
   },
   "dependencies": {
-    "@connexta/atlas": "0.0.35",
-    "backbone": "1.1.2",
-    "backbone-associations": "0.6.2",
-    "backbone-poller": "1.1.3",
-    "backbone-relational": "0.8.8",
-    "backbone.marionette": "1.8.8",
-    "backbone.modelbinder": "1.1.0",
-    "blueimp-file-upload": "9.25.1",
+    "@connexta/atlas": "0.0.46",
+    "dropzone": "5.5.1",
     "font-awesome": "4.7.0",
-    "iframe-resizer": "3.6.3",
-    "jquery": "3.2.1",
-    "jquery-ui": "1.12.1",
-    "js-cookie": "2.2.0",
-    "lodash": "4.17.5",
-    "logviewer-ui": "*",
-    "perfect-scrollbar": "1.4.0",
+    "formik": "1.5.8",
+    "iframe-resizer": "4.1.1",
+    "lodash.throttle": "4.1.1",
+    "@connexta/logviewer": "git://github.com/connexta/logviewer.git#17e7f603fbe5ba5d8edcd64c07787d065617deaa",
+    "prop-types": "15.7.2",
     "react": "16.8.6",
     "react-dom": "16.8.6",
-    "spin.js": "1.3.2",
-    "underscore": "1.8.3"
-  },
-  "alias": {
-    "modelbinder": "backbone.modelbinder",
-    "poller": "backbone-poller",
-    "backboneassociations": "backbone-associations",
-    "jqueryui": "jquery-ui",
-    "spin": "spin.js"
+    "react-router-dom": "5.0.1",
+    "styled-components": "4.3.2",
+    "yup": "0.27.0"
   },
   "scripts": {
-    "prestart": "ace disable-idp",
+    "copy:package": "cpx package.json dist && cpx \"src/**/!(*.tsx)\" \"dist/src\"",
     "start": "ace start",
-    "build": "ace bundle",
-    "postbuild": "ace package",
-    "m2": "yarn install:m2"
+    "prebuild": "rimraf dist && yarn copy:package",
+    "build": "tsc",
+    "build:standalone": "ace bundle",
+    "publish:npm": "yarn build && npm publish dist",
+    "m2": "yarn install:m2",
+    "watch": "ts-node -P ./tsconfig.json ./dev/index.tsx"
+  },
+  "ace": {
+    "whitelist": [],
+    "resolve": [
+      "react",
+      "react-dom",
+      "@material-ui/styles",
+      "styled-components"
+    ]
   },
   "files": [
     "src/main/webapp",
@@ -62,5 +71,9 @@
     "src/main/resources"
   ],
   "main": "src/main/webapp/main.js",
-  "context-path": "/admin"
+  "resolutions": {
+    "core-js": "2.6.9",
+    "@types/react": "16.8.23",
+    "@types/react-dom": "16.8.4"
+  }
 }

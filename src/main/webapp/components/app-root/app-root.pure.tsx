@@ -1,0 +1,133 @@
+import * as React from 'react'
+import { RouteChildrenProps } from 'react-router'
+import { setType } from '@connexta/atlas/typescript/hooks'
+
+export type PlatformConfigType = {
+  background: string
+  color: string
+  favIcon: string
+  footer: string
+  header: string
+  productImage: string
+  systemUsageMessage?: string
+  systemUsageOncePerSession?: boolean
+  systemUsageTitle?: string
+  timeout: number
+  title: string
+  vendorImage: string
+  version: string
+}
+
+export type AdminConfigType = {
+  branding: string
+  disabledInstallerApps: string
+}
+
+export type AlertType = {
+  alertAttribute?: string
+  alertLevel?: string
+  alertPattern?: string
+  count?: number
+  createddate?: string
+  'event.topics'?: string
+  details: string[]
+  hostAddress?: string
+  hostName?: string
+  id?: string
+  'last-updated'?: string
+  noticeTime?: string
+  priority?: number
+  source?: string
+  status?: string
+  timestamp?: number
+  title: string
+  type?: string
+}
+
+export type ModuleType = {
+  iframeLocation: string
+  name: string
+  active: boolean
+  cssLocation: string
+  id: string
+  jsLocation: string
+}
+
+export type ApplicationType = {
+  name: string
+  description: string
+}
+
+export type ApplicationTheme = 'light' | 'dark'
+
+export type MetatypeType = {
+  value: string[]
+  cardinality: number
+  defaultValue: string[]
+  description: string | null
+  id: string
+  name: string
+  optionLabels: string[]
+  optionValues: string[]
+  type: number
+}
+
+export type ExistingConfigurationType = {
+  bundle: number
+  bundle_location: string
+  bundle_name: string
+  enabled: boolean
+  fpid?: string
+  id: string
+  name: string
+  properties: {
+    [key: string]: string | boolean | number | string[] | boolean[] | number[]
+  }
+  // Let the child access parent info like metatype
+  service?: ConfigurationType
+}
+
+export type ConfigurationType = {
+  configurations?: ExistingConfigurationType[]
+  factory: boolean
+  id: string
+  fpid?: string
+  metatype: MetatypeType[]
+  name: string
+}
+
+export type FeatureType = {
+  name: string
+  repository: string
+  status: 'Uninstalled' | 'Installed'
+  version: string
+}
+
+// create context with no upfront defaultValue
+// without having to do undefined check all the time
+export function createCtx<A>() {
+  const ctx = React.createContext<A | undefined>(undefined)
+  function useCtx() {
+    const c = React.useContext(ctx)
+    if (!c) throw new Error('useCtx must be inside a Provider with a value')
+    return c
+  }
+  return [useCtx, ctx.Provider] as const // make TypeScript infer a tuple, not an array of union types
+}
+
+export const [useAppRootContext, AppRootContextProvider] = createCtx<{
+  platformConfig: PlatformConfigType
+  adminConfig: AdminConfigType
+  alerts: AlertType[]
+  fetchAlerts: () => Promise<void>
+  modules: ModuleType[]
+  fetchModules: () => Promise<void>
+  applications: ApplicationType[]
+  fetchApplications: () => Promise<void>
+  theme: ApplicationTheme
+  setTheme: setType<ApplicationTheme>
+}>()
+
+export const [useRouteContext, RouteContextProvider] = createCtx<{
+  routeProps: RouteChildrenProps
+}>()
