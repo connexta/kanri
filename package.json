@@ -22,7 +22,7 @@
     "@types/react-router-dom": "4.3.5",
     "@types/react-select": "3.0.2",
     "@types/styled-components": "4.0.3",
-    "@connexta/ace": "git://github.com/connexta/ace.git#6f1c389898a1ee94aac54b9e7d5b1073a8b5853b",
+    "@connexta/ace": "git://github.com/andrewkfiedler/ace.git#e0267416f6bdc5f1de30dbf4f20729ad32f95e01",
     "@connexta/eslint-config-connexta": "git://github.com/connexta/eslint-config-connexta.git#3f0caece6210d25c16863d472026fbfa069521a6",
     "chokidar": "3.0.2",
     "cpx": "1.5.0",
@@ -51,7 +51,7 @@
     "start": "ace start",
     "prebuild": "rimraf dist && yarn copy:package",
     "build": "tsc",
-    "build:standalone": "ace bundle && cpx dev/_redirects target/webapp/",
+    "build:standalone": "ace bundle --env netlify && cpx dev/_redirects target/webapp/",
     "publish:npm": "yarn build && npm publish dist",
     "m2": "yarn install:m2",
     "watch": "ts-node -P ./tsconfig.json ./dev/index.tsx"

@@ -12,11 +12,18 @@
  * <http://www.gnu.org/licenses/lgpl.html>.
  *
  **/
-
+// these variables are defined during the build
+/* global __ENV__ */
 import * as React from 'react'
 import * as ReactDom from 'react-dom'
 import { AppRoot } from './components/app-root'
 
 // setup the area that the modules will load into and asynchronously require in each module
 // so that it can render itself into the area that was just constructed for it
-ReactDom.render(<AppRoot />, document.querySelector('#root'))
+if (__ENV__ === 'netlify') {
+  fetch('/admin/').catch().then(() => {
+    ReactDom.render(<AppRoot />, document.querySelector('#root'))
+  })
+} else {
+  ReactDom.render(<AppRoot />, document.querySelector('#root'))
+}
