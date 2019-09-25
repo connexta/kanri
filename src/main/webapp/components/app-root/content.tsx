@@ -7,6 +7,17 @@ import { useAppRootContext } from '../app-root/app-root.pure'
 import { Route, Switch } from 'react-router-dom'
 import { InstanceRouteContextProvider } from './route'
 import { Iframe } from '../iframe/iframe'
+import { ID_TO_NAME } from './links'
+
+const Wizards = () => {
+  const { modules } = useAppRootContext()
+  const wizardsModule = modules.filter(module => module.id === 'setup')[0]
+  if (wizardsModule === undefined) {
+    return <div>Docs not yet available</div>
+  }
+  const srcUrl = wizardsModule.iframeLocation
+  return <Iframe url={srcUrl} />
+}
 
 const Docs = () => {
   const { modules } = useAppRootContext()
@@ -58,10 +69,11 @@ export const Content = () => {
         render={routeProps => {
           const currentModule = modules.filter(
             module =>
-              module.name.toLowerCase() === routeProps.match.params.moduleId
+              ID_TO_NAME[module.id].toLowerCase() ===
+              routeProps.match.params.moduleId
           )[0]
           if (currentModule !== undefined) {
-            switch (currentModule.name) {
+            switch (ID_TO_NAME[currentModule.id]) {
               case 'System':
                 return (
                   <InstanceRouteContextProvider>
@@ -76,12 +88,14 @@ export const Content = () => {
                 )
               case 'Documentation':
                 return <Docs />
-              case 'Setup':
+              case 'Installer':
                 return (
                   <InstanceRouteContextProvider>
                     <Installer />
                   </InstanceRouteContextProvider>
                 )
+              case 'Wizards':
+                return <Wizards />
             }
           }
           return <NoMatch />
