@@ -7,6 +7,7 @@ import {
   InfoIcon,
   InstallerIcon,
   AppsIcon,
+  CardModeIcon,
 } from '@connexta/atlas/atoms/icons'
 import {
   List,
@@ -15,11 +16,20 @@ import {
   ListItemText,
 } from '@connexta/atlas/atoms/list'
 
-const NAME_TO_ICON = {
-  Applications: AppsIcon,
-  Documentation: BookIcon,
-  Setup: InstallerIcon,
-  System: InfoIcon,
+const ID_TO_ICON = {
+  applications: AppsIcon,
+  docs: BookIcon,
+  installation: InstallerIcon,
+  configurations: InfoIcon,
+  setup: CardModeIcon,
+} as { [key: string]: any }
+
+export const ID_TO_NAME = {
+  applications: 'Applications',
+  docs: 'Documentation',
+  installation: 'Installer',
+  configurations: 'System',
+  setup: 'Wizards',
 } as { [key: string]: any }
 
 export const Links = () => {
@@ -30,15 +40,15 @@ export const Links = () => {
     <>
       <List>
         {modules.map(module => {
-          const Icon = NAME_TO_ICON[module.name] as any
-          const url = `/admin/${module.name.toLowerCase()}`
+          const Icon = ID_TO_ICON[module.id] as any
+          const url = `/admin/${ID_TO_NAME[module.id].toLowerCase()}`
           const isCurrentUrl = location.pathname.indexOf(url) !== -1
 
           return (
             <Link to={url} key={url}>
               <ListItem button selected={isCurrentUrl} tabIndex={-1}>
                 <ListItemIcon>{Icon ? <Icon /> : <></>}</ListItemIcon>
-                <ListItemText primary={module.name} />
+                <ListItemText primary={ID_TO_NAME[module.id]} />
               </ListItem>
             </Link>
           )
