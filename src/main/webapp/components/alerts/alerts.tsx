@@ -1,5 +1,5 @@
 import * as React from 'react'
-import fetch from '@connexta/atlas/functions/fetch'
+import { COMMANDS } from '../fetch/fetch'
 import { Paper } from '@connexta/atlas/atoms/paper'
 import { Grid } from '@connexta/atlas/atoms/grid'
 import { Typography } from '@connexta/atlas/atoms/typography'
@@ -54,7 +54,7 @@ export const Alerts = () => {
                                 return
                               }
                               setLoading(true)
-                              await fetch(ALERTS_DISMISS_URL, {
+                              await COMMANDS.FETCH(ALERTS_DISMISS_URL, {
                                 method: 'POST',
                                 body: JSON.stringify(createPayload(alert.id)),
                               })

@@ -4,11 +4,11 @@ import { Grid } from '@connexta/atlas/atoms/grid'
 import { Button } from '@connexta/atlas/atoms/button'
 import { Step } from './step'
 import { CircularProgress } from '@connexta/atlas/atoms/progress'
-import fetch from '@connexta/atlas/functions/fetch'
 import { InfoIcon } from '@connexta/atlas/atoms/icons'
 import { TextField } from '@connexta/atlas/atoms/input'
 import { Tooltip } from '@connexta/atlas/atoms/tooltip'
 import { Typography } from '@connexta/atlas/atoms/typography'
+import { COMMANDS } from '../fetch/fetch'
 
 const SYSTEM_PROPERTIES_READ_URL =
   '/admin/jolokia/exec/org.codice.ddf.ui.admin.api:type=SystemPropertiesAdminMBean/readSystemProperties'
@@ -54,22 +54,19 @@ export const SystemConfiguration = () => {
   const [attributes, setAttributes] = React.useState([] as AttributeType[])
   const { nextStep, previousStep } = React.useContext(InstallerContext)
 
-  React.useEffect(
-    () => {
-      if (mode === 'loading') {
-        fetch(SYSTEM_PROPERTIES_READ_URL)
-          .then(response => response.json())
-          .then(data => {
-            setAttributes(data.value)
-            setMode('normal')
-          })
-      }
-    },
-    [mode]
-  )
+  React.useEffect(() => {
+    if (mode === 'loading') {
+      COMMANDS.FETCH(SYSTEM_PROPERTIES_READ_URL)
+        .then(response => response.json())
+        .then(data => {
+          setAttributes(data.value)
+          setMode('normal')
+        })
+    }
+  }, [mode])
   React.useEffect(() => {
     if (mode === 'submitting') {
-      fetch(SYSTEM_PROPERTIES_WRITE_URL, {
+      COMMANDS.FETCH(SYSTEM_PROPERTIES_WRITE_URL, {
         method: 'POST',
         body: JSON.stringify(createPayload(attributes)),
       })

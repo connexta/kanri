@@ -10,7 +10,6 @@ import { Theme } from './theme'
 
 setConfig({ logLevel: 'debug' })
 
-import fetch from '@connexta/atlas/functions/fetch'
 const PLATFORM_CONFIG_URL = '/services/platform/config/ui'
 const ADMIN_CONFIG_URL = '/services/admin/config'
 const ALERTS_GET_URL =
@@ -31,6 +30,7 @@ import { SessionRefresher } from '../session-refresher/session-refresher'
 import { SessionTimeout } from '../session-timeout/session-timeout'
 import { SystemUsage } from '../system-usage/system-usage'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import { COMMANDS } from '../fetch/fetch'
 
 const AppRoot = () => {
   const [theme, setTheme] = React.useState('light' as ApplicationTheme)
@@ -44,33 +44,33 @@ const AppRoot = () => {
     [] as ApplicationType[]
   )
   const fetchAlerts = () => {
-    return fetch(ALERTS_GET_URL)
+    return COMMANDS.FETCH(ALERTS_GET_URL)
       .then(response => response.json())
       .then(data => {
         setAlerts(data.value)
       })
   }
   const fetchModules = () => {
-    return fetch(MODULES_URL)
+    return COMMANDS.FETCH(MODULES_URL)
       .then(response => response.json())
       .then(data => {
         setModules(data.value)
       })
   }
   const fetchApplications = () => {
-    return fetch(APPLICATIONS_URL)
+    return COMMANDS.FETCH(APPLICATIONS_URL)
       .then(response => response.json())
       .then(data => {
         setApplications(data.value)
       })
   }
   React.useEffect(() => {
-    fetch(PLATFORM_CONFIG_URL)
+    COMMANDS.FETCH(PLATFORM_CONFIG_URL)
       .then(response => response.json())
       .then(data => {
         setPlatformConfig(data)
       })
-    fetch(ADMIN_CONFIG_URL)
+    COMMANDS.FETCH(ADMIN_CONFIG_URL)
       .then(response => response.json())
       .then(data => {
         setAdminConfig(data)

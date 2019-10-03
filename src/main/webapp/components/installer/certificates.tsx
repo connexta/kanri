@@ -11,7 +11,7 @@ import { TextField, Select, MenuItem } from '@connexta/atlas/atoms/input'
 import { Tooltip } from '@connexta/atlas/atoms/tooltip'
 import { createGlobalStyle } from 'styled-components'
 import { setType } from '@connexta/atlas/typescript/hooks'
-import fetch from '@connexta/atlas/functions/fetch'
+import { COMMANDS } from '../fetch/fetch'
 
 const SYSTEM_PROPERTIES_READ_URL =
   '/admin/jolokia/exec/org.codice.ddf.ui.admin.api:type=SystemPropertiesAdminMBean/readSystemProperties'
@@ -183,7 +183,7 @@ export const Certificates = () => {
 
   React.useEffect(() => {
     if (mode === 'loading') {
-      fetch(SYSTEM_PROPERTIES_READ_URL)
+      COMMANDS.FETCH(SYSTEM_PROPERTIES_READ_URL)
         .then(response => response.json())
         .then(data => {
           setHostName(
@@ -199,7 +199,7 @@ export const Certificates = () => {
   React.useEffect(() => {
     if (mode === 'submitting' && hostName) {
       if (subMode === 'demo') {
-        fetch(CERTIFICATE_DEMO_URL, {
+        COMMANDS.FETCH(CERTIFICATE_DEMO_URL, {
           method: 'POST',
           body: JSON.stringify(getDemoPayload({ hostName: hostName.value })),
         }).then(() => {
@@ -207,7 +207,7 @@ export const Certificates = () => {
           nextStep()
         })
       } else if (subMode === 'provide') {
-        fetch(CERTIFICATE_REPLACE_URL, {
+        COMMANDS.FETCH(CERTIFICATE_REPLACE_URL, {
           method: 'POST',
           body: JSON.stringify(
             getReplacePayload({

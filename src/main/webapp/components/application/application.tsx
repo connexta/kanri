@@ -5,10 +5,10 @@ import { Typography } from '@connexta/atlas/atoms/typography'
 import { Tabs, Tab } from '@connexta/atlas/atoms/tabs'
 import { Services } from '../services/services'
 import { CircularProgress } from '@connexta/atlas/atoms/progress'
-import fetch from '@connexta/atlas/functions/fetch'
 import { ApplicationType, getDisplayName } from '../../types/App'
 import { useRouteContext } from '../app-root/app-root.pure'
 import { Iframe } from '../iframe/iframe'
+import { COMMANDS } from '../fetch/fetch'
 
 const DYNAMIC_PLUGINS_URL =
   '/admin/jolokia/exec/org.codice.ddf.admin.application.service.ApplicationService:service=application-service/getPluginsForApplication(java.lang.String)/'
@@ -62,7 +62,7 @@ const Application = ({ app }: Props) => {
   const [loading, setLoading] = React.useState(true)
   const [collection, setCollection] = React.useState([] as TabType[])
   React.useEffect(() => {
-    fetch(DYNAMIC_PLUGINS_URL + app.name)
+    COMMANDS.FETCH(DYNAMIC_PLUGINS_URL + app.name)
       .then(response => response.json())
       .then(data => {
         const plugins = [

@@ -12,7 +12,7 @@ import { Typography } from '@connexta/atlas/atoms/typography'
 import { CircularProgress } from '@connexta/atlas/atoms/progress'
 import { Button } from '@connexta/atlas/atoms/button'
 import { Grid } from '@connexta/atlas/atoms/grid'
-import fetch from '@connexta/atlas/functions/fetch'
+import { COMMANDS } from '../fetch/fetch'
 
 const PROFILE_INSTALL_URL =
   '/admin/jolokia/exec/org.codice.ddf.admin.application.service.ApplicationService:service=application-service/installFeature(java.lang.String)/'
@@ -30,7 +30,7 @@ export const Profile = () => {
   const [mode, setMode] = React.useState('normal' as ModeType)
   React.useEffect(() => {
     if (mode === 'installing' && profile !== undefined) {
-      fetch(PROFILE_INSTALL_URL + profile.name)
+      COMMANDS.FETCH(PROFILE_INSTALL_URL + profile.name)
         .then(response => response.json())
         .then(data => {
           if (data.status === 200) {
