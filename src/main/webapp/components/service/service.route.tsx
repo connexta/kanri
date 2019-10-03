@@ -47,6 +47,7 @@ export const ServiceRoute = ({
     <ControlledModal
       defaultOpen={true}
       modalProps={{
+        disableBackdropClick: true,
         onClose: () => {
           history.push(goBackUrl)
         },
