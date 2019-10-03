@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Typography } from '@connexta/atlas/atoms/typography'
-import fetch from '@connexta/atlas/functions/fetch'
+import { COMMANDS } from '../fetch/fetch'
 const TimeUtil = require('js/util/TimeUtil')
 const UnitsUtil = require('js/util/UnitsUtil')
 
@@ -29,49 +29,46 @@ type ModeType = 'loading' | 'normal'
 export const SystemInformation = () => {
   const [systemInfo, setSystemInfo] = React.useState({} as SystemInfoType)
   const [mode, setMode] = React.useState('loading' as ModeType)
-  React.useEffect(
-    () => {
-      if (mode === 'loading') {
-        fetch(SYSTEM_INFO_URL)
-          .then(response => response.json())
-          .then(systemInfoData => {
-            fetch(OPERATING_SYSTEM_URL)
-              .then(response => response.json())
-              .then(operatingInfoData => {
-                var systemData = systemInfoData.value
-                var operatingSystemData = operatingInfoData.value
-                var uptime = TimeUtil.convertUptimeToString(systemData.Uptime)
-                var usedMemory = UnitsUtil.convertBytesToDisplay(
-                  operatingSystemData.TotalPhysicalMemorySize -
-                    operatingSystemData.FreePhysicalMemorySize
-                )
-                var totalMemory = UnitsUtil.convertBytesToDisplay(
-                  operatingSystemData.TotalPhysicalMemorySize
-                )
-                var freeMemory = UnitsUtil.convertBytesToDisplay(
+  React.useEffect(() => {
+    if (mode === 'loading') {
+      COMMANDS.FETCH(SYSTEM_INFO_URL)
+        .then(response => response.json())
+        .then(systemInfoData => {
+          COMMANDS.FETCH(OPERATING_SYSTEM_URL)
+            .then(response => response.json())
+            .then(operatingInfoData => {
+              var systemData = systemInfoData.value
+              var operatingSystemData = operatingInfoData.value
+              var uptime = TimeUtil.convertUptimeToString(systemData.Uptime)
+              var usedMemory = UnitsUtil.convertBytesToDisplay(
+                operatingSystemData.TotalPhysicalMemorySize -
                   operatingSystemData.FreePhysicalMemorySize
-                )
-                var startTime = new Date(systemData.StartTime).toLocaleString()
+              )
+              var totalMemory = UnitsUtil.convertBytesToDisplay(
+                operatingSystemData.TotalPhysicalMemorySize
+              )
+              var freeMemory = UnitsUtil.convertBytesToDisplay(
+                operatingSystemData.FreePhysicalMemorySize
+              )
+              var startTime = new Date(systemData.StartTime).toLocaleString()
 
-                setSystemInfo({
-                  systemInformation: systemData,
-                  operatingSystem: operatingSystemData,
-                  startTime: startTime,
-                  uptime: uptime,
-                  usedMemory: usedMemory,
-                  totalMemory: totalMemory,
-                  freeMemory: freeMemory,
-                  runtime: systemData.SystemProperties['java.runtime.name'],
-                  runtimeVersion:
-                    systemData.SystemProperties['java.runtime.version'],
-                })
-                setMode('normal')
+              setSystemInfo({
+                systemInformation: systemData,
+                operatingSystem: operatingSystemData,
+                startTime: startTime,
+                uptime: uptime,
+                usedMemory: usedMemory,
+                totalMemory: totalMemory,
+                freeMemory: freeMemory,
+                runtime: systemData.SystemProperties['java.runtime.name'],
+                runtimeVersion:
+                  systemData.SystemProperties['java.runtime.version'],
               })
-          })
-      }
-    },
-    [mode]
-  )
+              setMode('normal')
+            })
+        })
+    }
+  }, [mode])
 
   switch (mode) {
     case 'loading':

@@ -2,6 +2,16 @@ import fetch, { FetchProps } from '@connexta/atlas/functions/fetch'
 import { ConfigurationType, FeatureType } from '../app-root/app-root.pure'
 
 /**
+ * Whenever using a url (fetch or iframe, etc) you should use this as it will
+ * ensure that it works under a reverse proxy.
+ * @param url
+ */
+export const handleReverseProxy = (url: string) => {
+  const context = window.location.pathname.split('/beta/admin/')[0] // normally "" unless we're under a reverse proxy
+  return `${context}${url}`
+}
+
+/**
  * Handy place for all our backend interaction information
  */
 
@@ -129,7 +139,7 @@ export const URLS = {
 
 export const COMMANDS = {
   FETCH: ((url, options) => {
-    return fetch(url, options)
+    return fetch(handleReverseProxy(url), options)
   }) as FetchProps,
   SESSION: {
     RENEW: () => {

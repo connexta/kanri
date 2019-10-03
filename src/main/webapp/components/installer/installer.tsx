@@ -3,7 +3,6 @@ import {
   CircularProgress,
   LinearProgress,
 } from '@connexta/atlas/atoms/progress'
-import fetch from '@connexta/atlas/functions/fetch'
 import { Welcome } from './welcome'
 import { Profile } from './profile'
 import { GuestClaims } from './guest-claims'
@@ -14,6 +13,7 @@ import { ProfileType, InstallerContext } from './installer.pure'
 import { Finish } from './finish'
 import { Paper } from '@connexta/atlas/atoms/paper'
 import { InstanceRouteContextProvider } from '../app-root/route'
+import { COMMANDS } from '../fetch/fetch'
 
 const PROFILES_URL =
   '/admin/jolokia/read/org.codice.ddf.admin.application.service.ApplicationService:service=application-service/InstallationProfiles/'
@@ -76,7 +76,7 @@ export const Installer = ({  }: Props) => {
     setStep(step - 1)
   }
   React.useEffect(() => {
-    fetch(PROFILES_URL)
+    COMMANDS.FETCH(PROFILES_URL)
       .then(response => response.json())
       .then(profiles => {
         setProfiles(profiles.value)

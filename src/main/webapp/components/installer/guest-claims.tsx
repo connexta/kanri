@@ -6,7 +6,6 @@ import { Button } from '@connexta/atlas/atoms/button'
 import { Typography } from '@connexta/atlas/atoms/typography'
 import { CircularProgress } from '@connexta/atlas/atoms/progress'
 import { RemoveIcon } from '@connexta/atlas/atoms/icons'
-import fetch from '@connexta/atlas/functions/fetch'
 import {
   FormControl,
   FormLabel,
@@ -15,6 +14,7 @@ import {
   CreatableSelect,
   TextField,
 } from '@connexta/atlas/atoms/input'
+import { COMMANDS } from '../fetch/fetch'
 
 const GUEST_CLAIMS_URL =
   '/admin/jolokia/exec/org.codice.ddf.ui.admin.api.ConfigurationAdmin:service=ui,version=2.3.0/getClaimsConfiguration/(service.pid%3Dddf.security.guest.realm)'
@@ -108,7 +108,7 @@ export const GuestClaims = () => {
 
   React.useEffect(() => {
     if (mode === 'submitting update guest claims') {
-      fetch(GUEST_CLAIMS_ADD_URL, {
+      COMMANDS.FETCH(GUEST_CLAIMS_ADD_URL, {
         method: 'POST',
         body: JSON.stringify(createPayload(attributes)),
       })
@@ -124,7 +124,7 @@ export const GuestClaims = () => {
   }, [mode])
   React.useEffect(() => {
     if (mode === 'submitting update') {
-      fetch(GUEST_CLAIMS_ADD_URL, {
+      COMMANDS.FETCH(GUEST_CLAIMS_ADD_URL, {
         method: 'POST',
         body: JSON.stringify(createPayload(attributes, OPERATION_UPDATE)),
       })
@@ -141,7 +141,7 @@ export const GuestClaims = () => {
   }, [mode])
   React.useEffect(() => {
     if (mode === 'loading') {
-      fetch(GUEST_CLAIMS_URL)
+      COMMANDS.FETCH(GUEST_CLAIMS_URL)
         .then(response => response.json())
         .then(data => {
           const serviceInfo = data.value as ServiceType

@@ -2,6 +2,7 @@ import * as React from 'react'
 // @ts-ignore
 import { iframeResizer } from 'iframe-resizer'
 import { useAppRootContext } from '../app-root/app-root.pure'
+import { handleReverseProxy } from '../fetch/fetch'
 type Props = {
   url?: string
 }
@@ -12,10 +13,10 @@ export const Iframe = ({ url }: Props) => {
   React.useLayoutEffect(() => {
     iframeResizer(null, 'iframe')
   })
-  let fixedUrl = url ? `/admin${url.substring(1)}` : url
+  let fixedUrl = url ? `/admin${url.substring(1)}` : ''
   return (
     <iframe
-      src={fixedUrl}
+      src={handleReverseProxy(fixedUrl)}
       width="100%"
       scrolling="no"
       style={{

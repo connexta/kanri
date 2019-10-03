@@ -5,7 +5,6 @@ import { Grid } from '@connexta/atlas/atoms/grid'
 import { Button } from '@connexta/atlas/atoms/button'
 import { CircularProgress } from '@connexta/atlas/atoms/progress'
 import { Typography } from '@connexta/atlas/atoms/typography'
-import fetch from '@connexta/atlas/functions/fetch'
 import { Paper } from '@connexta/atlas/atoms/paper'
 import {
   TextField,
@@ -14,6 +13,7 @@ import {
   MenuItem,
 } from '@connexta/atlas/atoms/input'
 import { AddIcon, RemoveIcon } from '@connexta/atlas/atoms/icons'
+import { COMMANDS } from '../fetch/fetch'
 
 type MetatypeEntryValueTypeSingle = string | number | boolean
 
@@ -109,7 +109,7 @@ export const SSO = () => {
   const [mode, setMode] = React.useState('loading' as ModeType)
   React.useEffect(() => {
     if (mode === 'submitting') {
-      fetch(
+      COMMANDS.FETCH(
         '/admin/jolokia/exec/org.codice.ddf.ui.admin.api.ConfigurationAdmin:service=ui,version=2.3.0',
         {
           method: 'POST',
@@ -129,7 +129,7 @@ export const SSO = () => {
     }
   }, [mode])
   React.useEffect(() => {
-    fetch(
+    COMMANDS.FETCH(
       '/admin/jolokia/read/org.codice.ddf.ui.admin.api.ConfigurationAdmin:service=ui,version=2.3.0/SsoConfigurations'
     )
       .then(response => response.json())

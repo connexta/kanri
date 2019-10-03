@@ -3,9 +3,9 @@ import { Step } from './step'
 import { Typography } from '@connexta/atlas/atoms/typography'
 import { Grid } from '@connexta/atlas/atoms/grid'
 import { Button } from '@connexta/atlas/atoms/button'
-import fetch from '@connexta/atlas/functions/fetch'
 import { CircularProgress } from '@connexta/atlas/atoms/progress'
 import { useRouteContext, useAppRootContext } from '../app-root/app-root.pure'
+import { COMMANDS } from '../fetch/fetch'
 
 const INSTALL_URL =
   '/admin/jolokia/exec/org.codice.ddf.admin.application.service.ApplicationService:service=application-service/installFeature(java.lang.String)/'
@@ -30,12 +30,12 @@ export const Finish = () => {
   }
   React.useEffect(() => {
     if (mode === 'restart now' || mode === 'restart later') {
-      fetch(UNINSTALL_URL + UNINSTALL_FEATURE).then(() => {
-        return fetch(INSTALL_URL + INSTALL_FEATURE).then(() => {
+      COMMANDS.FETCH(UNINSTALL_URL + UNINSTALL_FEATURE).then(() => {
+        return COMMANDS.FETCH(INSTALL_URL + INSTALL_FEATURE).then(() => {
           if (mode === 'restart later') {
             fetchAndRedirect()
           } else if (mode === 'restart now') {
-            fetch(RESTART_URL).then(() => {
+            COMMANDS.FETCH(RESTART_URL).then(() => {
               setTimeout(() => {
                 routeProps.history.push('/')
                 window.location.reload() // we have to sign in again unfortunately
