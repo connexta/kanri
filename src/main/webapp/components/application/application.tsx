@@ -9,6 +9,8 @@ import { ApplicationType, getDisplayName } from '../../types/App'
 import { useRouteContext } from '../app-root/app-root.pure'
 import { Iframe } from '../iframe/iframe'
 import { COMMANDS } from '../fetch/fetch'
+import { BackIcon } from '@connexta/atlas/atoms/icons'
+import { Button } from '@connexta/atlas/atoms/button'
 
 const DYNAMIC_PLUGINS_URL =
   '/admin/jolokia/exec/org.codice.ddf.admin.application.service.ApplicationService:service=application-service/getPluginsForApplication(java.lang.String)/'
@@ -92,6 +94,15 @@ const Application = ({ app }: Props) => {
       <Grid container direction="column" spacing={3}>
         <Grid item>
           <Grid container alignItems="center" spacing={3}>
+            <Grid item>
+              <Button
+                onClick={() => {
+                  history.push('/admin/applications/')
+                }}
+              >
+                <BackIcon></BackIcon>
+              </Button>
+            </Grid>
             <Grid item>
               <Typography variant="h4">{getDisplayName(app)}</Typography>
             </Grid>
