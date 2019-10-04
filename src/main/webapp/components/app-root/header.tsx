@@ -29,7 +29,7 @@ const generateBreadcrumbs = ({ location }: RouteComponentProps) => {
               textOverflow: 'ellipsis',
               overflow: 'hidden',
               whiteSpace: 'nowrap',
-              display: 'inline-block',
+              display: 'block',
             }}
           >
             {crumb}

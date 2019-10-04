@@ -102,14 +102,13 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export const Shell = () => {
-  const { platformConfig, adminConfig } = useAppRootContext()
+  const { platformConfig, adminConfig, theme } = useAppRootContext()
   let previousData = localStorage.getItem('shell.drawer')
   let defaultOpen = true
   if (previousData !== null) {
     defaultOpen = previousData === 'true'
   }
   const classes = useStyles()
-  const theme = useTheme()
   const [open, setOpen] = React.useState(defaultOpen)
 
   function handleDrawerOpen() {
@@ -195,16 +194,12 @@ export const Shell = () => {
               </Grid>
 
               <IconButton onClick={handleDrawerClose}>
-                {theme.direction === 'rtl' ? (
-                  <ChevronRightIcon />
-                ) : (
-                  <ChevronLeftIcon />
-                )}
+                <ChevronLeftIcon />
               </IconButton>
             </div>
             <Divider />
             <InstanceRouteContextProvider>
-              <Links />
+              <Links open={open} />
             </InstanceRouteContextProvider>
 
             <Divider />
@@ -214,6 +209,8 @@ export const Shell = () => {
                   className={classes.branding}
                   style={{
                     width: open ? `${drawerWidth - 20}px` : '52px',
+                    filter:
+                      theme === 'dark' ? 'invert(100%) hue-rotate(180deg)' : '',
                   }}
                   src={`data:image/png;base64,${platformConfig.productImage}`}
                 />
