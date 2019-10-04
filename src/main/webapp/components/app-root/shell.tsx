@@ -1,11 +1,6 @@
 import * as React from 'react'
 import clsx from 'clsx'
-import {
-  createStyles,
-  makeStyles,
-  useTheme,
-  Theme,
-} from '@material-ui/core/styles'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
 import { WrappedDrawer as Drawer } from '@connexta/atlas/atoms/drawer/drawer'
 import { WrappedAppBar as AppBar } from '@connexta/atlas/atoms/appbar/appbar'
@@ -13,11 +8,7 @@ import { WrappedToolbar as Toolbar } from '@connexta/atlas/atoms/toolbar/toolbar
 import { Typography } from '@connexta/atlas/atoms/typography'
 import { Divider } from '@connexta/atlas/atoms/divider'
 import { IconButton } from '@connexta/atlas/atoms/button'
-import {
-  MenuIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from '@connexta/atlas/atoms/icons'
+import { MenuIcon, ChevronLeftIcon } from '@connexta/atlas/atoms/icons'
 import { Header } from './header'
 import { Links } from './links'
 import { Content } from './content'
