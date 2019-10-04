@@ -4,6 +4,7 @@ import {
   darken,
   Theme as ThemeInterface,
   createStyles,
+  lighten,
 } from '@material-ui/core/styles'
 import { blue, pink } from '@material-ui/core/colors'
 import * as React from 'react'
@@ -40,7 +41,7 @@ export const Theme = ({ children }: Props) => {
     palette: {
       type: theme,
       primary: {
-        main: theme === 'light' ? blue[700] : blue[200],
+        main: theme === 'light' ? blue[700] : lighten(blue[200], 0.2),
       },
       secondary: {
         main: theme === 'light' ? darken(pink.A400, 0.1) : pink[200],

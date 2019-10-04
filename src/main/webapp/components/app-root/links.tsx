@@ -15,6 +15,19 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@connexta/atlas/atoms/list'
+import { Typography } from '@connexta/atlas/atoms/typography'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    shortName: {
+      transition: theme.transitions.create(['opacity', 'transform'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    },
+  })
+)
 
 const ID_TO_ICON = {
   applications: AppsIcon,
@@ -32,7 +45,16 @@ export const ID_TO_NAME = {
   setup: 'Wizards',
 } as { [key: string]: any }
 
-export const Links = () => {
+export const ID_TO_SHORT_NAME = {
+  applications: 'Apps',
+  docs: 'Docs',
+  installation: 'Installer',
+  configurations: 'System',
+  setup: 'Wizards',
+} as { [key: string]: any }
+
+export const Links = ({ open }: { open: boolean }) => {
+  const classes = useStyles()
   const { modules } = useAppRootContext()
   const { routeProps } = useRouteContext()
   const { location } = routeProps
@@ -46,8 +68,39 @@ export const Links = () => {
 
           return (
             <Link to={url} key={url}>
-              <ListItem button selected={isCurrentUrl} tabIndex={-1}>
-                <ListItemIcon>{Icon ? <Icon /> : <></>}</ListItemIcon>
+              <ListItem
+                button
+                selected={isCurrentUrl}
+                tabIndex={-1}
+                style={{ position: 'relative' }}
+              >
+                <ListItemIcon>
+                  {Icon ? (
+                    <>
+                      <Icon
+                        className={classes.shortName}
+                        style={{
+                          transform: open ? 'none' : 'translateY(-6px)',
+                        }}
+                      />
+                      <Typography
+                        className={classes.shortName}
+                        style={{
+                          opacity: open ? 0 : 1,
+                          fontSize: '.8rem',
+                          position: 'absolute',
+                          bottom: '2px',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                        }}
+                      >
+                        {ID_TO_SHORT_NAME[module.id]}
+                      </Typography>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </ListItemIcon>
                 <ListItemText primary={ID_TO_NAME[module.id]} />
               </ListItem>
             </Link>
