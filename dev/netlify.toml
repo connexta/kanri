@@ -1,6 +1,7 @@
 [[redirects]]
   from = "/*"
   to = "https://localhost:8993/:splat"
+  status = 200
   [redirects.headers]
     Test = "testing"
     X-Requested-With = "XMLHttpRequest"
