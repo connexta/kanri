@@ -1,4 +1,8 @@
 [[redirects]]
   from = "/*"
   to = "https://localhost:8993/:splat"
-  headers = { X-Requested-With = "XMLHttpRequest", Authorization = "Basic YWRtaW46YWRtaW4=", Host = "localhost:8993"}
+  [redirects.headers]
+    Test = "testing"
+    X-Requested-With = "XMLHttpRequest"
+    Authorization = "Basic YWRtaW46YWRtaW4="
+    Host = "localhost:8993"
