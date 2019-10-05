@@ -4,7 +4,6 @@ import { setConfig } from 'react-hot-loader'
 import { AppRootContextProvider } from './app-root.pure'
 import { HashRouter as Router } from 'react-router-dom'
 import { SnackbarProvider } from '@connexta/atlas/atoms/snackbar'
-
 import { Shell } from './shell'
 import { Theme } from './theme'
 

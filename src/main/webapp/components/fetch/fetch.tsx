@@ -1,5 +1,16 @@
 import fetch, { FetchProps } from '@connexta/atlas/functions/fetch'
 import { ConfigurationType, FeatureType } from '../app-root/app-root.pure'
+import { ServerSettings } from '../developer/settings'
+
+let socket = undefined as undefined | SocketIOClient.Socket
+if (__ENV__ === 'development') {
+  socket = require('socket.io-client')('http://localhost:4001')
+}
+let mocks = undefined as undefined | any
+if (__ENV__ === 'netlify') {
+  mocks = require('../../../../../dev/mocks.json')
+  console.log(mocks)
+}
 
 /**
  * Whenever using a url (fetch or iframe, etc) you should use this as it will
@@ -7,6 +18,9 @@ import { ConfigurationType, FeatureType } from '../app-root/app-root.pure'
  * @param url
  */
 export const handleReverseProxy = (url: string) => {
+  if (window.location.pathname === '/') {
+    return url // should only happen when running the dev server
+  }
   const context = window.location.pathname.split('/beta/admin/')[0] // normally "" unless we're under a reverse proxy
   return `${context}${url}`
 }
@@ -137,8 +151,45 @@ export const URLS = {
   },
 }
 
+export const mockedResponses = {} as any
+
+const handleDevelopment = ((url, options) => {
+  return fetch(handleReverseProxy(url), options).then(async response => {
+    const text = await response.clone().text()
+    mockedResponses[`${url}:${JSON.stringify(options)}`] = {
+      body: text,
+      init: {
+        status: response.status,
+        statusText: response.statusText,
+      },
+      lastSeen: new Date().toLocaleString(),
+    }
+
+    if (socket) socket.emit('mocks', mockedResponses)
+
+    return response
+  })
+}) as FetchProps
+
+const handleNetlify = ((url, options) => {
+  const mockedResponse = mocks[`${url}:${JSON.stringify(options)}`]
+  if (ServerSettings.server === 'mock' && mockedResponse !== undefined) {
+    return new Promise(resolve => {
+      resolve(new Response(mockedResponse.body, mockedResponse.init))
+    })
+  } else if (ServerSettings.server === 'proxy') {
+    // return fetch(`${ServerSettings.proxy}${url}`, options)
+  }
+  return fetch(handleReverseProxy(url), options)
+}) as FetchProps
+
 export const COMMANDS = {
   FETCH: ((url, options) => {
+    if (__ENV__ === 'development') {
+      return handleDevelopment(url, options)
+    } else if (__ENV__ === 'netlify') {
+      return handleNetlify(url, options)
+    }
     return fetch(handleReverseProxy(url), options)
   }) as FetchProps,
   SESSION: {
