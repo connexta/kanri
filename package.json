@@ -57,7 +57,7 @@
     "start:netlify": "ace start --env netlify",
     "prebuild": "rimraf dist && yarn copy:package",
     "build": "tsc",
-    "build:standalone": "ace bundle --env netlify && cpx dev/_redirects target/webapp/ && cpx dev/_headers target/webapp/",
+    "build:standalone": "ace bundle --env netlify && cpx dev/netlify.toml target/webapp/",
     "publish:npm": "yarn build && npm publish dist",
     "m2": "yarn install:m2",
     "capture:mocks": "ts-node -P ./tsconfig.json ./dev/capture-mocks.tsx",
