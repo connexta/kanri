@@ -1,15 +1,15 @@
 import fetch, { FetchProps } from '@connexta/atlas/functions/fetch'
 import { ConfigurationType, FeatureType } from '../app-root/app-root.pure'
 import { ServerSettings } from '../developer/settings'
+import { MocksType } from '../../../../../dev/capture-mocks'
 
 let socket = undefined as undefined | SocketIOClient.Socket
 if (__ENV__ === 'development') {
   socket = require('socket.io-client')('http://localhost:4001')
 }
-let mocks = undefined as undefined | any
+let mocks = {} as MocksType
 if (__ENV__ === 'mocks') {
   mocks = require('../../../../../dev/mocks.json')
-  console.log(mocks)
 }
 
 /**
@@ -151,34 +151,42 @@ export const URLS = {
   },
 }
 
-export const mockedResponses = {} as any
-
 const handleDevelopment = ((url, options) => {
   return fetch(handleReverseProxy(url), options).then(async response => {
-    const text = await response.clone().text()
-    mockedResponses[`${url}:${JSON.stringify(options)}`] = {
-      body: text,
-      init: {
-        status: response.status,
-        statusText: response.statusText,
-      },
-      lastSeen: new Date().toLocaleString(),
-    }
-
-    if (socket) socket.emit('mocks', mockedResponses)
+    if (socket)
+      socket.emit('mock', {
+        id: `${url}:${options && options.method ? options.method : 'GET'}`,
+        data: {
+          body: await response.clone().text(),
+          init: {
+            status: response.status,
+            statusText: response.statusText,
+          },
+          lastSeen: Date.now(),
+          lastSeenHR: new Date().toLocaleString(),
+        },
+      })
 
     return response
   })
 }) as FetchProps
 
 const handleMocks = ((url, options) => {
-  const mockedResponse = mocks[`${url}:${JSON.stringify(options)}`]
-  if (ServerSettings.server === 'mock' && mockedResponse !== undefined) {
+  const mockedResponses =
+    mocks[`${url}:${options && options.method ? options.method : 'GET'}`]
+  if (ServerSettings.server === 'mock' && mockedResponses !== undefined) {
+    const randomMockedResponse =
+      mockedResponses[Math.floor(Math.random() * mockedResponses.length)]
     return new Promise(resolve => {
-      resolve(new Response(mockedResponse.body, mockedResponse.init))
+      resolve(
+        new Response(
+          randomMockedResponse.data.body,
+          randomMockedResponse.data.init
+        )
+      )
     })
   } else if (ServerSettings.server === 'proxy') {
-    // return fetch(`${ServerSettings.proxy}${url}`, options)
+    return fetch(`${ServerSettings.proxy}${url}`, options)
   }
   return fetch(handleReverseProxy(url), options)
 }) as FetchProps

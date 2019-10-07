@@ -11,20 +11,84 @@ const server = http.createServer(app);
 const socketConnection = socketIo(server);
 server.listen(port, () => console.log(`Listening on port ${port}`));
 
-let existingMocks = undefined as any;
+export type MocksType = {
+  [key: string]: MockType[];
+};
+
+let mocks = {} as MocksType;
+
 try {
   // @ts-ignore
-  existingMocks = JSON.parse(fs.readFileSync("./dev/mocks.json"));
-} catch (err) {}
+  mocks = JSON.parse(fs.readFileSync("./dev/mocks.json"));
+} catch (err) {
+  mocks = {};
+}
+
+export type MockType = {
+  id: string;
+  data: {
+    body: string;
+    init: {
+      status: number;
+      statusText: string;
+    };
+    lastSeen: number;
+    lastSeenHR: string;
+  };
+};
+
+const resortMocksForId = (mock: MockType) => {
+  mocks[mock.id] = mocks[mock.id].sort((a, b) => {
+    return b.data.lastSeen - a.data.lastSeen;
+  });
+};
+
+/**
+ * Remove timestamp information and deal with the nasty jolokia error
+ */
+const mocksAreEqual = (a: MockType, b: MockType) => {
+  return (
+    a.data.body
+      .replace(/"timestamp":[1234567890]+,/, "")
+      .replace(/\[L[\w.;@]*/g, '""') ===
+      b.data.body
+        .replace(/"timestamp":[1234567890]+,/, "")
+        .replace(/\[L[\w.;@]*/g, '""') &&
+    a.data.init.status === b.data.init.status
+  );
+};
+
+const handleIncomingMock = (mock: MockType) => {
+  const mocksForId = mocks[mock.id];
+  if (mocksForId === undefined) {
+    mocks[mock.id] = [mock];
+  } else {
+    const existingMock = mocksForId.filter(existingMock => {
+      return mocksAreEqual(existingMock, mock);
+    })[0];
+    if (existingMock) {
+      // replace lastSeen and lastSeenHR so we can track stats and resort (makes culling easier)
+      existingMock.data.lastSeen = mock.data.lastSeen;
+      existingMock.data.lastSeenHR = mock.data.lastSeenHR;
+      resortMocksForId(mock);
+    } else {
+      // add it to the list of possible responses (keep only five, cut oldest)
+      mocksForId.unshift(mock);
+      if (mocksForId.length > 5) {
+        mocksForId.pop();
+      }
+    }
+  }
+};
 
 //Setting up a socket with the namespace "connection" for new sockets
 socketConnection.on("connection", socket => {
   console.log("New client connected");
-  socket.on("mocks", (mocks: any) => {
+  socket.on("mock", (mock: MockType) => {
+    handleIncomingMock(mock);
     fs.writeFileSync(
       "./dev/mocks.json",
       JSON.stringify({
-        ...existingMocks,
         ...mocks
       })
     );
