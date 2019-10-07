@@ -9,6 +9,8 @@ import { Breadcrumbs } from '@connexta/atlas/atoms/breadcrumbs'
 import { Alerts } from '../alerts/alerts'
 import { useAppRootContext } from './app-root.pure'
 import { setType } from '@connexta/atlas/typescript'
+import Tune from '@material-ui/icons/Tune'
+import { DeveloperSettings } from '../developer/settings'
 
 const generateBreadcrumbs = ({ location }: RouteComponentProps) => {
   const crumbs = location.pathname
@@ -70,6 +72,42 @@ export const Header = () => {
         </Switch>
       </Grid>
       <Grid item style={{ marginLeft: 'auto', flexShrink: 0 }}>
+        {__ENV__ === 'mocks' ? (
+          <ControlledDrawer
+            drawerProps={{
+              variant: 'temporary',
+              anchor: 'right',
+              PaperProps: {
+                style: {
+                  minWidth: '400px',
+                  maxWidth: '70vw',
+                  padding: '20px',
+                  overflow: 'hidden',
+                },
+              },
+            }}
+            drawerChildren={() => {
+              return <DeveloperSettings />
+            }}
+          >
+            {({ setOpen }) => {
+              return (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => {
+                    setOpen(true)
+                  }}
+                >
+                  <Tune />
+                  Developer
+                </Button>
+              )
+            }}
+          </ControlledDrawer>
+        ) : (
+          ''
+        )}
         <ControlledDrawer
           drawerProps={{
             variant: 'temporary',

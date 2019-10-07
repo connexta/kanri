@@ -1,5 +1,16 @@
 import fetch, { FetchProps } from '@connexta/atlas/functions/fetch'
 import { ConfigurationType, FeatureType } from '../app-root/app-root.pure'
+import { ServerSettings } from '../developer/settings'
+import { MocksType } from '../../../../../dev/capture-mocks'
+
+let socket = undefined as undefined | SocketIOClient.Socket
+if (__ENV__ === 'development') {
+  socket = require('socket.io-client')('http://localhost:4001')
+}
+let mocks = {} as MocksType
+if (__ENV__ === 'mocks') {
+  mocks = require('../../../../../dev/mocks.json')
+}
 
 /**
  * Whenever using a url (fetch or iframe, etc) you should use this as it will
@@ -7,6 +18,9 @@ import { ConfigurationType, FeatureType } from '../app-root/app-root.pure'
  * @param url
  */
 export const handleReverseProxy = (url: string) => {
+  if (window.location.pathname === '/') {
+    return url // should only happen when running the dev server
+  }
   const context = window.location.pathname.split('/beta/admin/')[0] // normally "" unless we're under a reverse proxy
   return `${context}${url}`
 }
@@ -137,8 +151,53 @@ export const URLS = {
   },
 }
 
+const handleDevelopment = ((url, options) => {
+  return fetch(handleReverseProxy(url), options).then(async response => {
+    if (socket)
+      socket.emit('mock', {
+        id: `${url}:${options && options.method ? options.method : 'GET'}`,
+        data: {
+          body: await response.clone().text(),
+          init: {
+            status: response.status,
+            statusText: response.statusText,
+          },
+          lastSeen: Date.now(),
+          lastSeenHR: new Date().toLocaleString(),
+        },
+      })
+
+    return response
+  })
+}) as FetchProps
+
+const handleMocks = ((url, options) => {
+  const mockedResponses =
+    mocks[`${url}:${options && options.method ? options.method : 'GET'}`]
+  if (ServerSettings.server === 'mock' && mockedResponses !== undefined) {
+    const randomMockedResponse =
+      mockedResponses[Math.floor(Math.random() * mockedResponses.length)]
+    return new Promise(resolve => {
+      resolve(
+        new Response(
+          randomMockedResponse.data.body,
+          randomMockedResponse.data.init
+        )
+      )
+    })
+  } else if (ServerSettings.server === 'proxy') {
+    return fetch(`${ServerSettings.proxy}${url}`, options)
+  }
+  return fetch(handleReverseProxy(url), options)
+}) as FetchProps
+
 export const COMMANDS = {
   FETCH: ((url, options) => {
+    if (__ENV__ === 'development') {
+      return handleDevelopment(url, options)
+    } else if (__ENV__ === 'mocks') {
+      return handleMocks(url, options)
+    }
     return fetch(handleReverseProxy(url), options)
   }) as FetchProps,
   SESSION: {
