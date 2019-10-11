@@ -195,7 +195,7 @@ export const Shell = () => {
 
             <Divider />
             <div style={{ marginTop: 'auto', padding: '10px' }}>
-              <a href="../">
+              <a href="../../">
                 <img
                   className={classes.branding}
                   style={{
