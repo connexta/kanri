@@ -53,7 +53,8 @@
   },
   "scripts": {
     "copy:package": "cpx package.json dist && cpx \"src/**/!(*.tsx)\" \"dist/src\"",
-    "start": "ace start & yarn capture:mocks",
+    "start": "ace start",
+    "start:capture": "ace start --env capture & yarn capture:mocks",
     "start:mocks": "ace start --env mocks",
     "prebuild": "rimraf dist && yarn copy:package",
     "build": "tsc",
