@@ -13,7 +13,7 @@
     "declaration": true,
     "strictNullChecks": true,
     "module": "commonjs",
-    "outDir": "./dist/src/main/webapp",
+    "outDir": "./dist",
     "lib": ["es2015", "dom"],
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
