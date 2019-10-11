@@ -4,7 +4,7 @@ import { ServerSettings } from '../developer/settings'
 import { MocksType } from '../../../../../dev/capture-mocks'
 
 let socket = undefined as undefined | SocketIOClient.Socket
-if (__ENV__ === 'development') {
+if (__ENV__ === 'capture') {
   socket = require('socket.io-client')('http://localhost:4001')
 }
 let mocks = {} as MocksType
@@ -151,7 +151,7 @@ export const URLS = {
   },
 }
 
-const handleDevelopment = ((url, options) => {
+const handleCapture = ((url, options) => {
   return fetch(handleReverseProxy(url), options).then(async response => {
     if (socket)
       socket.emit('mock', {
@@ -193,8 +193,8 @@ const handleMocks = ((url, options) => {
 
 export const COMMANDS = {
   FETCH: ((url, options) => {
-    if (__ENV__ === 'development') {
-      return handleDevelopment(url, options)
+    if (__ENV__ === 'capture') {
+      return handleCapture(url, options)
     } else if (__ENV__ === 'mocks') {
       return handleMocks(url, options)
     }

@@ -1,1 +1,1 @@
-declare var __ENV__: 'mocks' | 'development' | 'production'
+declare var __ENV__: 'mocks' | 'capture' | 'development' | 'production'
