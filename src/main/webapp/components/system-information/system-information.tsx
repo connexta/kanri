@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Typography } from '@connexta/atlas/atoms/typography'
 import { COMMANDS } from '../fetch/fetch'
-const TimeUtil = require('js/util/TimeUtil')
-const UnitsUtil = require('js/util/UnitsUtil')
+import { TimeUtil } from './TimeUtil'
+import { UnitsUtil } from './UnitsUtil'
 
 const SYSTEM_INFO_URL = '/admin/jolokia/read/java.lang:type=Runtime/'
 const OPERATING_SYSTEM_URL =
