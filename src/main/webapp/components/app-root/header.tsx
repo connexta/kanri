@@ -11,7 +11,8 @@ import { useAppRootContext } from './app-root.pure'
 import { setType } from '@connexta/atlas/typescript'
 import Tune from '@material-ui/icons/Tune'
 import { DeveloperSettings } from '../developer/settings'
-
+import { Search } from './search'
+import { ExtractedServicesProvider } from '../services/services.provider'
 const generateBreadcrumbs = ({ location }: RouteComponentProps) => {
   const crumbs = location.pathname
     .substring(1)
@@ -72,7 +73,46 @@ export const Header = () => {
         </Switch>
       </Grid>
       <Grid item style={{ marginLeft: 'auto', flexShrink: 0 }}>
-        {__ENV__ === 'mocks' ? (
+        <Grid container alignItems="center">
+          {__ENV__ === 'mocks' ? (
+            <ControlledDrawer
+              drawerProps={{
+                variant: 'temporary',
+                anchor: 'right',
+                PaperProps: {
+                  style: {
+                    minWidth: '400px',
+                    maxWidth: '70vw',
+                    padding: '20px',
+                    overflow: 'hidden',
+                  },
+                },
+              }}
+              drawerChildren={() => {
+                return <DeveloperSettings />
+              }}
+            >
+              {({ setOpen }) => {
+                return (
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => {
+                      setOpen(true)
+                    }}
+                  >
+                    <Tune />
+                    Developer
+                  </Button>
+                )
+              }}
+            </ControlledDrawer>
+          ) : (
+            ''
+          )}
+          <ExtractedServicesProvider>
+            <Search />
+          </ExtractedServicesProvider>
           <ControlledDrawer
             drawerProps={{
               variant: 'temporary',
@@ -87,89 +127,55 @@ export const Header = () => {
               },
             }}
             drawerChildren={() => {
-              return <DeveloperSettings />
+              return <Settings />
             }}
           >
             {({ setOpen }) => {
               return (
-                <Button
-                  variant="contained"
-                  color="secondary"
+                <IconButton
+                  color="inherit"
                   onClick={() => {
                     setOpen(true)
                   }}
                 >
-                  <Tune />
-                  Developer
-                </Button>
+                  <SettingsIcon />
+                </IconButton>
               )
             }}
           </ControlledDrawer>
-        ) : (
-          ''
-        )}
-        <ControlledDrawer
-          drawerProps={{
-            variant: 'temporary',
-            anchor: 'right',
-            PaperProps: {
-              style: {
-                minWidth: '400px',
-                maxWidth: '70vw',
-                padding: '20px',
-                overflow: 'hidden',
-              },
-            },
-          }}
-          drawerChildren={() => {
-            return <Settings />
-          }}
-        >
-          {({ setOpen }) => {
-            return (
-              <IconButton
-                color="inherit"
-                onClick={() => {
-                  setOpen(true)
-                }}
-              >
-                <SettingsIcon />
-              </IconButton>
-            )
-          }}
-        </ControlledDrawer>
 
-        <ControlledDrawer
-          drawerProps={{
-            variant: 'temporary',
-            anchor: 'right',
-            PaperProps: {
-              style: {
-                minWidth: '400px',
-                maxWidth: '70vw',
-                padding: '20px',
-                overflow: 'hidden',
+          <ControlledDrawer
+            drawerProps={{
+              variant: 'temporary',
+              anchor: 'right',
+              PaperProps: {
+                style: {
+                  minWidth: '400px',
+                  maxWidth: '70vw',
+                  padding: '20px',
+                  overflow: 'hidden',
+                },
               },
-            },
-          }}
-          drawerChildren={() => {
-            return <Alerts />
-          }}
-        >
-          {({ setOpen }) => {
-            return <NotificationsComp setOpen={setOpen} />
-          }}
-        </ControlledDrawer>
+            }}
+            drawerChildren={() => {
+              return <Alerts />
+            }}
+          >
+            {({ setOpen }) => {
+              return <NotificationsComp setOpen={setOpen} />
+            }}
+          </ControlledDrawer>
 
-        <Button
-          onClick={() => {
-            window.location.href = '/logout?service=' + window.location.href
-          }}
-          variant="text"
-          color="inherit"
-        >
-          Log out
-        </Button>
+          <Button
+            onClick={() => {
+              window.location.href = '/logout?service=' + window.location.href
+            }}
+            variant="text"
+            color="inherit"
+          >
+            Log out
+          </Button>
+        </Grid>
       </Grid>
     </Grid>
   )
