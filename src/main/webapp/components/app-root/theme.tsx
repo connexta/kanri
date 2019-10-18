@@ -16,6 +16,9 @@ type Props = {
 }
 
 const GlobalStyles = createGlobalStyle<ThemeInterface>`
+  [role="tooltip"] {
+    z-index: 1201;
+  }
   a {
     color: ${props => props.palette.primary.dark};
   }
