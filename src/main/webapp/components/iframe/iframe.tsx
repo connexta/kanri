@@ -13,7 +13,14 @@ export const Iframe = ({ url }: Props) => {
   React.useLayoutEffect(() => {
     iframeResizer(null, 'iframe')
   })
-  let fixedUrl = url ? `/admin${url.substring(1)}` : ''
+  // only some iframes are brought in as relative
+  const isRelativeUrl = url && url.startsWith('./')
+  let fixedUrl = ''
+  if (url && isRelativeUrl) {
+    fixedUrl = `/admin${url.substring(1)}`
+  } else {
+    fixedUrl = url ? url : ''
+  }
   return (
     <iframe
       src={handleReverseProxy(fixedUrl)}

@@ -98,11 +98,18 @@ const FieldRender = ({
   formikBag: FormikProps<MyFormValues>
   loading: boolean
 } & FieldProps<MyFormValues>) => {
+  const autoFocus = location.hash.split('?focus=')[1] === meta.id
   if (meta.optionLabels.length > 0) {
     return (
       <div>
         <Label meta={meta}></Label>
-        <TextField select fullWidth {...field} disabled={loading}>
+        <TextField
+          select
+          fullWidth
+          {...field}
+          disabled={loading}
+          autoFocus={autoFocus}
+        >
           {meta.optionLabels.map((optionLabel, index) => {
             return (
               <MenuItem key={index} value={meta.optionValues[index]}>
@@ -119,7 +126,13 @@ const FieldRender = ({
       return (
         <div>
           <Label meta={meta}></Label>
-          <TextField fullWidth type="number" {...field} disabled={loading} />
+          <TextField
+            autoFocus={autoFocus}
+            fullWidth
+            type="number"
+            {...field}
+            disabled={loading}
+          />
           {form.touched.firstName &&
             form.errors.firstName &&
             form.errors.firstName}
@@ -130,6 +143,7 @@ const FieldRender = ({
         <>
           <Label meta={meta}>
             <Checkbox
+              autoFocus={autoFocus}
               checked={field.value}
               onChange={(e: any) => {
                 // @ts-ignore
@@ -165,6 +179,7 @@ const FieldRender = ({
                     <TextField
                       key={index}
                       fullWidth
+                      autoFocus={autoFocus}
                       value={subval}
                       onChange={e => {
                         // @ts-ignore
@@ -212,7 +227,13 @@ const FieldRender = ({
       return (
         <div>
           <Label meta={meta}></Label>
-          <TextField fullWidth type="text" {...field} disabled={loading} />
+          <TextField
+            fullWidth
+            autoFocus={autoFocus}
+            type="text"
+            {...field}
+            disabled={loading}
+          />
           {form.touched.firstName &&
             form.errors.firstName &&
             form.errors.firstName}
