@@ -21,6 +21,13 @@ import { setType } from '@connexta/atlas/typescript'
 import _debounce from 'lodash.debounce'
 import { CircularProgress } from '@connexta/atlas/atoms/progress'
 
+// https://stackoverflow.com/questions/4149276/how-to-convert-camelcase-to-camel-case
+const unCamelCase = (text: string) => {
+  return text.replace(/([A-Z])/g, ' $1').replace(/^./, function(str) {
+    return str.toUpperCase()
+  })
+}
+
 type PossibleType = {
   why: React.ComponentType<{ isSelected: boolean }>
   to: string
@@ -271,6 +278,37 @@ const determineSuggestions = ({
                         }
                       />
                     </Typography>
+                    {matchingMetatype.name !== undefined &&
+                    !matchingMetatype.name
+                      .toLowerCase()
+                      .includes(
+                        unCamelCase(matchingMetatype.id).toLowerCase()
+                      ) &&
+                    !matchingMetatype.name
+                      .toLowerCase()
+                      .includes(matchingMetatype.id.toLowerCase()) ? (
+                      <>
+                        <Typography
+                          noWrap={false}
+                          style={{
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            fontSize: '12px',
+                            opacity: 0.9,
+                          }}
+                          variant="body2"
+                        >
+                          <HighlightedText
+                            value={value}
+                            text={
+                              matchingMetatype.name !== undefined
+                                ? matchingMetatype.id
+                                : ''
+                            }
+                          />
+                        </Typography>
+                      </>
+                    ) : null}
                   </Grid>
                   <Grid
                     item
