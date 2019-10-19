@@ -40,6 +40,7 @@ const INCLUDE_APP_SUGGESTIONS = false
 type determineSuggestionsProps = {
   applications: ApplicationType[]
   services: ConfigurationType[]
+  setPropertySuggestions: setType<PossibleType[]>
   setAppSuggestions: setType<PossibleType[]>
   setConfigurationSuggestions: setType<PossibleType[]>
   value: string
@@ -131,11 +132,17 @@ const HighlightedText = ({
   return <>{highlights}</>
 }
 
+const GENERAL_TYPOGRAPHY_STYLES = {
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+}
+
 const determineSuggestions = ({
   applications,
   services,
   setAppSuggestions,
   setConfigurationSuggestions,
+  setPropertySuggestions,
   value,
   setLoading,
   theme,
@@ -176,7 +183,10 @@ const determineSuggestions = ({
                 spacing={3}
               >
                 <Grid item xs={5}>
-                  <Typography noWrap={false}>
+                  <Typography
+                    noWrap={false}
+                    style={{ ...GENERAL_TYPOGRAPHY_STYLES }}
+                  >
                     <HighlightedText value={value} text={app.name} />
                   </Typography>
                 </Grid>
@@ -188,12 +198,19 @@ const determineSuggestions = ({
                     paddingLeft: '10px',
                   }}
                 >
-                  <Typography variant="h6">
+                  <Typography
+                    variant="h6"
+                    style={{ ...GENERAL_TYPOGRAPHY_STYLES }}
+                  >
                     <HighlightedText text={app.name} value={value} />
                   </Typography>
                   <Typography
                     variant="body2"
-                    style={{ fontSize: '12px', opacity: 0.9 }}
+                    style={{
+                      fontSize: '12px',
+                      opacity: 0.9,
+                      ...GENERAL_TYPOGRAPHY_STYLES,
+                    }}
                   >
                     <HighlightedText
                       text={app.description ? app.description : ''}
@@ -221,6 +238,7 @@ const determineSuggestions = ({
     )
   }
 
+  const propertyPossibles = [] as PossibleType[]
   const servicePossibles = [] as PossibleType[]
   services.forEach(service => {
     service.metatype
@@ -244,7 +262,7 @@ const determineSuggestions = ({
         if (prefix !== ' ') {
           match = prefix + match
         }
-        servicePossibles.push({
+        propertyPossibles.push({
           why: ({ isSelected }: { isSelected: boolean }) => {
             return (
               <div
@@ -267,6 +285,7 @@ const determineSuggestions = ({
                       style={{
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
+                        ...GENERAL_TYPOGRAPHY_STYLES,
                       }}
                     >
                       <HighlightedText
@@ -278,7 +297,7 @@ const determineSuggestions = ({
                         }
                       />
                     </Typography>
-                    {matchingMetatype.name !== undefined &&
+                    {matchingMetatype.name !== null &&
                     !matchingMetatype.name
                       .toLowerCase()
                       .includes(
@@ -291,8 +310,7 @@ const determineSuggestions = ({
                         <Typography
                           noWrap={false}
                           style={{
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
+                            ...GENERAL_TYPOGRAPHY_STYLES,
                             fontSize: '12px',
                             opacity: 0.9,
                           }}
@@ -301,7 +319,7 @@ const determineSuggestions = ({
                           <HighlightedText
                             value={value}
                             text={
-                              matchingMetatype.name !== undefined
+                              matchingMetatype.name !== null
                                 ? matchingMetatype.id
                                 : ''
                             }
@@ -318,10 +336,16 @@ const determineSuggestions = ({
                       paddingLeft: '10px',
                     }}
                   >
-                    <Typography variant="h6">
+                    <Typography
+                      variant="h6"
+                      style={{ ...GENERAL_TYPOGRAPHY_STYLES }}
+                    >
                       <HighlightedText value={value} text={service.name} />
                     </Typography>
-                    <Typography variant="body2" style={{ opacity: 0.9 }}>
+                    <Typography
+                      variant="body2"
+                      style={{ opacity: 0.9, ...GENERAL_TYPOGRAPHY_STYLES }}
+                    >
                       <HighlightedText
                         value={value}
                         text={
@@ -333,7 +357,11 @@ const determineSuggestions = ({
                     </Typography>
                     <Typography
                       variant="body2"
-                      style={{ fontSize: '12px', opacity: 0.9 }}
+                      style={{
+                        fontSize: '12px',
+                        opacity: 0.9,
+                        ...GENERAL_TYPOGRAPHY_STYLES,
+                      }}
                     >
                       <HighlightedText
                         text={
@@ -389,6 +417,7 @@ const determineSuggestions = ({
                   style={{
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
+                    ...GENERAL_TYPOGRAPHY_STYLES,
                   }}
                 >
                   <HighlightedText text={service.name} value={value} />
@@ -402,8 +431,21 @@ const determineSuggestions = ({
                   paddingLeft: '10px',
                 }}
               >
-                <Typography variant="h6">
+                <Typography
+                  variant="h6"
+                  style={{ ...GENERAL_TYPOGRAPHY_STYLES }}
+                >
                   <HighlightedText text={service.name} value={value} />
+                </Typography>
+                <Typography
+                  variant="body2"
+                  style={{
+                    fontSize: '12px',
+                    opacity: 0.9,
+                    ...GENERAL_TYPOGRAPHY_STYLES,
+                  }}
+                >
+                  <HighlightedText text={service.id} value={value} />
                 </Typography>
               </Grid>
             </Grid>
@@ -414,7 +456,17 @@ const determineSuggestions = ({
       to: `/admin/system/Configuration/${service.name}`,
     })
   })
-
+  setPropertySuggestions(
+    propertyPossibles
+      .sort(a => {
+        if (a.match.toLowerCase().startsWith(value.toLowerCase())) {
+          return -1
+        } else {
+          return 1
+        }
+      })
+      .slice(0, MAX_RESULTS)
+  )
   setConfigurationSuggestions(
     servicePossibles
       .sort(a => {
@@ -447,6 +499,9 @@ export const Search = () => {
     configurationSuggestions,
     setConfigurationSuggestions,
   ] = React.useState([] as PossibleType[])
+  const [propertySuggestions, setPropertySuggestions] = React.useState(
+    [] as PossibleType[]
+  )
   const [appSuggestions, setAppSuggestions] = React.useState(
     [] as PossibleType[]
   )
@@ -470,6 +525,7 @@ export const Search = () => {
         services,
         setAppSuggestions,
         setConfigurationSuggestions,
+        setPropertySuggestions,
         value,
         setLoading,
         theme,
@@ -514,7 +570,9 @@ export const Search = () => {
         }}
         onKeyDown={e => {
           const totalLength =
-            appSuggestions.length + configurationSuggestions.length
+            appSuggestions.length +
+            configurationSuggestions.length +
+            propertySuggestions.length
           if (e.keyCode === 38) {
             //up
             e.preventDefault()
@@ -527,9 +585,9 @@ export const Search = () => {
             setScrollTo(true)
           } else if (e.keyCode === 13) {
             e.preventDefault()
-            const toLoad = appSuggestions.concat(configurationSuggestions)[
-              selected
-            ]
+            const toLoad = appSuggestions
+              .concat(configurationSuggestions)
+              .concat(propertySuggestions)[selected]
             history.push(toLoad.to)
             setOpen(false)
           }
@@ -554,7 +612,12 @@ export const Search = () => {
               <>
                 {appSuggestions.length > 0 ? (
                   <>
-                    <Typography variant="h6">Applications</Typography>
+                    <Typography
+                      variant="h6"
+                      style={{ ...GENERAL_TYPOGRAPHY_STYLES }}
+                    >
+                      Applications
+                    </Typography>
                     <Divider />
                     {appSuggestions.map((suggestion, index) => {
                       const isSelected = index === selected
@@ -582,7 +645,12 @@ export const Search = () => {
                 ) : null}
                 {configurationSuggestions.length > 0 ? (
                   <>
-                    <Typography variant="h6">Configurations</Typography>
+                    <Typography
+                      variant="h6"
+                      style={{ ...GENERAL_TYPOGRAPHY_STYLES }}
+                    >
+                      Configurations
+                    </Typography>
                     <Divider />
                     {configurationSuggestions.map((suggestion, index) => {
                       const isSelected =
@@ -609,8 +677,50 @@ export const Search = () => {
                     })}
                   </>
                 ) : null}
+                {propertySuggestions.length > 0 ? (
+                  <>
+                    <Typography
+                      variant="h6"
+                      style={{ ...GENERAL_TYPOGRAPHY_STYLES }}
+                    >
+                      Configuration Properties
+                    </Typography>
+                    <Divider />
+                    {propertySuggestions.map((suggestion, index) => {
+                      const isSelected =
+                        configurationSuggestions.length +
+                          appSuggestions.length +
+                          index ===
+                        selected
+                      const Suggestion = suggestion.why
+                      return (
+                        <Link
+                          to={suggestion.to}
+                          onClick={() => {
+                            setOpen(false)
+                          }}
+                          style={{
+                            textDecoration: 'none',
+                            color: 'inherit',
+                          }}
+                          onMouseMove={() => {
+                            setSelected(
+                              configurationSuggestions.length +
+                                appSuggestions.length +
+                                index
+                            )
+                          }}
+                          ref={isSelected ? selectedRef : null}
+                        >
+                          <Suggestion isSelected={isSelected} />
+                        </Link>
+                      )
+                    })}
+                  </>
+                ) : null}
                 {configurationSuggestions.length === 0 &&
-                appSuggestions.length === 0 ? (
+                appSuggestions.length === 0 &&
+                propertySuggestions.length === 0 ? (
                   <div>No results found for query "{value}"</div>
                 ) : null}
               </>
