@@ -544,6 +544,14 @@ export const Search = () => {
     }
   })
 
+  const tryToOpen = () => {
+    if (value.length > 2) {
+      setTimeout(() => {
+        setOpen(true)
+      }, 100)
+    }
+  }
+
   return (
     <>
       <FilledInput
@@ -568,6 +576,8 @@ export const Search = () => {
           color: theme.palette.primary.contrastText,
           background: 'rgba(255,255,255,.1)',
         }}
+        onFocus={tryToOpen}
+        onClick={tryToOpen}
         onKeyDown={e => {
           const totalLength =
             appSuggestions.length +
@@ -583,12 +593,17 @@ export const Search = () => {
             e.preventDefault()
             setSelected(Math.min(selected + 1, totalLength - 1))
             setScrollTo(true)
+            tryToOpen()
           } else if (e.keyCode === 13) {
+            //enter
             e.preventDefault()
             const toLoad = appSuggestions
               .concat(configurationSuggestions)
               .concat(propertySuggestions)[selected]
             history.push(toLoad.to)
+            setOpen(false)
+          } else if (e.keyCode === 27) {
+            //escape
             setOpen(false)
           }
         }}
