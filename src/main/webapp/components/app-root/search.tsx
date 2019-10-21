@@ -20,6 +20,20 @@ import { Grid } from '@connexta/atlas/atoms/grid'
 import { setType } from '@connexta/atlas/typescript'
 import _debounce from 'lodash.debounce'
 import { CircularProgress } from '@connexta/atlas/atoms/progress'
+import Fuse from 'fuse.js'
+
+const FUSE_OPTIONS = {
+  shouldSort: true,
+  tokenize: true,
+  findAllMatches: true,
+  includeScore: true,
+  includeMatches: true,
+  threshold: 0,
+  location: 0,
+  distance: 100,
+  maxPatternLength: 32,
+  minMatchCharLength: 3,
+}
 
 // https://stackoverflow.com/questions/4149276/how-to-convert-camelcase-to-camel-case
 const unCamelCase = (text: string) => {
@@ -40,6 +54,7 @@ const INCLUDE_APP_SUGGESTIONS = false
 type determineSuggestionsProps = {
   applications: ApplicationType[]
   services: ConfigurationType[]
+  properties: PropertyType[]
   setPropertySuggestions: setType<PossibleType[]>
   setAppSuggestions: setType<PossibleType[]>
   setConfigurationSuggestions: setType<PossibleType[]>
@@ -132,12 +147,65 @@ const HighlightedText = ({
   return <>{highlights}</>
 }
 
+const HighlightedTextTwo = ({}) => {}
+
 const GENERAL_TYPOGRAPHY_STYLES = {
   overflow: 'hidden',
   textOverflow: 'ellipsis',
 }
 
+type FuseResponse<T> = {
+  item: T
+  highlights: {
+    [key: string]: React.ReactNode
+  }
+  matches: {
+    arrayIndex: 0
+    indices: number[]
+    key: string
+    value: string
+  }[]
+  score: number
+}[]
+
+const propertyTypeFuseKeys = [
+  {
+    name: 'id',
+    weight: 0.3,
+  },
+  {
+    name: 'description',
+    weight: 0.1,
+  },
+  {
+    name: 'name',
+    weight: 0.6,
+  },
+]
+
+const propertyTypeFuse = new Fuse([] as PropertyType[], {
+  ...FUSE_OPTIONS,
+  keys: propertyTypeFuseKeys,
+})
+
+const configurationTypeFuseKeys = [
+  {
+    name: 'id',
+    weight: 0.4,
+  },
+  {
+    name: 'name',
+    weight: 0.6,
+  },
+]
+
+const configurationTypeFuse = new Fuse([] as ConfigurationType[], {
+  ...FUSE_OPTIONS,
+  keys: configurationTypeFuseKeys,
+})
+
 const determineSuggestions = ({
+  properties,
   applications,
   services,
   setAppSuggestions,
@@ -240,160 +308,166 @@ const determineSuggestions = ({
 
   const propertyPossibles = [] as PossibleType[]
   const servicePossibles = [] as PossibleType[]
-  services.forEach(service => {
-    service.metatype
-      .filter(metatype => {
-        let concat = metatype.id + metatype.description
-        if (metatype.name !== null) concat += metatype.name
-        return concat.toLowerCase().includes(value.toLowerCase())
-      })
-      .forEach(matchingMetatype => {
-        let match = '',
-          matchIndex
-        let concat = ''
-        if (matchingMetatype.name !== null)
-          concat += ' ' + matchingMetatype.name
-        concat = matchingMetatype.description + ' ' + matchingMetatype.id
 
-        matchIndex = concat.toLowerCase().indexOf(value.toLowerCase())
-        const prefixes = concat.substring(0, matchIndex).split(' ')
-        const prefix = prefixes[prefixes.length - 1]
-        match = concat.substring(matchIndex).split(' ')[0]
-        if (prefix !== ' ') {
-          match = prefix + match
-        }
-        propertyPossibles.push({
-          why: ({ isSelected }: { isSelected: boolean }) => {
-            return (
-              <div
-                style={{
-                  padding: '10px',
-                  width: '400px',
-                  background: isSelected ? HIGHLIGHT : 'inherit',
-                }}
-              >
-                <Grid
-                  container
-                  alignItems="center"
-                  direction="row"
-                  wrap="nowrap"
-                  spacing={3}
+  propertyTypeFuse.setCollection(properties)
+  // @ts-ignore
+  const propertyMatches = propertyTypeFuse.search(value) as FuseResponse<
+    PropertyType
+  >
+
+  propertyMatches.forEach(propertyMatch => {
+    propertyMatch.matches.forEach(match => {
+      const highlight = (
+        <>
+          {match.value.substring(0, match.indices[0])}
+          <u
+            style={{
+              background:
+                theme.palette.type === 'dark'
+                  ? fade(theme.palette.primary.dark, 0.3)
+                  : fade(theme.palette.primary.light, 0.1),
+            }}
+          >
+            {match.value.substring(match.indices[0], match.indices[1])}
+          </u>
+          {match.value.substring(match.indices[1])}
+        </>
+      )
+      propertyMatch.highlights = {
+        ...propertyMatch.highlights,
+        [match.key]: highlight,
+      }
+    })
+  })
+  propertyMatches.forEach(propertyMatch => {
+    propertyPossibles.push({
+      why: ({ isSelected }: { isSelected: boolean }) => {
+        return (
+          <div
+            style={{
+              padding: '10px',
+              width: '400px',
+              background: isSelected ? HIGHLIGHT : 'inherit',
+            }}
+          >
+            <Grid
+              container
+              alignItems="center"
+              direction="row"
+              wrap="nowrap"
+              spacing={3}
+            >
+              <Grid item xs={5}>
+                <Typography
+                  noWrap={false}
+                  style={{
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    ...GENERAL_TYPOGRAPHY_STYLES,
+                  }}
                 >
-                  <Grid item xs={5}>
+                  <HighlightedText
+                    value={value}
+                    text={
+                      propertyMatch
+                        ? propertyMatch.item.name || propertyMatch.item.id
+                        : ''
+                    }
+                  />
+                </Typography>
+                {propertyMatch.item.name !== null &&
+                !propertyMatch.item.name
+                  .toLowerCase()
+                  .includes(unCamelCase(propertyMatch.item.id).toLowerCase()) &&
+                !propertyMatch.item.name
+                  .toLowerCase()
+                  .includes(propertyMatch.item.id.toLowerCase()) ? (
+                  <>
                     <Typography
                       noWrap={false}
                       style={{
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
                         ...GENERAL_TYPOGRAPHY_STYLES,
-                      }}
-                    >
-                      <HighlightedText
-                        value={value}
-                        text={
-                          matchingMetatype
-                            ? matchingMetatype.name || matchingMetatype.id
-                            : ''
-                        }
-                      />
-                    </Typography>
-                    {matchingMetatype.name !== null &&
-                    !matchingMetatype.name
-                      .toLowerCase()
-                      .includes(
-                        unCamelCase(matchingMetatype.id).toLowerCase()
-                      ) &&
-                    !matchingMetatype.name
-                      .toLowerCase()
-                      .includes(matchingMetatype.id.toLowerCase()) ? (
-                      <>
-                        <Typography
-                          noWrap={false}
-                          style={{
-                            ...GENERAL_TYPOGRAPHY_STYLES,
-                            fontSize: '12px',
-                            opacity: 0.9,
-                          }}
-                          variant="body2"
-                        >
-                          <HighlightedText
-                            value={value}
-                            text={
-                              matchingMetatype.name !== null
-                                ? matchingMetatype.id
-                                : ''
-                            }
-                          />
-                        </Typography>
-                      </>
-                    ) : null}
-                  </Grid>
-                  <Grid
-                    item
-                    xs={5}
-                    style={{
-                      borderLeft: '1px solid rgba(0,0,0,.1)',
-                      paddingLeft: '10px',
-                    }}
-                  >
-                    <Typography
-                      variant="h6"
-                      style={{ ...GENERAL_TYPOGRAPHY_STYLES }}
-                    >
-                      <HighlightedText value={value} text={service.name} />
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      style={{ opacity: 0.9, ...GENERAL_TYPOGRAPHY_STYLES }}
-                    >
-                      <HighlightedText
-                        value={value}
-                        text={
-                          matchingMetatype
-                            ? matchingMetatype.name || matchingMetatype.id
-                            : ''
-                        }
-                      />
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      style={{
                         fontSize: '12px',
                         opacity: 0.9,
-                        ...GENERAL_TYPOGRAPHY_STYLES,
                       }}
+                      variant="body2"
                     >
                       <HighlightedText
+                        value={value}
                         text={
-                          matchingMetatype && matchingMetatype.description
-                            ? matchingMetatype.description
+                          propertyMatch.item.name !== null
+                            ? propertyMatch.item.id
                             : ''
                         }
-                        value={value}
                       />
                     </Typography>
-                  </Grid>
-                </Grid>
-              </div>
-            )
-          },
-          match,
-          to: `/admin/system/Configuration/${service.name}?focus=${matchingMetatype.id}`,
-        })
-      })
-    let match = '',
-      matchIndex
-    let serviceConcat = service.name + ' ' + service.id
-    matchIndex = serviceConcat.toLowerCase().indexOf(value.toLowerCase())
-    if (matchIndex === -1) {
-      return
-    }
-    const prefixes = serviceConcat.substring(0, matchIndex).split(' ')
-    const prefix = prefixes[prefixes.length - 1]
-    match = serviceConcat.substring(matchIndex).split(' ')[0]
-    if (prefix !== ' ') {
-      match = prefix + match
-    }
+                  </>
+                ) : null}
+              </Grid>
+              <Grid
+                item
+                xs={5}
+                style={{
+                  borderLeft: '1px solid rgba(0,0,0,.1)',
+                  paddingLeft: '10px',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  style={{ ...GENERAL_TYPOGRAPHY_STYLES }}
+                >
+                  <HighlightedText
+                    value={value}
+                    text={propertyMatch.item.parent.name}
+                  />
+                </Typography>
+                <Typography
+                  variant="body2"
+                  style={{ opacity: 0.9, ...GENERAL_TYPOGRAPHY_STYLES }}
+                >
+                  <HighlightedText
+                    value={value}
+                    text={
+                      propertyMatch
+                        ? propertyMatch.item.name || propertyMatch.item.id
+                        : ''
+                    }
+                  />
+                </Typography>
+                <Typography
+                  variant="body2"
+                  style={{
+                    fontSize: '12px',
+                    opacity: 0.9,
+                    ...GENERAL_TYPOGRAPHY_STYLES,
+                  }}
+                >
+                  <HighlightedText
+                    text={
+                      propertyMatch && propertyMatch.item.description
+                        ? propertyMatch.item.description
+                        : ''
+                    }
+                    value={value}
+                  />
+                </Typography>
+              </Grid>
+            </Grid>
+          </div>
+        )
+      },
+      match: '',
+      to: `/admin/system/Configuration/${propertyMatch.item.parent.name}?focus=${propertyMatch.item.id}`,
+    })
+  })
+  setPropertySuggestions(propertyPossibles.slice(0, MAX_RESULTS))
+
+  configurationTypeFuse.setCollection(services)
+  // @ts-ignore
+  const configurationMatches = configurationTypeFuse.search(
+    value
+  ) as FuseResponse<ConfigurationType>
+  configurationMatches.forEach(configurationMatch => {
     servicePossibles.push({
       why: ({ isSelected }: { isSelected: boolean }) => {
         return (
@@ -420,7 +494,10 @@ const determineSuggestions = ({
                     ...GENERAL_TYPOGRAPHY_STYLES,
                   }}
                 >
-                  <HighlightedText text={service.name} value={value} />
+                  <HighlightedText
+                    text={configurationMatch.item.name}
+                    value={value}
+                  />
                 </Typography>
               </Grid>
               <Grid
@@ -435,7 +512,10 @@ const determineSuggestions = ({
                   variant="h6"
                   style={{ ...GENERAL_TYPOGRAPHY_STYLES }}
                 >
-                  <HighlightedText text={service.name} value={value} />
+                  <HighlightedText
+                    text={configurationMatch.item.name}
+                    value={value}
+                  />
                 </Typography>
                 <Typography
                   variant="body2"
@@ -445,43 +525,30 @@ const determineSuggestions = ({
                     ...GENERAL_TYPOGRAPHY_STYLES,
                   }}
                 >
-                  <HighlightedText text={service.id} value={value} />
+                  <HighlightedText
+                    text={configurationMatch.item.id}
+                    value={value}
+                  />
                 </Typography>
               </Grid>
             </Grid>
           </div>
         )
       },
-      match,
-      to: `/admin/system/Configuration/${service.name}`,
+      match: '',
+      to: `/admin/system/Configuration/${configurationMatch.item.name}`,
     })
   })
-  setPropertySuggestions(
-    propertyPossibles
-      .sort(a => {
-        if (a.match.toLowerCase().startsWith(value.toLowerCase())) {
-          return -1
-        } else {
-          return 1
-        }
-      })
-      .slice(0, MAX_RESULTS)
-  )
-  setConfigurationSuggestions(
-    servicePossibles
-      .sort(a => {
-        if (a.match.toLowerCase().startsWith(value.toLowerCase())) {
-          return -1
-        } else {
-          return 1
-        }
-      })
-      .slice(0, MAX_RESULTS)
-  )
+
+  setConfigurationSuggestions(servicePossibles.slice(0, MAX_RESULTS))
   setLoading(false)
 }
 
 const debouncedDetermineSuggestions = _debounce(determineSuggestions, 250)
+
+type PropertyType = {
+  parent: ConfigurationType
+} & ConfigurationType['metatype'][0]
 
 export const Search = () => {
   const anchorRef = React.useRef<null | HTMLElement>(null)
@@ -491,6 +558,7 @@ export const Search = () => {
   const [selected, setSelected] = React.useState(0 as number)
   const [value, setValue] = React.useState('')
   const [open, setOpen] = React.useState(false)
+  const [properties, setProperties] = React.useState([] as PropertyType[])
   const { services } = useServicesContext()
   const [loading, setLoading] = React.useState(false)
   const [scrollTo, setScrollTo] = React.useState(false)
@@ -517,10 +585,29 @@ export const Search = () => {
   }, [value])
 
   React.useEffect(() => {
+    setProperties(
+      services.reduce(
+        (blob, service) => {
+          return blob.concat(
+            service.metatype.map(meta => {
+              return {
+                parent: service,
+                ...meta,
+              }
+            })
+          )
+        },
+        [] as PropertyType[]
+      )
+    )
+  }, [services])
+
+  React.useEffect(() => {
     if (open === true) {
       //app suggestions
       setLoading(true)
       debouncedDetermineSuggestions({
+        properties,
         applications,
         services,
         setAppSuggestions,

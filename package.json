@@ -41,6 +41,7 @@
     "dropzone": "5.5.1",
     "font-awesome": "4.7.0",
     "formik": "1.5.8",
+    "fuse.js": "3.4.5",
     "iframe-resizer": "4.1.1",
     "lodash.throttle": "4.1.1",
     "@connexta/logviewer": "git://github.com/connexta/logviewer.git#17e7f603fbe5ba5d8edcd64c07787d065617deaa",
