@@ -74,8 +74,53 @@ export const Header = () => {
         </Switch>
       </Grid>
       <Grid item style={{ marginLeft: 'auto', flexShrink: 0 }}>
-        <Grid container alignItems="center">
+        <Grid container alignItems="center" spacing={3}>
           {__ENV__ === 'mocks' ? (
+            <Grid item>
+              <ControlledDrawer
+                drawerProps={{
+                  variant: 'temporary',
+                  anchor: 'right',
+                  PaperProps: {
+                    style: {
+                      minWidth: '400px',
+                      maxWidth: '70vw',
+                      padding: '20px',
+                      overflow: 'hidden',
+                    },
+                  },
+                }}
+                drawerChildren={() => {
+                  return <DeveloperSettings />
+                }}
+              >
+                {({ setOpen }) => {
+                  return (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => {
+                        setOpen(true)
+                      }}
+                    >
+                      <Tune />
+                      Developer
+                    </Button>
+                  )
+                }}
+              </ControlledDrawer>
+            </Grid>
+          ) : (
+            ''
+          )}
+          {modules.length > 1 ? (
+            <Grid item>
+              <ExtractedServicesProvider>
+                <Search />
+              </ExtractedServicesProvider>
+            </Grid>
+          ) : null}
+          <Grid item>
             <ControlledDrawer
               drawerProps={{
                 variant: 'temporary',
@@ -90,94 +135,57 @@ export const Header = () => {
                 },
               }}
               drawerChildren={() => {
-                return <DeveloperSettings />
+                return <Settings />
               }}
             >
               {({ setOpen }) => {
                 return (
-                  <Button
-                    variant="contained"
-                    color="secondary"
+                  <IconButton
+                    color="inherit"
                     onClick={() => {
                       setOpen(true)
                     }}
                   >
-                    <Tune />
-                    Developer
-                  </Button>
+                    <SettingsIcon />
+                  </IconButton>
                 )
               }}
             </ControlledDrawer>
-          ) : (
-            ''
-          )}
-          {modules.length > 1 ? (
-            <ExtractedServicesProvider>
-              <Search />
-            </ExtractedServicesProvider>
-          ) : null}
-          <ControlledDrawer
-            drawerProps={{
-              variant: 'temporary',
-              anchor: 'right',
-              PaperProps: {
-                style: {
-                  minWidth: '400px',
-                  maxWidth: '70vw',
-                  padding: '20px',
-                  overflow: 'hidden',
+          </Grid>
+          <Grid item>
+            <ControlledDrawer
+              drawerProps={{
+                variant: 'temporary',
+                anchor: 'right',
+                PaperProps: {
+                  style: {
+                    minWidth: '400px',
+                    maxWidth: '70vw',
+                    padding: '20px',
+                    overflow: 'hidden',
+                  },
                 },
-              },
-            }}
-            drawerChildren={() => {
-              return <Settings />
-            }}
-          >
-            {({ setOpen }) => {
-              return (
-                <IconButton
-                  color="inherit"
-                  onClick={() => {
-                    setOpen(true)
-                  }}
-                >
-                  <SettingsIcon />
-                </IconButton>
-              )
-            }}
-          </ControlledDrawer>
-
-          <ControlledDrawer
-            drawerProps={{
-              variant: 'temporary',
-              anchor: 'right',
-              PaperProps: {
-                style: {
-                  minWidth: '400px',
-                  maxWidth: '70vw',
-                  padding: '20px',
-                  overflow: 'hidden',
-                },
-              },
-            }}
-            drawerChildren={() => {
-              return <Alerts />
-            }}
-          >
-            {({ setOpen }) => {
-              return <NotificationsComp setOpen={setOpen} />
-            }}
-          </ControlledDrawer>
-
-          <Button
-            onClick={() => {
-              window.location.href = '/logout?service=' + window.location.href
-            }}
-            variant="text"
-            color="inherit"
-          >
-            Log out
-          </Button>
+              }}
+              drawerChildren={() => {
+                return <Alerts />
+              }}
+            >
+              {({ setOpen }) => {
+                return <NotificationsComp setOpen={setOpen} />
+              }}
+            </ControlledDrawer>
+          </Grid>
+          <Grid item>
+            <Button
+              onClick={() => {
+                window.location.href = '/logout?service=' + window.location.href
+              }}
+              variant="text"
+              color="inherit"
+            >
+              Log out
+            </Button>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>
