@@ -70,10 +70,16 @@ type addHighlightingType = {
 
 const MAX_TEXT_LENGTH = 50
 
+/**
+ * Uses the first token to truncate the text at an appropriate spot.  Assumption is the first token is likely the most important.
+ */
 const getTruncatedText = ({ text, value }: addHighlightingType) => {
-  let firstOccurence = text
-    .toLowerCase()
-    .indexOf(value.split(' ')[0].toLowerCase())
+  let firstOccurence = text.toLowerCase().indexOf(
+    value
+      .split(' ')
+      .filter(token => token !== '')[0]
+      .toLowerCase()
+  )
   let truncatedText = text.substring(0)
   if (firstOccurence === -1) {
     firstOccurence = 0
