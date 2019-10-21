@@ -599,21 +599,30 @@ export const Search = () => {
     setSelected(0)
   }, [value])
 
+  /**
+   * Structuring the properties this way lets fusejs do proper ranking of the results.
+   *
+   * Removing factories for now since it doesn't really make sense to query on individual factory properties (for now).
+   * They are still included in the configuration list though, since someone may be using this search bar to make a new one.
+   * Maybe if we include things like "values" for properties in the results in the future including factories would make more sense.
+   */
   React.useEffect(() => {
     setProperties(
-      services.reduce(
-        (blob, service) => {
-          return blob.concat(
-            service.metatype.map(meta => {
-              return {
-                parent: service,
-                ...meta,
-              }
-            })
-          )
-        },
-        [] as PropertyType[]
-      )
+      services
+        .filter(service => service.factory === false)
+        .reduce(
+          (blob, service) => {
+            return blob.concat(
+              service.metatype.map(meta => {
+                return {
+                  parent: service,
+                  ...meta,
+                }
+              })
+            )
+          },
+          [] as PropertyType[]
+        )
     )
   }, [services])
 
@@ -735,7 +744,7 @@ export const Search = () => {
                     >
                       Applications
                     </Typography>
-                    <Divider />
+                    <Divider style={{ marginBottom: '10px' }} />
                     {appSuggestions.map((suggestion, index) => {
                       const isSelected = index === selected
                       const Suggestion = suggestion.why
@@ -768,7 +777,7 @@ export const Search = () => {
                     >
                       Configurations
                     </Typography>
-                    <Divider />
+                    <Divider style={{ marginBottom: '10px' }} />
                     {configurationSuggestions.map((suggestion, index) => {
                       const isSelected =
                         appSuggestions.length + index === selected
@@ -802,7 +811,7 @@ export const Search = () => {
                     >
                       Configuration Properties
                     </Typography>
-                    <Divider />
+                    <Divider style={{ marginBottom: '10px' }} />
                     {propertySuggestions.map((suggestion, index) => {
                       const isSelected =
                         configurationSuggestions.length +
