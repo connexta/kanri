@@ -33,6 +33,8 @@ import {
 } from '@connexta/atlas/atoms/snackbar'
 import { LinearProgress } from '@material-ui/core'
 import { Tooltip } from '@connexta/atlas/atoms/tooltip'
+import { CheckboxProps } from '@material-ui/core/Checkbox/Checkbox'
+import { ButtonBaseActions } from '@material-ui/core/ButtonBase/ButtonBase'
 // todo, make a pr or open an issue with formik
 const FormikFormFix = FormikForm as React.ComponentType<FormikFormProps>
 type Props = (
@@ -54,6 +56,28 @@ const CustomGrid = styled(Grid)`
     margin-top: 20px;
   }
 `
+/**
+ *  Fix for focus only appearing on checkboxes if last interaction was through keyboard.
+ *  This makes it so autofocus works in all cases.
+ *
+ *  See https://github.com/mui-org/material-ui/issues/9659
+ */
+const FocusableCheckbox = (props: CheckboxProps) => {
+  const sideEffectActions = React.useRef(null as null | ButtonBaseActions)
+  React.useEffect(() => {
+    if (sideEffectActions.current !== null && props.autoFocus) {
+      sideEffectActions.current.focusVisible()
+    }
+  }, [sideEffectActions])
+  return (
+    <Checkbox
+      {...props}
+      action={actions => {
+        sideEffectActions.current = actions
+      }}
+    />
+  )
+}
 
 type MyFormValues = ExistingConfigurationType['properties']
 
@@ -142,7 +166,7 @@ const FieldRender = ({
       return (
         <>
           <Label meta={meta}>
-            <Checkbox
+            <FocusableCheckbox
               autoFocus={autoFocus}
               checked={field.value}
               onChange={(e: any) => {
