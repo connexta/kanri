@@ -71,7 +71,9 @@ type addHighlightingType = {
 const MAX_TEXT_LENGTH = 50
 
 const getTruncatedText = ({ text, value }: addHighlightingType) => {
-  let firstOccurence = text.toLowerCase().indexOf(value.toLowerCase())
+  let firstOccurence = text
+    .toLowerCase()
+    .indexOf(value.split(' ')[0].toLowerCase())
   let truncatedText = text.substring(0)
   if (firstOccurence === -1) {
     firstOccurence = 0
@@ -114,20 +116,29 @@ const HighlightedText = ({
   const theme = useTheme()
   let truncatedText = getTruncatedText({ text, value })
 
-  const parts = truncatedText.toLowerCase().split(value.toLowerCase())
-  const indexes = [] as number[]
-  let index = 0
-  parts.forEach(part => {
-    index = index + part.length
-    indexes.push(index)
-    index = index + value.length
-  })
+  const indexes = [] as { index: number; length: number }[]
+
+  value
+    .toLowerCase()
+    .split(' ')
+    .filter(part => part !== '')
+    .forEach(token => {
+      const parts = truncatedText.toLowerCase().split(token.toLowerCase())
+      let index = 0
+      parts.forEach(part => {
+        index = index + part.length
+        indexes.push({ index, length: token.length })
+        index = index + value.length
+      })
+    })
+  indexes.sort((a, b) => a.index - b.index)
   const highlights = [] as React.ReactNode[]
   indexes.forEach((startOfHighlight, i) => {
-    const endOfLastHighlight = i !== 0 ? indexes[i - 1] + value.length : 0
+    const endOfLastHighlight =
+      i !== 0 ? indexes[i - 1].index + indexes[i - 1].length : 0
     highlights.push(
       <>
-        {truncatedText.substring(endOfLastHighlight, startOfHighlight)}
+        {truncatedText.substring(endOfLastHighlight, startOfHighlight.index)}
         <u
           style={{
             background:
@@ -137,8 +148,8 @@ const HighlightedText = ({
           }}
         >
           {truncatedText.substring(
-            startOfHighlight,
-            startOfHighlight + value.length
+            startOfHighlight.index,
+            startOfHighlight.index + startOfHighlight.length
           )}
         </u>
       </>
@@ -146,8 +157,6 @@ const HighlightedText = ({
   })
   return <>{highlights}</>
 }
-
-const HighlightedTextTwo = ({}) => {}
 
 const GENERAL_TYPOGRAPHY_STYLES = {
   overflow: 'hidden',
