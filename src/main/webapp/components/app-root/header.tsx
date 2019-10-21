@@ -65,6 +65,7 @@ const NotificationsComp = ({ setOpen }: { setOpen: setType<boolean> }) => {
 }
 
 export const Header = () => {
+  const { modules } = useAppRootContext()
   return (
     <Grid container alignItems="center" spacing={3} wrap="nowrap">
       <Grid item>
@@ -110,9 +111,11 @@ export const Header = () => {
           ) : (
             ''
           )}
-          <ExtractedServicesProvider>
-            <Search />
-          </ExtractedServicesProvider>
+          {modules.length > 1 ? (
+            <ExtractedServicesProvider>
+              <Search />
+            </ExtractedServicesProvider>
+          ) : null}
           <ControlledDrawer
             drawerProps={{
               variant: 'temporary',
