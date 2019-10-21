@@ -21,6 +21,7 @@ import { setType } from '@connexta/atlas/typescript'
 import _debounce from 'lodash.debounce'
 import { CircularProgress } from '@connexta/atlas/atoms/progress'
 import Fuse from 'fuse.js'
+import scrollIntoView from 'scroll-into-view-if-needed'
 
 const FUSE_OPTIONS = {
   shouldSort: true,
@@ -649,8 +650,10 @@ export const Search = () => {
       popperInstanceRef.current.update()
     }
     if (selectedRef.current && scrollTo) {
-      //@ts-ignore
-      selectedRef.current.scrollIntoViewIfNeeded()
+      scrollIntoView(selectedRef.current, {
+        behavior: 'smooth',
+        scrollMode: 'if-needed',
+      })
       setScrollTo(false)
     }
   })
