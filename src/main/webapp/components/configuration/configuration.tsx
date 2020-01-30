@@ -64,7 +64,7 @@ const generateUrl = (displayName: string, hash: boolean) => {
   const firstPart = hash
     ? location.hash.split('/Configuration')[0].substring(1)
     : location.pathname.split('/Configuration')[0]
-  return `${firstPart}/Configuration/${displayName}`
+  return `${firstPart}/Configuration/${encodeURIComponent(displayName)}`
 }
 
 export const Configuration = ({

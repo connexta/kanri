@@ -35,7 +35,7 @@ const generateBreadcrumbs = ({ location }: RouteComponentProps) => {
               display: 'block',
             }}
           >
-            {crumb}
+            {decodeURIComponent(crumb)}
           </Link>
         )
       })}
