@@ -19,12 +19,12 @@
     "@types/lodash.throttle": "4.1.5",
     "@types/react": "16.8.23",
     "@types/react-dom": "16.8.4",
-    "@types/react-router-dom": "5.1.0",
+    "@types/react-router-dom": "5.1.1",
     "@types/react-select": "3.0.2",
     "@types/socket.io": "2.1.3",
     "@types/socket.io-client": "1.4.32",
     "@types/styled-components": "4.0.3",
-    "@connexta/ace": "git://github.com/connexta/ace.git#f0beb45ee163cad90bd17911796f9a18150682bc",
+    "@connexta/ace": "git://github.com/connexta/ace.git#d3294c2a70532dee1fdb01513fb86cd7f9685a28",
     "@connexta/eslint-config-connexta": "git://github.com/connexta/eslint-config-connexta.git#3f0caece6210d25c16863d472026fbfa069521a6",
     "chokidar": "3.0.2",
     "cpx": "1.5.0",
@@ -70,9 +70,7 @@
     "whitelist": [],
     "resolve": [
       "react",
-      "react-dom",
-      "@material-ui/styles",
-      "styled-components"
+      "react-dom"
     ]
   },
   "files": [
@@ -84,6 +82,8 @@
   "resolutions": {
     "core-js": "2.6.9",
     "@types/react": "16.8.23",
-    "@types/react-dom": "16.8.4"
-  }
+    "@types/react-dom": "16.8.4",
+    "@types/react-router": "5.1.4"
+  },
+  "context-path": "/"
 }
