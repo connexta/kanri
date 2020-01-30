@@ -306,7 +306,7 @@ const determineSuggestions = ({
             </div>
           )
         },
-        to: `/admin/applications/${app.name}`,
+        to: `/admin/applications/${encodeURIComponent(app.name)}`,
       })
     })
     setAppSuggestions(
@@ -473,7 +473,9 @@ const determineSuggestions = ({
         )
       },
       match: '',
-      to: `/admin/system/Configuration/${propertyMatch.item.parent.name}?focus=${propertyMatch.item.id}`,
+      to: `/admin/system/Configuration/${encodeURIComponent(
+        propertyMatch.item.parent.name
+      )}?focus=${encodeURIComponent(propertyMatch.item.id)}`,
     })
   })
   setPropertySuggestions(propertyPossibles.slice(0, MAX_RESULTS))
@@ -552,7 +554,9 @@ const determineSuggestions = ({
         )
       },
       match: '',
-      to: `/admin/system/Configuration/${configurationMatch.item.name}`,
+      to: `/admin/system/Configuration/${encodeURIComponent(
+        configurationMatch.item.name
+      )}`,
     })
   })
 
@@ -611,19 +615,16 @@ export const Search = () => {
     setProperties(
       services
         .filter(service => service.factory === false)
-        .reduce(
-          (blob, service) => {
-            return blob.concat(
-              service.metatype.map(meta => {
-                return {
-                  parent: service,
-                  ...meta,
-                }
-              })
-            )
-          },
-          [] as PropertyType[]
-        )
+        .reduce((blob, service) => {
+          return blob.concat(
+            service.metatype.map(meta => {
+              return {
+                parent: service,
+                ...meta,
+              }
+            })
+          )
+        }, [] as PropertyType[])
     )
   }, [services])
 

@@ -27,17 +27,21 @@ export const ServiceRoute = ({
   if (services.length === 0) {
     return null
   }
+
   const goBackUrl = match.url.split(`/${match.params.configurationId}`)[0]
+  const decodedConfigurationId = decodeURIComponent(
+    match.params.configurationId
+  )
 
   let correctService = services.find(service => {
-    return service.name === match.params.configurationId
+    return service.name === decodedConfigurationId
   })
   let correctConfiguration = undefined as ExistingConfigurationType | undefined
 
   services.forEach(service => {
     if (service.configurations) {
       service.configurations.forEach(configuration => {
-        if (configuration.id === match.params.configurationId) {
+        if (configuration.id === decodedConfigurationId) {
           correctConfiguration = configuration
         }
       })

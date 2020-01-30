@@ -42,7 +42,7 @@ const TopLevel = () => {
         {applications.map(app => {
           return (
             <Grid item key={app.name} xs={4} md={3}>
-              <Link to={`/admin/applications/${app.name}`}>
+              <Link to={`/admin/applications/${encodeURIComponent(app.name)}`}>
                 <Button
                   fullWidth
                   variant="outlined"
@@ -62,7 +62,9 @@ const TopLevel = () => {
 
 const NoMatch = ({ match, location }: RouteComponentProps) => {
   if (match.url.indexOf('applications') !== -1) {
-    const notFoundApplication = location.pathname.split('applications/')[1]
+    const notFoundApplication = decodeURIComponent(
+      location.pathname.split('applications/')[1]
+    )
     return (
       <>
         <Typography variant="h4" style={{ marginBottom: '10px' }}>
@@ -86,8 +88,11 @@ const Applications = () => {
       <Route
         path="/admin/applications/:applicationId"
         render={routeComponentProps => {
+          const decodedApplicationId = decodeURIComponent(
+            routeComponentProps.match.params.applicationId
+          )
           const app = applications.find(
-            app => app.name === routeComponentProps.match.params.applicationId
+            app => app.name === decodedApplicationId
           )
           if (app === undefined) {
             return <NoMatch {...routeComponentProps} />
