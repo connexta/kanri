@@ -21,7 +21,9 @@ export const handleReverseProxy = (url: string) => {
   if (window.location.pathname === '/') {
     return url // should only happen when running the dev server
   }
-  const context = window.location.pathname.split('/beta/admin/')[0] // normally "" unless we're under a reverse proxy
+  const context = window.location.pathname.split(
+    `${__package__json__['context-path']}/`
+  )[0] // normally "" unless we're under a reverse proxy
   return `${context}${url}`
 }
 
