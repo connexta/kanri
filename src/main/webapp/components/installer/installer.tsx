@@ -1,8 +1,7 @@
 import * as React from 'react'
-import {
-  CircularProgress,
-  LinearProgress,
-} from '@connexta/atlas/atoms/progress'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import LinearProgress from '@material-ui/core/LinearProgress'
+
 import { Welcome } from './welcome'
 import { Profile } from './profile'
 import { GuestClaims } from './guest-claims'
@@ -11,7 +10,7 @@ import { Certificates } from './certificates'
 import { SSO } from './sso'
 import { ProfileType, InstallerContext } from './installer.pure'
 import { Finish } from './finish'
-import { Paper } from '@connexta/atlas/atoms/paper'
+import Paper from '@material-ui/core/Paper'
 import { InstanceRouteContextProvider } from '../app-root/route'
 import { COMMANDS } from '../fetch/fetch'
 
@@ -60,13 +59,13 @@ const ProgressBar = ({
   )
 }
 
-export const Installer = ({  }: Props) => {
+export const Installer = ({}: Props) => {
   const [step, setStep] = React.useState(0)
   const [totalSteps] = React.useState(6)
   const [profiles, setProfiles] = React.useState([] as ProfileType[])
-  const [profile, setProfile] = React.useState(undefined as
-    | ProfileType
-    | undefined)
+  const [profile, setProfile] = React.useState(
+    undefined as ProfileType | undefined
+  )
   const [loading] = React.useState(false)
 
   const nextStep = () => {

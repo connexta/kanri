@@ -13,17 +13,17 @@
  *
  **/
 import * as React from 'react'
-import { CircularProgress } from '@connexta/atlas/atoms/progress'
-import { Paper } from '@connexta/atlas/atoms/paper'
-import { Grid } from '@connexta/atlas/atoms/grid'
-import { Button } from '@connexta/atlas/atoms/button'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Paper from '@material-ui/core/Paper'
+import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
 import { hot } from 'react-hot-loader'
 import { getDisplayName } from '../../types/App'
 import Application from '../application/application'
 import { useAppRootContext } from '../app-root/app-root.pure'
 
 import { Route, Link, Switch, RouteComponentProps } from 'react-router-dom'
-import { Typography } from '@connexta/atlas/atoms/typography'
+import Typography from '@material-ui/core/Typography'
 import { InstanceRouteContextProvider } from '../app-root/route'
 
 const TopLevel = () => {

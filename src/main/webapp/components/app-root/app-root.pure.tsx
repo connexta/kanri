@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { RouteChildrenProps } from 'react-router'
 import { setType } from '@connexta/atlas/typescript/hooks'
+import { RouteComponentProps } from 'react-router-dom'
 
 export type PlatformConfigType = {
   background: string
@@ -115,6 +116,17 @@ export function createCtx<A>() {
   return [useCtx, ctx.Provider] as const // make TypeScript infer a tuple, not an array of union types
 }
 
+export type ExtensionType = {
+  links: {
+    name: string
+    shortName: string
+    url: string
+    Icon: any
+    content: (props: any) => JSX.Element
+  }[]
+  handleModuleRouting: (moduleId: string) => JSX.Element | undefined
+}
+
 export const [useAppRootContext, AppRootContextProvider] = createCtx<{
   platformConfig: PlatformConfigType
   adminConfig: AdminConfigType
@@ -126,6 +138,7 @@ export const [useAppRootContext, AppRootContextProvider] = createCtx<{
   fetchApplications: () => Promise<void>
   theme: ApplicationTheme
   setTheme: setType<ApplicationTheme>
+  extension: ExtensionType
 }>()
 
 export const [useRouteContext, RouteContextProvider] = createCtx<{

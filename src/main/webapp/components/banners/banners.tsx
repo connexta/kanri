@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Typography } from '@connexta/atlas/atoms/typography'
+import Typography from '@material-ui/core/Typography'
 import { useAppRootContext } from '../app-root/app-root.pure'
 
 export const BannerHeader = () => {

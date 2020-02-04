@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { hot } from 'react-hot-loader/root'
 import { setConfig } from 'react-hot-loader'
-import { AppRootContextProvider } from './app-root.pure'
+import { AppRootContextProvider, ExtensionType } from './app-root.pure'
 import { HashRouter as Router } from 'react-router-dom'
 import { SnackbarProvider } from '@connexta/atlas/atoms/snackbar'
 
@@ -32,7 +32,7 @@ import { SystemUsage } from '../system-usage/system-usage'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { COMMANDS } from '../fetch/fetch'
 
-const AppRoot = () => {
+const AppRoot = ({ extension }: { extension: ExtensionType }) => {
   const [theme, setTheme] = React.useState('light' as ApplicationTheme)
   const [platformConfig, setPlatformConfig] = React.useState(
     {} as PlatformConfigType
@@ -106,6 +106,7 @@ const AppRoot = () => {
         value={{
           platformConfig,
           adminConfig,
+          extension,
           alerts,
           fetchAlerts,
           modules,

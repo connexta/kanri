@@ -4,9 +4,9 @@ import { useAppRootContext } from '../app-root/app-root.pure'
 import { setType } from '@connexta/atlas/typescript'
 import throttle from 'lodash.throttle'
 import { ControlledModal } from '@connexta/atlas/atoms/modal'
-import { Typography } from '@connexta/atlas/atoms/typography'
-import { Button } from '@connexta/atlas/atoms/button'
-import { Grid } from '@connexta/atlas/atoms/grid'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
 
 const idleNoticeDuration = 60000
 // Length of inactivity that will trigger user timeout (15 minutes in ms by default)

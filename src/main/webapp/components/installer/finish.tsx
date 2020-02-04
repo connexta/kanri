@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { Step } from './step'
-import { Typography } from '@connexta/atlas/atoms/typography'
-import { Grid } from '@connexta/atlas/atoms/grid'
-import { Button } from '@connexta/atlas/atoms/button'
-import { CircularProgress } from '@connexta/atlas/atoms/progress'
+import Typography from '@material-ui/core/Typography'
+import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import { useRouteContext, useAppRootContext } from '../app-root/app-root.pure'
 import { COMMANDS } from '../fetch/fetch'
 

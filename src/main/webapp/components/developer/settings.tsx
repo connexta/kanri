@@ -1,7 +1,8 @@
 import * as React from 'react'
-import { Typography } from '@connexta/atlas/atoms/typography'
-import { TextField, MenuItem } from '@connexta/atlas/atoms/input'
-import { Grid } from '@connexta/atlas/atoms/grid'
+import Typography from '@material-ui/core/Typography'
+import TextField from '@material-ui/core/TextField'
+import MenuItem from '@material-ui/core/MenuItem'
+import Grid from '@material-ui/core/Grid'
 import Grow from '@material-ui/core/Grow'
 
 type ServerSettingsType = {

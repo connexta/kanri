@@ -1,13 +1,14 @@
 import * as React from 'react'
 import { InstallerContext } from './installer.pure'
-import { Grid } from '@connexta/atlas/atoms/grid'
-import { Button } from '@connexta/atlas/atoms/button'
+import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
 import { Step } from './step'
-import { CircularProgress } from '@connexta/atlas/atoms/progress'
-import { InfoIcon } from '@connexta/atlas/atoms/icons'
-import { TextField } from '@connexta/atlas/atoms/input'
-import { Tooltip } from '@connexta/atlas/atoms/tooltip'
-import { Typography } from '@connexta/atlas/atoms/typography'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import InfoIcon from '@material-ui/icons/Info'
+import TextField from '@material-ui/core/TextField'
+import Tooltip from '@material-ui/core/Tooltip'
+
+import Typography from '@material-ui/core/Typography'
 import { COMMANDS } from '../fetch/fetch'
 
 const SYSTEM_PROPERTIES_READ_URL =
@@ -21,13 +22,10 @@ const createPayload = (attributes: AttributeType[]) => {
     mbean: 'org.codice.ddf.ui.admin.api:type=SystemPropertiesAdminMBean',
     operation: 'writeSystemProperties',
     arguments: [
-      attributes.reduce(
-        (blob, attr) => {
-          blob[attr.key] = attr.value
-          return blob
-        },
-        {} as { [key: string]: string }
-      ),
+      attributes.reduce((blob, attr) => {
+        blob[attr.key] = attr.value
+        return blob
+      }, {} as { [key: string]: string }),
     ],
   }
 }

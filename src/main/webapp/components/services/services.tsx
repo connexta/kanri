@@ -21,8 +21,8 @@ import { ApplicationType } from '../../types/App'
 import { Route } from 'react-router-dom'
 import { ServiceRoute } from '../service/service.route'
 import { ConfigurationType } from '../app-root/app-root.pure'
-import { CircularProgress } from '@connexta/atlas/atoms/progress'
-import { Typography } from '@connexta/atlas/atoms/typography'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Typography from '@material-ui/core/Typography'
 
 type Props = {
   app?: ApplicationType

@@ -1,6 +1,7 @@
 import * as React from 'react'
-import { TextField, MenuItem } from '@connexta/atlas/atoms/input'
-import { Typography } from '@connexta/atlas/atoms/typography'
+import TextField from '@material-ui/core/TextField'
+import MenuItem from '@material-ui/core/MenuItem'
+import Typography from '@material-ui/core/Typography'
 import { useAppRootContext, ApplicationTheme } from './app-root.pure'
 
 export const Settings = () => {

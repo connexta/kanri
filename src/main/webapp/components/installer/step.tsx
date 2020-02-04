@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Grid } from '@connexta/atlas/atoms/grid'
+import Grid from '@material-ui/core/Grid'
 
 type Props = {
   content?: React.ReactNode

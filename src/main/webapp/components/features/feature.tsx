@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { FeatureType } from '../app-root/app-root.pure'
-import { Grid } from '@connexta/atlas/atoms/grid'
-import { Button } from '@connexta/atlas/atoms/button'
-import { Typography } from '@connexta/atlas/atoms/typography'
+import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
 import { COMMANDS } from '../fetch/fetch'
 import { useFeaturesContext } from './features.pure'
-import { LinearProgress } from '@connexta/atlas/atoms/progress'
+import LinearProgress from '@material-ui/core/LinearProgress'
 import {
   useSnackbar,
   generateDismissSnackbarAction,

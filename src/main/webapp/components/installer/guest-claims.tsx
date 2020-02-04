@@ -1,19 +1,19 @@
 import * as React from 'react'
 import { Step } from './step'
 import { InstallerContext } from './installer.pure'
-import { Grid } from '@connexta/atlas/atoms/grid'
-import { Button } from '@connexta/atlas/atoms/button'
-import { Typography } from '@connexta/atlas/atoms/typography'
-import { CircularProgress } from '@connexta/atlas/atoms/progress'
-import { RemoveIcon } from '@connexta/atlas/atoms/icons'
-import {
-  FormControl,
-  FormLabel,
-  Select,
-  MenuItem,
-  CreatableSelect,
-  TextField,
-} from '@connexta/atlas/atoms/input'
+import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import RemoveIcon from '@material-ui/icons/Remove'
+
+import FormControl from '@material-ui/core/FormControl'
+import FormLabel from '@material-ui/core/FormLabel'
+import Select from '@material-ui/core/Select'
+import MenuItem from '@material-ui/core/MenuItem'
+import { WrappedCreatableSelect as CreatableSelect } from '@connexta/atlas/atoms/input/autocomplete'
+import TextField from '@material-ui/core/TextField'
+
 import { COMMANDS } from '../fetch/fetch'
 
 const GUEST_CLAIMS_URL =

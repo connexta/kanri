@@ -2,19 +2,23 @@ import * as React from 'react'
 import clsx from 'clsx'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
-import { WrappedDrawer as Drawer } from '@connexta/atlas/atoms/drawer/drawer'
-import { WrappedAppBar as AppBar } from '@connexta/atlas/atoms/appbar/appbar'
-import { WrappedToolbar as Toolbar } from '@connexta/atlas/atoms/toolbar/toolbar'
-import { Typography } from '@connexta/atlas/atoms/typography'
-import { Divider } from '@connexta/atlas/atoms/divider'
-import { IconButton } from '@connexta/atlas/atoms/button'
-import { MenuIcon, ChevronLeftIcon } from '@connexta/atlas/atoms/icons'
+import Drawer from '@material-ui/core/Drawer'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+
+import Typography from '@material-ui/core/Typography'
+import Divider from '@material-ui/core/Divider'
+import IconButton from '@material-ui/core/IconButton'
+
+import MenuIcon from '@material-ui/icons/Menu'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+
 import { Header } from './header'
 import { Links } from './links'
 import { Content } from './content'
 import { useAppRootContext } from './app-root.pure'
 import { InstanceRouteContextProvider } from './route'
-import { Grid } from '@connexta/atlas/atoms/grid'
+import Grid from '@material-ui/core/Grid'
 import { BannerHeader, BannerFooter } from '../banners/banners'
 
 const drawerWidth = 240

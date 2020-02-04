@@ -12,11 +12,20 @@
  * <http://www.gnu.org/licenses/lgpl.html>.
  *
  **/
-
 import * as React from 'react'
 import * as ReactDom from 'react-dom'
 import { AppRoot } from './components/app-root'
+import { ExtensionType } from './components/app-root/app-root.pure'
 
-// setup the area that the modules will load into and asynchronously require in each module
-// so that it can render itself into the area that was just constructed for it
-ReactDom.render(<AppRoot />, document.querySelector('#root'))
+export type MainProps = {
+  extension: ExtensionType
+}
+
+export default ({ extension }: MainProps) => {
+  // setup the area that the modules will load into and asynchronously require in each module
+  // so that it can render itself into the area that was just constructed for it
+  ReactDom.render(
+    <AppRoot extension={extension}></AppRoot>,
+    document.querySelector('#root')
+  )
+}
