@@ -32,7 +32,7 @@ import { SystemUsage } from '../system-usage/system-usage'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { COMMANDS } from '../fetch/fetch'
 
-const AppRoot = ({ extension }: { extension: ExtensionType }) => {
+const AppRoot = ({ extension }: { extension?: ExtensionType }) => {
   const [theme, setTheme] = React.useState('light' as ApplicationTheme)
   const [platformConfig, setPlatformConfig] = React.useState(
     {} as PlatformConfigType

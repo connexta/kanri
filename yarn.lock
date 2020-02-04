@@ -1087,10 +1087,10 @@
     whatwg-fetch "2.0.4"
     worker-loader "1.1.1"
 
-"@connexta/atlas@0.0.46":
-  version "0.0.46"
-  resolved "https://registry.yarnpkg.com/@connexta/atlas/-/atlas-0.0.46.tgz#a795c8bfa12f8391f20554bf2fc2ed938f0fea48"
-  integrity sha512-JZj7H68BfBlYi7UErwBNS4ohJuXIoI8phdS0A/y+/8G8RlS715ul7S6JlDFgz7whYcLQKrcYlNO0QR5tV9ajLQ==
+"@connexta/atlas@0.0.47":
+  version "0.0.47"
+  resolved "https://registry.yarnpkg.com/@connexta/atlas/-/atlas-0.0.47.tgz#17c205c909ccb93d8991689a7ff9ee20c7e6dcd2"
+  integrity sha512-3DMiDC4WoS7el79g+GdqCjwaoqqSCCa33GqenH8HqCZaVeSYTCS7dR8hGj0gSPmhLSSsmqcB/4at3Gcr/2xHrA==
   dependencies:
     "@date-io/moment" "1.3.9"
     "@material-ui/core" "4.4.1"
@@ -1098,7 +1098,7 @@
     "@material-ui/lab" "4.0.0-alpha.26"
     "@material-ui/pickers" "3.2.2"
     html-react-parser "0.6.1"
-    lodash "4.17.4"
+    lodash "4.17.13"
     material-ui-chip-input "1.0.0"
     notistack "0.9.0"
     polished "3.4.1"
@@ -9267,10 +9267,10 @@ lodash@4.13.1:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.13.1.tgz#83e4b10913f48496d4d16fec4a560af2ee744b68"
   integrity sha1-g+SxCRP0hJbU0W/sSlYK8u50S2g=
 
-lodash@4.17.4:
-  version "4.17.4"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
-  integrity sha1-eCA6TRwyiuHYbcpkYONptX9AVa4=
+lodash@4.17.13:
+  version "4.17.13"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.13.tgz#0bdc3a6adc873d2f4e0c4bac285df91b64fc7b93"
+  integrity sha512-vm3/XWXfWtRua0FkUyEHBZy8kCPjErNBT9fJx8Zvs+U6zjqPbTUOpkaoum3O5uiA8sm+yNMHXfYkTUHFoMxFNA==
 
 lodash@^4.0.1, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.3.0, lodash@^4.8.0:
   version "4.17.15"

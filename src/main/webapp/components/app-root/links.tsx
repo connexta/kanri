@@ -105,6 +105,7 @@ export const Links = ({ open }: { open: boolean }) => {
           )
         })}
         {extension &&
+          extension.links &&
           extension.links.map(({ url, Icon, name, shortName }) => {
             const isCurrentUrl = location.pathname.indexOf(url) !== -1
             const constructedUrl = `/admin/${url}`

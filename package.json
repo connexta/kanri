@@ -37,7 +37,7 @@
     "typescript": "3.5.3"
   },
   "dependencies": {
-    "@connexta/atlas": "0.0.46",
+    "@connexta/atlas": "0.0.47",
     "@material-ui/core": "4.4.1",
     "@material-ui/icons": "4.4.1",
     "@material-ui/lab": "4.0.0-alpha.26",
@@ -75,10 +75,7 @@
     "whitelist": [],
     "resolve": {
       "react": "react",
-      "react-dom$": "react-dom",
-      "@material-ui/core/Modal": "@material-ui/core/Modal",
-      "@material-ui/styles": "@material-ui/styles",
-      "@material-ui/core/styles": "@material-ui/core/styles"
+      "react-dom$": "react-dom"
     }
   },
   "files": [
@@ -86,7 +83,7 @@
     "target/webapp",
     "src/main/resources"
   ],
-  "main": "src/main/webapp/main.tsx",
+  "main": "src/main/webapp/components/entry/default-entry.tsx",
   "resolutions": {
     "core-js": "2.6.9",
     "@material-ui/styles": "4.4.1",

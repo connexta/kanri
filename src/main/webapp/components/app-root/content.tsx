@@ -99,9 +99,11 @@ export const Content = () => {
             }
           }
           return (
-            extension.handleModuleRouting(routeProps.match.params.moduleId) || (
-              <NoMatch />
-            )
+            (extension &&
+              extension.handleModuleRouting &&
+              extension.handleModuleRouting(
+                routeProps.match.params.moduleId
+              )) || <NoMatch />
           )
         }}
       />
