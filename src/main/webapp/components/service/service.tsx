@@ -14,8 +14,8 @@
  **/
 import * as React from 'react'
 import { Configuration } from '../configuration/configuration'
-import { Divider } from '@connexta/atlas/atoms/divider'
-import { Button } from '@connexta/atlas/atoms/button'
+import Divider from '@material-ui/core/Divider'
+import Button from '@material-ui/core/Button'
 import { ConfigurationType } from '../app-root/app-root.pure'
 import { Link } from 'react-router-dom'
 type Props = {

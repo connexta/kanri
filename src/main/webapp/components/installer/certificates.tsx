@@ -1,14 +1,19 @@
 import * as React from 'react'
 import { InstallerContext } from './installer.pure'
-import { Grid } from '@connexta/atlas/atoms/grid'
-import { Button } from '@connexta/atlas/atoms/button'
+import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
 import { Step } from './step'
-import { CircularProgress } from '@connexta/atlas/atoms/progress'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import Dropzone from 'dropzone'
-import { Typography } from '@connexta/atlas/atoms/typography'
-import { AddIcon, InfoIcon } from '@connexta/atlas/atoms/icons'
-import { TextField, Select, MenuItem } from '@connexta/atlas/atoms/input'
-import { Tooltip } from '@connexta/atlas/atoms/tooltip'
+import Typography from '@material-ui/core/Typography'
+import AddIcon from '@material-ui/icons/Add'
+import InfoIcon from '@material-ui/icons/Info'
+
+import TextField from '@material-ui/core/TextField'
+import Select from '@material-ui/core/Select'
+import MenuItem from '@material-ui/core/MenuItem'
+import Tooltip from '@material-ui/core/Tooltip'
+
 import { createGlobalStyle } from 'styled-components'
 import { setType } from '@connexta/atlas/typescript/hooks'
 import { COMMANDS } from '../fetch/fetch'
@@ -126,9 +131,9 @@ export const Certificates = () => {
   const [subMode, setSubMode] = React.useState('skip' as SubModeType)
   const [errors, setErrors] = React.useState([] as string[])
   const { nextStep, previousStep } = React.useContext(InstallerContext)
-  const [hostName, setHostName] = React.useState(undefined as
-    | AttributeType
-    | undefined)
+  const [hostName, setHostName] = React.useState(
+    undefined as AttributeType | undefined
+  )
   const [keystoreFile, setKeystoreFile] = React.useState('')
   const [keystoreFileName, setKeystoreFileName] = React.useState('')
   const [keystorePass, setKeystorePass] = React.useState('')

@@ -13,13 +13,13 @@
  *
  **/
 import * as React from 'react'
-import { Button } from '@connexta/atlas/atoms/button'
-import { Grid } from '@connexta/atlas/atoms/grid'
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
 import { ExistingConfigurationType } from '../app-root/app-root.pure'
 import { useServicesContext } from '../services/services.pure'
-import { Typography } from '@connexta/atlas/atoms/typography'
+import Typography from '@material-ui/core/Typography'
 import { Link } from 'react-router-dom'
-import { CloseIcon } from '@connexta/atlas/atoms/icons'
+import CloseIcon from '@material-ui/icons/Close'
 import { COMMANDS } from '../fetch/fetch'
 import {
   generateDismissSnackbarAction,

@@ -1,17 +1,16 @@
 import * as React from 'react'
 import { Step } from './step'
 import { getDisplayName, InstallerContext } from './installer.pure'
-import {
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
-} from '@connexta/atlas/atoms/input'
-import { Typography } from '@connexta/atlas/atoms/typography'
-import { CircularProgress } from '@connexta/atlas/atoms/progress'
-import { Button } from '@connexta/atlas/atoms/button'
-import { Grid } from '@connexta/atlas/atoms/grid'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormControl from '@material-ui/core/FormControl'
+import FormLabel from '@material-ui/core/FormLabel'
+
+import Typography from '@material-ui/core/Typography'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
 import { COMMANDS } from '../fetch/fetch'
 
 const PROFILE_INSTALL_URL =

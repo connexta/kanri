@@ -5,12 +5,10 @@ import {
   ConfigurationType,
 } from '../app-root/app-root.pure'
 import { ModalHeader } from '@connexta/atlas/atoms/modal'
-import {
-  TextField,
-  Checkbox,
-  MenuItem,
-  InputLabel,
-} from '@connexta/atlas/atoms/input'
+import TextField from '@material-ui/core/TextField'
+import Checkbox from '@material-ui/core/Checkbox'
+import MenuItem from '@material-ui/core/MenuItem'
+import InputLabel from '@material-ui/core/InputLabel'
 import {
   Formik,
   FormikActions,
@@ -20,10 +18,13 @@ import {
   FieldProps,
   FormikFormProps,
 } from 'formik'
-import { Grid } from '@connexta/atlas/atoms/grid'
-import { Button } from '@connexta/atlas/atoms/button'
-import { RemoveIcon, AddIcon, InfoIcon } from '@connexta/atlas/atoms/icons'
-import { Typography } from '@connexta/atlas/atoms/typography'
+import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
+import RemoveIcon from '@material-ui/icons/Remove'
+import AddIcon from '@material-ui/icons/Add'
+import InfoIcon from '@material-ui/icons/Info'
+
+import Typography from '@material-ui/core/Typography'
 import styled from 'styled-components'
 import { COMMANDS } from '../fetch/fetch'
 import { useServicesContext } from '../services/services.pure'
@@ -32,7 +33,7 @@ import {
   generateDismissSnackbarAction,
 } from '@connexta/atlas/atoms/snackbar'
 import { LinearProgress } from '@material-ui/core'
-import { Tooltip } from '@connexta/atlas/atoms/tooltip'
+import Tooltip from '@material-ui/core/Tooltip'
 import { CheckboxProps } from '@material-ui/core/Checkbox/Checkbox'
 import { ButtonBaseActions } from '@material-ui/core/ButtonBase/ButtonBase'
 // todo, make a pr or open an issue with formik
@@ -45,7 +46,8 @@ type Props = (
   | {
       configuration?: undefined
       service: ConfigurationType
-    }) & {
+    }
+) & {
   onClose: () => void
 }
 
@@ -339,22 +341,19 @@ export const ConfigurationEdit = ({
         service,
         loading,
         onClose,
-        initialValues: service.metatype.reduce(
-          (blob, meta) => {
-            blob[meta.id] = meta.defaultValue
-            if (meta.cardinality > 0 && blob[meta.id] === null) {
-              blob[meta.id] = []
-            }
-            if (meta.cardinality === 0 && blob[meta.id] instanceof Array) {
-              blob[meta.id] = (blob[meta.id] as any[])[0]
-            }
-            if (meta.type === 11) {
-              blob[meta.id] = blob[meta.id] === 'true'
-            }
-            return blob
-          },
-          {} as ExistingConfigurationType['properties']
-        ),
+        initialValues: service.metatype.reduce((blob, meta) => {
+          blob[meta.id] = meta.defaultValue
+          if (meta.cardinality > 0 && blob[meta.id] === null) {
+            blob[meta.id] = []
+          }
+          if (meta.cardinality === 0 && blob[meta.id] instanceof Array) {
+            blob[meta.id] = (blob[meta.id] as any[])[0]
+          }
+          if (meta.type === 11) {
+            blob[meta.id] = blob[meta.id] === 'true'
+          }
+          return blob
+        }, {} as ExistingConfigurationType['properties']),
         onSubmit: async values => {
           if (loading) {
             return
@@ -424,22 +423,19 @@ export const ConfigurationEdit = ({
         service,
         loading,
         onClose,
-        initialValues: service.metatype.reduce(
-          (blob, meta) => {
-            blob[meta.id] = meta.defaultValue
-            if (meta.cardinality > 0 && blob[meta.id] === null) {
-              blob[meta.id] = []
-            }
-            if (meta.cardinality === 0 && blob[meta.id] instanceof Array) {
-              blob[meta.id] = (blob[meta.id] as any[])[0]
-            }
-            if (meta.type === 11) {
-              blob[meta.id] = blob[meta.id] === 'true'
-            }
-            return blob
-          },
-          {} as ExistingConfigurationType['properties']
-        ),
+        initialValues: service.metatype.reduce((blob, meta) => {
+          blob[meta.id] = meta.defaultValue
+          if (meta.cardinality > 0 && blob[meta.id] === null) {
+            blob[meta.id] = []
+          }
+          if (meta.cardinality === 0 && blob[meta.id] instanceof Array) {
+            blob[meta.id] = (blob[meta.id] as any[])[0]
+          }
+          if (meta.type === 11) {
+            blob[meta.id] = blob[meta.id] === 'true'
+          }
+          return blob
+        }, {} as ExistingConfigurationType['properties']),
         onSubmit: async values => {
           if (loading) {
             return
@@ -491,27 +487,21 @@ export const ConfigurationEdit = ({
  */
 const DOT_REPLACEMENT = '_dot_'
 const toFormikNotation = (values: ExistingConfigurationType['properties']) => {
-  return Object.keys(values).reduce(
-    (blob, key) => {
-      const newKey = key.split('.').join(DOT_REPLACEMENT)
-      blob[newKey] = values[key]
-      return blob
-    },
-    {} as ExistingConfigurationType['properties']
-  )
+  return Object.keys(values).reduce((blob, key) => {
+    const newKey = key.split('.').join(DOT_REPLACEMENT)
+    blob[newKey] = values[key]
+    return blob
+  }, {} as ExistingConfigurationType['properties'])
 }
 
 const fromFormikNotation = (
   values: ExistingConfigurationType['properties']
 ) => {
-  return Object.keys(values).reduce(
-    (blob, key) => {
-      const newKey = key.split(DOT_REPLACEMENT).join('.')
-      blob[newKey] = values[key]
-      return blob
-    },
-    {} as ExistingConfigurationType['properties']
-  )
+  return Object.keys(values).reduce((blob, key) => {
+    const newKey = key.split(DOT_REPLACEMENT).join('.')
+    blob[newKey] = values[key]
+    return blob
+  }, {} as ExistingConfigurationType['properties'])
 }
 
 const ConfigurationEditRender = ({

@@ -18,10 +18,10 @@ import { ExtractedFeaturesProvider } from './features.provider'
 import { useFeaturesContext } from './features.pure'
 import { ApplicationType } from '../../types/App'
 import { Feature } from './feature'
-import { Grid } from '@connexta/atlas/atoms/grid'
-import { Divider } from '@connexta/atlas/atoms/divider'
-import { CircularProgress } from '@connexta/atlas/atoms/progress'
-import { Typography } from '@connexta/atlas/atoms/typography'
+import Grid from '@material-ui/core/Grid'
+import Divider from '@material-ui/core/Divider'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Typography from '@material-ui/core/Typography'
 type Props = {
   app?: ApplicationType
 }
@@ -60,7 +60,7 @@ const Subfeatures = () => {
   )
 }
 
-export const Features = ({  }: Props) => {
+export const Features = ({}: Props) => {
   return (
     <ExtractedFeaturesProvider>
       <Subfeatures />

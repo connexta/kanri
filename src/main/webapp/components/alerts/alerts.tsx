@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { COMMANDS } from '../fetch/fetch'
-import { Paper } from '@connexta/atlas/atoms/paper'
-import { Grid } from '@connexta/atlas/atoms/grid'
-import { Typography } from '@connexta/atlas/atoms/typography'
+import Paper from '@material-ui/core/Paper'
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
 import { useAppRootContext } from '../app-root/app-root.pure'
-import { Button } from '@connexta/atlas/atoms/button'
-import { CloseIcon } from '@connexta/atlas/atoms/icons'
+import Button from '@material-ui/core/Button'
+import CloseIcon from '@material-ui/icons/Close'
 
 const ALERTS_DISMISS_URL =
   '/admin/jolokia/exec/org.codice.ddf.ui.admin.api:type=AdminAlertMBean/dismissAlert'

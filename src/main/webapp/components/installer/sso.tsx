@@ -1,18 +1,18 @@
 import * as React from 'react'
 import { Step } from './step'
 import { InstallerContext } from './installer.pure'
-import { Grid } from '@connexta/atlas/atoms/grid'
-import { Button } from '@connexta/atlas/atoms/button'
-import { CircularProgress } from '@connexta/atlas/atoms/progress'
-import { Typography } from '@connexta/atlas/atoms/typography'
-import { Paper } from '@connexta/atlas/atoms/paper'
-import {
-  TextField,
-  Checkbox,
-  FormControlLabel,
-  MenuItem,
-} from '@connexta/atlas/atoms/input'
-import { AddIcon, RemoveIcon } from '@connexta/atlas/atoms/icons'
+import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Typography from '@material-ui/core/Typography'
+import Paper from '@material-ui/core/Paper'
+import TextField from '@material-ui/core/TextField'
+import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import AddIcon from '@material-ui/icons/Add'
+import RemoveIcon from '@material-ui/icons/Remove'
+
 import { COMMANDS } from '../fetch/fetch'
 
 type MetatypeEntryValueTypeSingle = string | number | boolean

@@ -1,6 +1,8 @@
 import * as React from 'react'
-import { Tabs, Tab } from '@connexta/atlas/atoms/tabs'
-import { CircularProgress } from '@connexta/atlas/atoms/progress'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+
+import CircularProgress from '@material-ui/core/CircularProgress'
 import { SystemInformation } from '../system-information/system-information'
 import { Services } from '../services/services'
 import { LogViewer } from '../log-viewer/log-viewer'

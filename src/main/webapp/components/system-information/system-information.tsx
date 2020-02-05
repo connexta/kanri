@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Typography } from '@connexta/atlas/atoms/typography'
+import Typography from '@material-ui/core/Typography'
 import { COMMANDS } from '../fetch/fetch'
 import { TimeUtil } from './TimeUtil'
 import { UnitsUtil } from './UnitsUtil'

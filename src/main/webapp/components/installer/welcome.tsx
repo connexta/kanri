@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Step } from './step'
-import { Typography } from '@connexta/atlas/atoms/typography'
-import { Button } from '@connexta/atlas/atoms/button'
-import { Grid } from '@connexta/atlas/atoms/grid'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
 import { InstallerContext } from './installer.pure'
 
 export const Welcome = () => {

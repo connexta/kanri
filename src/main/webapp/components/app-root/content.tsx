@@ -2,7 +2,7 @@ import * as React from 'react'
 import Applications from '../applications/applications'
 import { System } from '../system'
 import { Installer } from '../installer/installer'
-import { Typography } from '@connexta/atlas/atoms/typography'
+import Typography from '@material-ui/core/Typography'
 import { useAppRootContext } from '../app-root/app-root.pure'
 import { Route, Switch } from 'react-router-dom'
 import { InstanceRouteContextProvider } from './route'
@@ -60,7 +60,7 @@ const NoMatch = () => {
 }
 
 export const Content = () => {
-  const { modules } = useAppRootContext()
+  const { modules, extension } = useAppRootContext()
 
   return (
     <Switch>
@@ -98,7 +98,13 @@ export const Content = () => {
                 return <Wizards />
             }
           }
-          return <NoMatch />
+          return (
+            (extension &&
+              extension.handleModuleRouting &&
+              extension.handleModuleRouting(
+                routeProps.match.params.moduleId
+              )) || <NoMatch />
+          )
         }}
       />
       <Route component={HomeMatch} />
