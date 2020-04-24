@@ -95,9 +95,9 @@ const AppRoot = ({ extension }: { extension?: ExtensionType }) => {
     //   }
     // })
     const previousTheme = localStorage.getItem(
-      'theme'
+      'kanri.theme'
     ) as ApplicationTheme | null
-    const currentTheme = previousTheme !== null ? previousTheme : 'light'
+    const currentTheme = (previousTheme === 'light' || previousTheme === 'dark') ? previousTheme : 'light'
     setTheme(currentTheme)
   }, [])
   return (
@@ -115,7 +115,7 @@ const AppRoot = ({ extension }: { extension?: ExtensionType }) => {
           fetchApplications,
           theme,
           setTheme: (theme: ApplicationTheme) => {
-            localStorage.setItem('theme', theme)
+            localStorage.setItem('kanri.theme', theme)
             setTheme(theme)
           },
         }}
