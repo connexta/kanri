@@ -98,7 +98,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const Shell = () => {
   const { platformConfig, adminConfig, theme } = useAppRootContext()
-  let previousData = localStorage.getItem('shell.drawer')
+  let previousData = localStorage.getItem('kanri.shell.drawer')
   let defaultOpen = true
   if (previousData !== null) {
     defaultOpen = previousData === 'true'
@@ -107,12 +107,12 @@ export const Shell = () => {
   const [open, setOpen] = React.useState(defaultOpen)
 
   function handleDrawerOpen() {
-    localStorage.setItem('shell.drawer', 'true')
+    localStorage.setItem('kanri.shell.drawer', 'true')
     setOpen(true)
   }
 
   function handleDrawerClose() {
-    localStorage.setItem('shell.drawer', 'false')
+    localStorage.setItem('kanri.shell.drawer', 'false')
     setOpen(false)
   }
 

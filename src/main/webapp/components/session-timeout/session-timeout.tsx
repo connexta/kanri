@@ -39,7 +39,7 @@ const handleLocalStorageChange = ({
 }: {
   setIdleTimeoutDate: setType<number>
 }) => {
-  const idleTimeoutDate = localStorage.getItem('idleTimeoutDate')
+  const idleTimeoutDate = localStorage.getItem('kanri.idleTimeoutDate')
   if (idleTimeoutDate) {
     setIdleTimeoutDate(parseInt(idleTimeoutDate))
   }
@@ -55,7 +55,7 @@ const resetIdleTimeoutDate = ({
   var idleTimeoutDate = getIdleTimeoutDate(idleTimeoutThreshold)
   if (localStorageAvailable) {
     //@ts-ignore
-    localStorage.setItem('idleTimeoutDate', idleTimeoutDate)
+    localStorage.setItem('kanri.idleTimeoutDate', idleTimeoutDate)
   }
   setIdleTimeoutDate(idleTimeoutDate)
 }
