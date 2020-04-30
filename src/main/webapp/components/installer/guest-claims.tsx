@@ -11,10 +11,10 @@ import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
-import { WrappedCreatableSelect as CreatableSelect } from '@connexta/atlas/atoms/input/autocomplete'
 import TextField from '@material-ui/core/TextField'
 
 import { COMMANDS } from '../fetch/fetch'
+import { CreatableSelect } from '../select/select'
 
 const GUEST_CLAIMS_URL =
   '/admin/jolokia/exec/org.codice.ddf.ui.admin.api.ConfigurationAdmin:service=ui,version=2.3.0/getClaimsConfiguration/(service.pid%3Dddf.security.guest.realm)'
@@ -106,75 +106,84 @@ export const GuestClaims = () => {
   )
   const [, setService] = React.useState(undefined as ServiceType | undefined)
 
-  React.useEffect(() => {
-    if (mode === 'submitting update guest claims') {
-      COMMANDS.FETCH(GUEST_CLAIMS_ADD_URL, {
-        method: 'POST',
-        body: JSON.stringify(createPayload(attributes)),
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.status === 200) {
-            setMode('submitting update')
-          } else {
-            // warn?
-          }
+  React.useEffect(
+    () => {
+      if (mode === 'submitting update guest claims') {
+        COMMANDS.FETCH(GUEST_CLAIMS_ADD_URL, {
+          method: 'POST',
+          body: JSON.stringify(createPayload(attributes)),
         })
-    }
-  }, [mode])
-  React.useEffect(() => {
-    if (mode === 'submitting update') {
-      COMMANDS.FETCH(GUEST_CLAIMS_ADD_URL, {
-        method: 'POST',
-        body: JSON.stringify(createPayload(attributes, OPERATION_UPDATE)),
-      })
-        .then(response => response.text())
-        .then(response => {
-          //todo investigate why this returns text that isn't json parseable
-          if (response.indexOf(`"status":200`) !== 0) {
-            nextStep()
-          } else {
-            // warn?
-          }
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === 200) {
+              setMode('submitting update')
+            } else {
+              // warn?
+            }
+          })
+      }
+    },
+    [mode]
+  )
+  React.useEffect(
+    () => {
+      if (mode === 'submitting update') {
+        COMMANDS.FETCH(GUEST_CLAIMS_ADD_URL, {
+          method: 'POST',
+          body: JSON.stringify(createPayload(attributes, OPERATION_UPDATE)),
         })
-    }
-  }, [mode])
-  React.useEffect(() => {
-    if (mode === 'loading') {
-      COMMANDS.FETCH(GUEST_CLAIMS_URL)
-        .then(response => response.json())
-        .then(data => {
-          const serviceInfo = data.value as ServiceType
-          if (serviceInfo.profiles.availableProfiles.Default === undefined) {
-            serviceInfo.profiles.availableProfiles.Default = serviceInfo.configurations
-              ? serviceInfo.configurations[0].properties.attributes
-              : serviceInfo.metatype[0].defaultValue
-            serviceInfo.profiles.profileNames.push('Default')
-          }
-          setAvailableProfiles(serviceInfo.profiles.profileNames)
-          // @ts-ignore
-          setAttributes(
-            serviceInfo.profiles.availableProfiles.Default.map(claim => {
-              return {
-                name: claim.split('=')[0],
-                value: claim.split('=')[1],
-              }
-            })
-          )
-          setAvailableClaims(
-            serviceInfo.claims.availableClaims.filter(availableClaim => {
-              return (
-                serviceInfo.claims.immutableClaims.indexOf(availableClaim) ===
-                -1
-              )
-            })
-          )
-          setImmutableClaims(serviceInfo.claims.immutableClaims)
-          setService(serviceInfo)
-          setMode('normal')
-        })
-    }
-  }, [mode])
+          .then(response => response.text())
+          .then(response => {
+            //todo investigate why this returns text that isn't json parseable
+            if (response.indexOf(`"status":200`) !== 0) {
+              nextStep()
+            } else {
+              // warn?
+            }
+          })
+      }
+    },
+    [mode]
+  )
+  React.useEffect(
+    () => {
+      if (mode === 'loading') {
+        COMMANDS.FETCH(GUEST_CLAIMS_URL)
+          .then(response => response.json())
+          .then(data => {
+            const serviceInfo = data.value as ServiceType
+            if (serviceInfo.profiles.availableProfiles.Default === undefined) {
+              serviceInfo.profiles.availableProfiles.Default = serviceInfo.configurations
+                ? serviceInfo.configurations[0].properties.attributes
+                : serviceInfo.metatype[0].defaultValue
+              serviceInfo.profiles.profileNames.push('Default')
+            }
+            setAvailableProfiles(serviceInfo.profiles.profileNames)
+            // @ts-ignore
+            setAttributes(
+              serviceInfo.profiles.availableProfiles.Default.map(claim => {
+                return {
+                  name: claim.split('=')[0],
+                  value: claim.split('=')[1],
+                }
+              })
+            )
+            setAvailableClaims(
+              serviceInfo.claims.availableClaims.filter(availableClaim => {
+                return (
+                  serviceInfo.claims.immutableClaims.indexOf(availableClaim) ===
+                  -1
+                )
+              })
+            )
+            setImmutableClaims(serviceInfo.claims.immutableClaims)
+            setService(serviceInfo)
+            setMode('normal')
+          })
+      }
+    },
+    [mode]
+  )
   switch (mode) {
     case 'loading':
       return <Step content={<CircularProgress />} />

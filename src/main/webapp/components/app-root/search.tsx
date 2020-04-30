@@ -18,11 +18,11 @@ import {
 } from './app-root.pure'
 import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
-import { setType } from '@connexta/atlas/typescript'
 import _debounce from 'lodash.debounce'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Fuse from 'fuse.js'
 import scrollIntoView from 'scroll-into-view-if-needed'
+import { setType } from '../../typescript/hooks'
 
 const FUSE_OPTIONS = {
   shouldSort: true,
@@ -596,14 +596,17 @@ export const Search = () => {
   )
   const theme = useTheme()
 
-  React.useEffect(() => {
-    if (value.length > 2) {
-      setOpen(true)
-    } else {
-      setOpen(false)
-    }
-    setSelected(0)
-  }, [value])
+  React.useEffect(
+    () => {
+      if (value.length > 2) {
+        setOpen(true)
+      } else {
+        setOpen(false)
+      }
+      setSelected(0)
+    },
+    [value]
+  )
 
   /**
    * Structuring the properties this way lets fusejs do proper ranking of the results.
@@ -612,40 +615,47 @@ export const Search = () => {
    * They are still included in the configuration list though, since someone may be using this search bar to make a new one.
    * Maybe if we include things like "values" for properties in the results in the future including factories would make more sense.
    */
-  React.useEffect(() => {
-    setProperties(
-      services
-        .filter(service => service.factory === false)
-        .reduce((blob, service) => {
-          return blob.concat(
-            service.metatype.map(meta => {
-              return {
-                parent: service,
-                ...meta,
-              }
-            })
-          )
-        }, [] as PropertyType[])
-    )
-  }, [services])
+  React.useEffect(
+    () => {
+      setProperties(
+        services.filter(service => service.factory === false).reduce(
+          (blob, service) => {
+            return blob.concat(
+              service.metatype.map(meta => {
+                return {
+                  parent: service,
+                  ...meta,
+                }
+              })
+            )
+          },
+          [] as PropertyType[]
+        )
+      )
+    },
+    [services]
+  )
 
-  React.useEffect(() => {
-    if (open === true) {
-      //app suggestions
-      setLoading(true)
-      debouncedDetermineSuggestions({
-        properties,
-        applications,
-        services,
-        setAppSuggestions,
-        setConfigurationSuggestions,
-        setPropertySuggestions,
-        value,
-        setLoading,
-        theme,
-      })
-    }
-  }, [open, value])
+  React.useEffect(
+    () => {
+      if (open === true) {
+        //app suggestions
+        setLoading(true)
+        debouncedDetermineSuggestions({
+          properties,
+          applications,
+          services,
+          setAppSuggestions,
+          setConfigurationSuggestions,
+          setPropertySuggestions,
+          value,
+          setLoading,
+          theme,
+        })
+      }
+    },
+    [open, value]
+  )
 
   React.useEffect(() => {
     if (popperInstanceRef.current) {

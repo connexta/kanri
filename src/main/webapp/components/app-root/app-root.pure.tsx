@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { RouteChildrenProps } from 'react-router'
-import { setType } from '@connexta/atlas/typescript/hooks'
+import { setType } from '../../typescript/hooks'
 
 export type PlatformConfigType = {
   background: string

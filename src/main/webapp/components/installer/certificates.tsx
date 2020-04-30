@@ -15,8 +15,8 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Tooltip from '@material-ui/core/Tooltip'
 
 import { createGlobalStyle } from 'styled-components'
-import { setType } from '@connexta/atlas/typescript/hooks'
 import { COMMANDS } from '../fetch/fetch'
+import { setType } from '../../typescript/hooks'
 
 const SYSTEM_PROPERTIES_READ_URL =
   '/admin/jolokia/exec/org.codice.ddf.ui.admin.api:type=SystemPropertiesAdminMBean/readSystemProperties'
@@ -131,9 +131,9 @@ export const Certificates = () => {
   const [subMode, setSubMode] = React.useState('skip' as SubModeType)
   const [errors, setErrors] = React.useState([] as string[])
   const { nextStep, previousStep } = React.useContext(InstallerContext)
-  const [hostName, setHostName] = React.useState(
-    undefined as AttributeType | undefined
-  )
+  const [hostName, setHostName] = React.useState(undefined as
+    | AttributeType
+    | undefined)
   const [keystoreFile, setKeystoreFile] = React.useState('')
   const [keystoreFileName, setKeystoreFileName] = React.useState('')
   const [keystorePass, setKeystorePass] = React.useState('')
@@ -143,105 +143,117 @@ export const Certificates = () => {
   const [truststorePass, setTruststorePass] = React.useState('')
   const [mode, setMode] = React.useState('loading' as ModeType)
   const keystoreDropzoneRef = React.useRef<HTMLDivElement>()
-  React.useEffect(() => {
-    if (
-      mode === 'normal' &&
-      subMode === 'provide' &&
-      keystoreDropzoneRef.current
-    ) {
-      new Dropzone(keystoreDropzoneRef.current, {
-        url: '../services/content',
-        complete: file => {
-          const fileReader = new FileReader()
-          fileReader.onloadend = () => {
-            const result = fileReader.result as string
-            setKeystoreFile(result.split(',')[1])
-          }
-          setKeystoreFileName(file.name)
-          fileReader.readAsDataURL(file)
-        },
-      })
-    }
-  }, [mode, subMode])
+  React.useEffect(
+    () => {
+      if (
+        mode === 'normal' &&
+        subMode === 'provide' &&
+        keystoreDropzoneRef.current
+      ) {
+        new Dropzone(keystoreDropzoneRef.current, {
+          url: '../services/content',
+          complete: file => {
+            const fileReader = new FileReader()
+            fileReader.onloadend = () => {
+              const result = fileReader.result as string
+              setKeystoreFile(result.split(',')[1])
+            }
+            setKeystoreFileName(file.name)
+            fileReader.readAsDataURL(file)
+          },
+        })
+      }
+    },
+    [mode, subMode]
+  )
   const truststoreDropzoneRef = React.useRef<HTMLDivElement>()
-  React.useEffect(() => {
-    if (
-      mode === 'normal' &&
-      subMode === 'provide' &&
-      truststoreDropzoneRef.current
-    ) {
-      new Dropzone(truststoreDropzoneRef.current, {
-        url: '../services/content',
-        complete: file => {
-          const fileReader = new FileReader()
-          fileReader.onloadend = () => {
-            const result = fileReader.result as string
-            setTruststoreFile(result.split(',')[1])
-          }
-          setTruststoreFileName(file.name)
-          fileReader.readAsDataURL(file)
-        },
-        clickable: true,
-      })
-    }
-  }, [mode, subMode])
+  React.useEffect(
+    () => {
+      if (
+        mode === 'normal' &&
+        subMode === 'provide' &&
+        truststoreDropzoneRef.current
+      ) {
+        new Dropzone(truststoreDropzoneRef.current, {
+          url: '../services/content',
+          complete: file => {
+            const fileReader = new FileReader()
+            fileReader.onloadend = () => {
+              const result = fileReader.result as string
+              setTruststoreFile(result.split(',')[1])
+            }
+            setTruststoreFileName(file.name)
+            fileReader.readAsDataURL(file)
+          },
+          clickable: true,
+        })
+      }
+    },
+    [mode, subMode]
+  )
 
-  React.useEffect(() => {
-    if (mode === 'loading') {
-      COMMANDS.FETCH(SYSTEM_PROPERTIES_READ_URL)
-        .then(response => response.json())
-        .then(data => {
-          setHostName(
-            data.value.filter(
-              (attr: AttributeType) =>
-                attr.key === 'org.codice.ddf.system.hostname'
-            )[0]
-          )
-          setMode('normal')
-        })
-    }
-  }, [mode])
-  React.useEffect(() => {
-    if (mode === 'submitting' && hostName) {
-      if (subMode === 'demo') {
-        COMMANDS.FETCH(CERTIFICATE_DEMO_URL, {
-          method: 'POST',
-          body: JSON.stringify(getDemoPayload({ hostName: hostName.value })),
-        }).then(() => {
-          //todo verify this with someone
-          nextStep()
-        })
-      } else if (subMode === 'provide') {
-        COMMANDS.FETCH(CERTIFICATE_REPLACE_URL, {
-          method: 'POST',
-          body: JSON.stringify(
-            getReplacePayload({
-              hostName: hostName.value,
-              keyPass,
-              keystorePass,
-              keystoreFile,
-              keystoreFileName,
-              truststoreFile,
-              truststoreFileName,
-              truststorePass,
-            })
-          ),
-        })
+  React.useEffect(
+    () => {
+      if (mode === 'loading') {
+        COMMANDS.FETCH(SYSTEM_PROPERTIES_READ_URL)
           .then(response => response.json())
           .then(data => {
-            const errors = data.value as string[]
-            if (errors.length > 0) {
-              setErrors(errors)
-              setMode('normal')
-            } else {
-              nextStep()
-            }
+            setHostName(
+              data.value.filter(
+                (attr: AttributeType) =>
+                  attr.key === 'org.codice.ddf.system.hostname'
+              )[0]
+            )
+            setMode('normal')
           })
-      } else {
-        nextStep()
       }
-    }
-  }, [mode])
+    },
+    [mode]
+  )
+  React.useEffect(
+    () => {
+      if (mode === 'submitting' && hostName) {
+        if (subMode === 'demo') {
+          COMMANDS.FETCH(CERTIFICATE_DEMO_URL, {
+            method: 'POST',
+            body: JSON.stringify(getDemoPayload({ hostName: hostName.value })),
+          }).then(() => {
+            //todo verify this with someone
+            nextStep()
+          })
+        } else if (subMode === 'provide') {
+          COMMANDS.FETCH(CERTIFICATE_REPLACE_URL, {
+            method: 'POST',
+            body: JSON.stringify(
+              getReplacePayload({
+                hostName: hostName.value,
+                keyPass,
+                keystorePass,
+                keystoreFile,
+                keystoreFileName,
+                truststoreFile,
+                truststoreFileName,
+                truststorePass,
+              })
+            ),
+          })
+            .then(response => response.json())
+            .then(data => {
+              const errors = data.value as string[]
+              if (errors.length > 0) {
+                setErrors(errors)
+                setMode('normal')
+              } else {
+                nextStep()
+              }
+            })
+        } else {
+          nextStep()
+        }
+      }
+    },
+    [mode]
+  )
   switch (mode) {
     case 'submitting':
       return <Step content={<Submitting subMode={subMode} />} />
@@ -625,7 +637,9 @@ export const SubModeComponent = ({
                           {err.indexOf(
                             'Keystore does not contain the required key'
                           ) !== -1
-                            ? `Keystore does not contain the required key for the given hostname: ${hostName.value}`
+                            ? `Keystore does not contain the required key for the given hostname: ${
+                                hostName.value
+                              }`
                             : err}
                         </Typography>
                         <Typography variant="body1" color="secondary">

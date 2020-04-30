@@ -7,16 +7,16 @@ import { Route, Switch, RouteComponentProps, Link } from 'react-router-dom'
 import SettingsIcon from '@material-ui/icons/Settings'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 
-import { ControlledDrawer } from '@connexta/atlas/atoms/drawer'
 import { Settings } from './settings'
 import Breadcrumbs from '@material-ui/core/Breadcrumbs'
 import { Alerts } from '../alerts/alerts'
 import { useAppRootContext } from './app-root.pure'
-import { setType } from '@connexta/atlas/typescript'
 import Tune from '@material-ui/icons/Tune'
 import { DeveloperSettings } from '../developer/settings'
 import { Search } from './search'
 import { ExtractedServicesProvider } from '../services/services.provider'
+import { ControlledDrawer } from '../drawer/drawer'
+import { setType } from '../../typescript/hooks'
 const generateBreadcrumbs = ({ location }: RouteComponentProps) => {
   const crumbs = location.pathname
     .substring(1)

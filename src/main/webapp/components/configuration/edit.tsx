@@ -4,7 +4,6 @@ import {
   MetatypeType,
   ConfigurationType,
 } from '../app-root/app-root.pure'
-import { ModalHeader } from '@connexta/atlas/atoms/modal'
 import TextField from '@material-ui/core/TextField'
 import Checkbox from '@material-ui/core/Checkbox'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -28,14 +27,15 @@ import Typography from '@material-ui/core/Typography'
 import styled from 'styled-components'
 import { COMMANDS } from '../fetch/fetch'
 import { useServicesContext } from '../services/services.pure'
-import {
-  useSnackbar,
-  generateDismissSnackbarAction,
-} from '@connexta/atlas/atoms/snackbar'
 import { LinearProgress } from '@material-ui/core'
 import Tooltip from '@material-ui/core/Tooltip'
 import { CheckboxProps } from '@material-ui/core/Checkbox/Checkbox'
 import { ButtonBaseActions } from '@material-ui/core/ButtonBase/ButtonBase'
+import { ModalHeader } from '../modal/modal'
+import {
+  useSnackbar,
+  generateDismissSnackbarAction,
+} from '../snackbar/snackbar.provider'
 // todo, make a pr or open an issue with formik
 const FormikFormFix = FormikForm as React.ComponentType<FormikFormProps>
 type Props = (
@@ -46,8 +46,7 @@ type Props = (
   | {
       configuration?: undefined
       service: ConfigurationType
-    }
-) & {
+    }) & {
   onClose: () => void
 }
 
@@ -66,11 +65,14 @@ const CustomGrid = styled(Grid)`
  */
 const FocusableCheckbox = (props: CheckboxProps) => {
   const sideEffectActions = React.useRef(null as null | ButtonBaseActions)
-  React.useEffect(() => {
-    if (sideEffectActions.current !== null && props.autoFocus) {
-      sideEffectActions.current.focusVisible()
-    }
-  }, [sideEffectActions])
+  React.useEffect(
+    () => {
+      if (sideEffectActions.current !== null && props.autoFocus) {
+        sideEffectActions.current.focusVisible()
+      }
+    },
+    [sideEffectActions]
+  )
   return (
     <Checkbox
       {...props}
@@ -103,7 +105,7 @@ const Label = ({
           {meta.description !== null ? (
             <Grid item style={{ marginLeft: '10px' }}>
               <Tooltip title={meta.description}>
-                <InfoIcon></InfoIcon>
+                <InfoIcon />
               </Tooltip>
             </Grid>
           ) : null}
@@ -128,7 +130,7 @@ const FieldRender = ({
   if (meta.optionLabels.length > 0) {
     return (
       <div>
-        <Label meta={meta}></Label>
+        <Label meta={meta} />
         <TextField
           select
           fullWidth
@@ -151,7 +153,7 @@ const FieldRender = ({
     case 3:
       return (
         <div>
-          <Label meta={meta}></Label>
+          <Label meta={meta} />
           <TextField
             autoFocus={autoFocus}
             fullWidth
@@ -190,7 +192,7 @@ const FieldRender = ({
         const value = field.value as string[]
         return (
           <div>
-            <Label meta={meta}></Label>
+            <Label meta={meta} />
             {value.map((subval, index) => {
               return (
                 <Grid
@@ -252,7 +254,7 @@ const FieldRender = ({
       }
       return (
         <div>
-          <Label meta={meta}></Label>
+          <Label meta={meta} />
           <TextField
             fullWidth
             autoFocus={autoFocus}
@@ -341,19 +343,22 @@ export const ConfigurationEdit = ({
         service,
         loading,
         onClose,
-        initialValues: service.metatype.reduce((blob, meta) => {
-          blob[meta.id] = meta.defaultValue
-          if (meta.cardinality > 0 && blob[meta.id] === null) {
-            blob[meta.id] = []
-          }
-          if (meta.cardinality === 0 && blob[meta.id] instanceof Array) {
-            blob[meta.id] = (blob[meta.id] as any[])[0]
-          }
-          if (meta.type === 11) {
-            blob[meta.id] = blob[meta.id] === 'true'
-          }
-          return blob
-        }, {} as ExistingConfigurationType['properties']),
+        initialValues: service.metatype.reduce(
+          (blob, meta) => {
+            blob[meta.id] = meta.defaultValue
+            if (meta.cardinality > 0 && blob[meta.id] === null) {
+              blob[meta.id] = []
+            }
+            if (meta.cardinality === 0 && blob[meta.id] instanceof Array) {
+              blob[meta.id] = (blob[meta.id] as any[])[0]
+            }
+            if (meta.type === 11) {
+              blob[meta.id] = blob[meta.id] === 'true'
+            }
+            return blob
+          },
+          {} as ExistingConfigurationType['properties']
+        ),
         onSubmit: async values => {
           if (loading) {
             return
@@ -423,19 +428,22 @@ export const ConfigurationEdit = ({
         service,
         loading,
         onClose,
-        initialValues: service.metatype.reduce((blob, meta) => {
-          blob[meta.id] = meta.defaultValue
-          if (meta.cardinality > 0 && blob[meta.id] === null) {
-            blob[meta.id] = []
-          }
-          if (meta.cardinality === 0 && blob[meta.id] instanceof Array) {
-            blob[meta.id] = (blob[meta.id] as any[])[0]
-          }
-          if (meta.type === 11) {
-            blob[meta.id] = blob[meta.id] === 'true'
-          }
-          return blob
-        }, {} as ExistingConfigurationType['properties']),
+        initialValues: service.metatype.reduce(
+          (blob, meta) => {
+            blob[meta.id] = meta.defaultValue
+            if (meta.cardinality > 0 && blob[meta.id] === null) {
+              blob[meta.id] = []
+            }
+            if (meta.cardinality === 0 && blob[meta.id] instanceof Array) {
+              blob[meta.id] = (blob[meta.id] as any[])[0]
+            }
+            if (meta.type === 11) {
+              blob[meta.id] = blob[meta.id] === 'true'
+            }
+            return blob
+          },
+          {} as ExistingConfigurationType['properties']
+        ),
         onSubmit: async values => {
           if (loading) {
             return
@@ -487,21 +495,27 @@ export const ConfigurationEdit = ({
  */
 const DOT_REPLACEMENT = '_dot_'
 const toFormikNotation = (values: ExistingConfigurationType['properties']) => {
-  return Object.keys(values).reduce((blob, key) => {
-    const newKey = key.split('.').join(DOT_REPLACEMENT)
-    blob[newKey] = values[key]
-    return blob
-  }, {} as ExistingConfigurationType['properties'])
+  return Object.keys(values).reduce(
+    (blob, key) => {
+      const newKey = key.split('.').join(DOT_REPLACEMENT)
+      blob[newKey] = values[key]
+      return blob
+    },
+    {} as ExistingConfigurationType['properties']
+  )
 }
 
 const fromFormikNotation = (
   values: ExistingConfigurationType['properties']
 ) => {
-  return Object.keys(values).reduce((blob, key) => {
-    const newKey = key.split(DOT_REPLACEMENT).join('.')
-    blob[newKey] = values[key]
-    return blob
-  }, {} as ExistingConfigurationType['properties'])
+  return Object.keys(values).reduce(
+    (blob, key) => {
+      const newKey = key.split(DOT_REPLACEMENT).join('.')
+      blob[newKey] = values[key]
+      return blob
+    },
+    {} as ExistingConfigurationType['properties']
+  )
 }
 
 const ConfigurationEditRender = ({

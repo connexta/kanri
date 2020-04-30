@@ -13,6 +13,11 @@
     "node": ">=0.10.5"
   },
   "devDependencies": {
+    "@material-ui/core": "4.9.12",
+    "@material-ui/icons": "4.9.1",
+    "@material-ui/lab": "4.0.0-alpha.51",
+    "@material-ui/pickers": "3.2.10",
+    "@material-ui/styles": "4.9.10",
     "@types/dropzone": "5.0.6",
     "@types/iframe-resizer": "3.5.7",
     "@types/lodash.debounce": "4.0.6",
@@ -30,31 +35,41 @@
     "cpx": "1.5.0",
     "express": "4.17.1",
     "lodash.debounce": "4.0.8",
+    "notistack": "0.9.11",
+    "querystring": "0.2.0",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-select": "3.1.0",
+    "react-router-dom": "5.1.2",
     "rimraf": "3.0.0",
     "socket.io": "2.3.0",
     "socket.io-client": "2.3.0",
+    "styled-components": "5.1.0",
     "ts-node": "8.3.0",
-    "typescript": "3.5.3"
+    "typescript": "3.5.3",
+    "url": "0.11.0"
+  },
+  "peerDependencies": {
+    "@material-ui/core": ">=4",
+    "@material-ui/icons": ">=4",
+    "@material-ui/lab": "4.0.0-alpha.51",
+    "@material-ui/pickers": ">=3",
+    "@material-ui/styles": ">=4",
+    "notistack": ">=0",
+    "react": ">=16",
+    "react-dom": ">=16",
+    "react-select": ">=3",
+    "react-router-dom": ">=5",
+    "styled-components": ">=5"
   },
   "dependencies": {
-    "@connexta/atlas": "0.0.47",
-    "@material-ui/core": "4.4.1",
-    "@material-ui/icons": "4.4.1",
-    "@material-ui/lab": "4.0.0-alpha.26",
-    "@material-ui/pickers": "3.2.2",
-    "@material-ui/styles": "4.5.0",
     "dropzone": "5.5.1",
-    "font-awesome": "4.7.0",
     "formik": "1.5.8",
     "fuse.js": "3.4.5",
     "iframe-resizer": "4.1.1",
     "lodash.throttle": "4.1.1",
     "@connexta/logviewer": "git://github.com/connexta/logviewer.git#17e7f603fbe5ba5d8edcd64c07787d065617deaa",
     "prop-types": "15.7.2",
-    "react": "16.8.6",
-    "react-dom": "16.8.6",
-    "react-router-dom": "5.1.2",
-    "styled-components": "4.3.2",
     "scroll-into-view-if-needed": "2.2.20",
     "yup": "0.27.0"
   },
@@ -84,12 +99,5 @@
     "src/main/resources"
   ],
   "main": "src/main/webapp/components/entry/default-entry.tsx",
-  "resolutions": {
-    "core-js": "2.6.9",
-    "@material-ui/styles": "4.4.1",
-    "@types/react": "16.8.23",
-    "@types/react-dom": "16.8.4",
-    "@types/react-router": "5.1.4"
-  },
   "context-path": "/"
 }

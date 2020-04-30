@@ -1,4 +1,4 @@
-import fetch, { FetchProps } from '@connexta/atlas/functions/fetch'
+import fetch, { FetchProps } from './base-fetch'
 import { ConfigurationType, FeatureType } from '../app-root/app-root.pure'
 import { ServerSettings } from '../developer/settings'
 import { MocksType } from '../../../../../dev/capture-mocks'
