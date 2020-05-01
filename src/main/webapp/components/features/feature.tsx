@@ -9,7 +9,7 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import {
   useSnackbar,
   generateDismissSnackbarAction,
-} from '@connexta/atlas/atoms/snackbar'
+} from '../snackbar/snackbar.provider'
 
 type Props = {
   feature: FeatureType

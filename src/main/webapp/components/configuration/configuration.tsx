@@ -22,10 +22,9 @@ import { Link } from 'react-router-dom'
 import CloseIcon from '@material-ui/icons/Close'
 import { COMMANDS } from '../fetch/fetch'
 import {
-  generateDismissSnackbarAction,
   useSnackbar,
-} from '@connexta/atlas/atoms/snackbar'
-
+  generateDismissSnackbarAction,
+} from '../snackbar/snackbar.provider'
 const getHintName = ({
   configuration,
 }: {

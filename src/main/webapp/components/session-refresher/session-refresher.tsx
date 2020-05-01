@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { COMMANDS } from '../fetch/fetch'
-import { setType } from '@connexta/atlas/typescript'
+import { setType } from '../../typescript/hooks'
 
 const getLatestExpiry = async ({
   setSessionRenewDate,

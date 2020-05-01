@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { URLS } from '../fetch/fetch'
 import { useAppRootContext } from '../app-root/app-root.pure'
-import { setType } from '@connexta/atlas/typescript'
 import throttle from 'lodash.throttle'
-import { ControlledModal } from '@connexta/atlas/atoms/modal'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
+import { ControlledModal } from '../modal/modal'
+import { setType } from '../../typescript/hooks'
 
 const idleNoticeDuration = 60000
 // Length of inactivity that will trigger user timeout (15 minutes in ms by default)
@@ -95,7 +95,9 @@ export const SessionTimeout = () => {
   const [idleTimeoutThreshold, setIdleTimeoutThreshold] = React.useState(
     defaultIdleTimeoutThreshold
   )
-  const [idleTimeoutDate, setIdleTimeoutDate] = React.useState()
+  const [idleTimeoutDate, setIdleTimeoutDate] = React.useState(
+    Date.now() + defaultIdleTimeoutThreshold
+  )
   const [showPrompt, setShowPrompt] = React.useState(false)
 
   React.useEffect(() => {

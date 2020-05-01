@@ -14,10 +14,10 @@
  **/
 import * as React from 'react'
 import { ConfigurationEdit } from '../configuration/edit'
-import { ControlledModal } from '@connexta/atlas/atoms/modal'
 import { ExistingConfigurationType } from '../app-root/app-root.pure'
 import { RouteComponentProps } from 'react-router-dom'
 import { useServicesContext } from '../services/services.pure'
+import { ControlledModal } from '../modal/modal'
 
 export const ServiceRoute = ({
   match,

@@ -198,19 +198,23 @@ export const Shell = () => {
             </InstanceRouteContextProvider>
 
             <Divider />
-            <div style={{ marginTop: 'auto', padding: '10px' }}>
-              <a href="../../">
-                <img
-                  className={classes.branding}
-                  style={{
-                    width: open ? `${drawerWidth - 20}px` : '52px',
-                    filter:
-                      theme === 'dark' ? 'invert(100%) hue-rotate(180deg)' : '',
-                  }}
-                  src={`data:image/png;base64,${platformConfig.productImage}`}
-                />
-              </a>
-            </div>
+            {platformConfig.productImage ? (
+              <div style={{ marginTop: 'auto', padding: '10px' }}>
+                <a href="../../">
+                  <img
+                    className={classes.branding}
+                    style={{
+                      width: open ? `${drawerWidth - 20}px` : '52px',
+                      filter:
+                        theme === 'dark'
+                          ? 'invert(100%) hue-rotate(180deg)'
+                          : '',
+                    }}
+                    src={`data:image/png;base64,${platformConfig.productImage}`}
+                  />
+                </a>
+              </div>
+            ) : null}
           </Drawer>
           <main
             className={classes.content}

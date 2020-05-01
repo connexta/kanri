@@ -3,7 +3,6 @@ import { hot } from 'react-hot-loader/root'
 import { setConfig } from 'react-hot-loader'
 import { AppRootContextProvider, ExtensionType } from './app-root.pure'
 import { HashRouter as Router } from 'react-router-dom'
-import { SnackbarProvider } from '@connexta/atlas/atoms/snackbar'
 
 import { Shell } from './shell'
 import { Theme } from './theme'
@@ -31,6 +30,7 @@ import { SessionTimeout } from '../session-timeout/session-timeout'
 import { SystemUsage } from '../system-usage/system-usage'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { COMMANDS } from '../fetch/fetch'
+import { SnackbarProvider } from '../snackbar/snackbar.provider'
 
 const AppRoot = ({ extension }: { extension?: ExtensionType }) => {
   const [theme, setTheme] = React.useState('light' as ApplicationTheme)
@@ -97,7 +97,10 @@ const AppRoot = ({ extension }: { extension?: ExtensionType }) => {
     const previousTheme = localStorage.getItem(
       'kanri.theme'
     ) as ApplicationTheme | null
-    const currentTheme = (previousTheme === 'light' || previousTheme === 'dark') ? previousTheme : 'light'
+    const currentTheme =
+      previousTheme === 'light' || previousTheme === 'dark'
+        ? previousTheme
+        : 'light'
     setTheme(currentTheme)
   }, [])
   return (
