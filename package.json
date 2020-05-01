@@ -68,7 +68,7 @@
     "fuse.js": "3.4.5",
     "iframe-resizer": "4.1.1",
     "lodash.throttle": "4.1.1",
-    "@connexta/logviewer": "git://github.com/connexta/logviewer.git#17e7f603fbe5ba5d8edcd64c07787d065617deaa",
+    "@connexta/logviewer": "git://github.com/connexta/logviewer.git#155b9d7c3df819038ee7a5557967b22ebddb8587",
     "prop-types": "15.7.2",
     "scroll-into-view-if-needed": "2.2.20",
     "yup": "0.27.0"
