@@ -41,6 +41,9 @@
     "react-dom": "16.13.1",
     "react-select": "3.1.0",
     "react-router-dom": "5.1.2",
+    "react-redux": "6.0.0",
+    "redux": "4.0.1",
+    "redux-thunk": "2.3.0",
     "rimraf": "3.0.0",
     "socket.io": "2.3.0",
     "socket.io-client": "2.3.0",
@@ -68,7 +71,7 @@
     "fuse.js": "3.4.5",
     "iframe-resizer": "4.1.1",
     "lodash.throttle": "4.1.1",
-    "@connexta/logviewer": "git://github.com/connexta/logviewer.git#155b9d7c3df819038ee7a5557967b22ebddb8587",
+    "@connexta/logviewer": "git://github.com/connexta/logviewer.git#81784420e24eb19d7584e5ee9a73789518d3e6aa",
     "prop-types": "15.7.2",
     "scroll-into-view-if-needed": "2.2.20",
     "yup": "0.27.0"
