@@ -13,7 +13,7 @@ const getLatestExpiry = async ({
 }
 
 export const SessionRefresher = () => {
-  const [sessionRenewDate, setSessionRenewDate] = React.useState()
+  const [sessionRenewDate, setSessionRenewDate] = React.useState(undefined as number | undefined)
   React.useEffect(() => {
     getLatestExpiry({ setSessionRenewDate })
   }, [])
