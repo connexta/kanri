@@ -76,7 +76,7 @@
     "yup": "0.27.0"
   },
   "scripts": {
-    "copy:package": "cpx package.json dist && json -I -f dist/package.json -e 'this.private=false' && cpx \"src/**/!(*.tsx)\" \"dist/src\"",
+    "copy:package": "cpx package.json dist && json -I -f dist/package.json -e 'this.private=false' && cpx \"src/**/!(*.tsx)\" \"dist/src\" && cpx \"dev/**/!(*.tsx)\" \"dist/dev\"",
     "start": "ace start",
     "start:capture": "ace start --env capture & yarn capture:mocks",
     "start:mocks": "ace start --env mocks",
