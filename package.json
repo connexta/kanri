@@ -89,12 +89,12 @@
     "watch": "ts-node -P ./tsconfig.json ./dev/watch.tsx"
   },
   "ace": {
+    "files": [
+      "src/main/webapp",
+      "target/webapp",
+      "src/main/resources"
+    ]
   },
-  "files": [
-    "src/main/webapp",
-    "target/webapp",
-    "src/main/resources"
-  ],
   "main": "src/main/webapp/components/entry/default-entry.tsx",
   "context-path": "/"
 }
