@@ -59,7 +59,7 @@ const customFetch: FetchProps = (url, allOptions = {}) => {
     cache: 'no-cache',
     ...otherOptions,
     headers: {
-      'X-Requested-With': 'XMLHttpRequest',
+      // 'X-Requested-With': 'XMLHttpRequest',
       ...headers,
     },
   })
