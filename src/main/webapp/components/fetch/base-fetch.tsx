@@ -55,7 +55,7 @@ export type FetchProps = (url: string, options?: Options) => Promise<Response>
 const customFetch: FetchProps = (url, allOptions = {}) => {
   const { headers, ...otherOptions } = allOptions
   return fetch(cacheBust(url), {
-    credentials: 'same-origin',
+    credentials: 'include',
     cache: 'no-cache',
     ...otherOptions,
     headers: {

@@ -96,5 +96,5 @@
     ]
   },
   "main": "src/main/webapp/components/entry/default-entry.tsx",
-  "context-path": "/"
+  "context-path": "./"
 }
