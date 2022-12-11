@@ -33,7 +33,7 @@
     "@connexta/eslint-config-connexta": "git://github.com/connexta/eslint-config-connexta.git#3f0caece6210d25c16863d472026fbfa069521a6",
     "chokidar": "3.0.2",
     "cpx": "1.5.0",
-    "express": "4.17.1",
+    "express": "4.17.3",
     "json": "9.0.6",
     "lodash.debounce": "4.0.8",
     "notistack": "0.9.11",
