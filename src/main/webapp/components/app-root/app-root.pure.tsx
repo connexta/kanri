@@ -70,6 +70,8 @@ export type MetatypeType = {
   optionLabels: string[]
   optionValues: string[]
   type: number
+  touched: boolean
+  initialTouched: boolean
 }
 
 export type ExistingConfigurationType = {

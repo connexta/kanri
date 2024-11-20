@@ -66,14 +66,14 @@
   },
   "dependencies": {
     "dropzone": "5.5.1",
-    "formik": "1.5.8",
+    "formik": "2.3.3",
     "fuse.js": "3.4.5",
     "iframe-resizer": "4.1.1",
     "lodash.throttle": "4.1.1",
-    "@connexta/logviewer": "git+https://github.com/connexta/logviewer.git#81784420e24eb19d7584e5ee9a73789518d3e6aa",
+    "@connexta/logviewer": "file:///opt/logviewer",
     "prop-types": "15.7.2",
     "scroll-into-view-if-needed": "2.2.20",
-    "yup": "0.27.0"
+    "yup": "1.4.0"
   },
   "scripts": {
     "copy:package": "cpx package.json dist && json -I -f dist/package.json -e 'this.private=false' && cpx \"src/**/!(*.tsx)\" \"dist/src\" && cpx \"dev/**/!(*.tsx)\" \"dist/dev\"",
