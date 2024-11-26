@@ -70,7 +70,7 @@
     "fuse.js": "3.4.5",
     "iframe-resizer": "4.1.1",
     "lodash.throttle": "4.1.1",
-    "@connexta/logviewer": "file:///opt/logviewer",
+    "@connexta/logviewer": "git+https://github.com/alexabird/logviewer.git#bd9c142a447dc67411262b1d2d19f3629b4154c0",
     "prop-types": "15.7.2",
     "scroll-into-view-if-needed": "2.2.20",
     "yup": "1.4.0"
