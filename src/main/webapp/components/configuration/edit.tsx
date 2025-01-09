@@ -10,7 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import InputLabel from '@material-ui/core/InputLabel'
 import {
   Formik,
-  FormikActions,
+  FormikHelpers as FormikActions,
   FormikProps,
   Form as FormikForm,
   Field,
@@ -125,7 +125,7 @@ const FieldRender = ({
   meta: MetatypeType
   formikBag: FormikProps<MyFormValues>
   loading: boolean
-} & FieldProps<MyFormValues>) => {
+} & FieldProps<string[], MyFormValues>) => {
   const autoFocus = location.hash.split('?focus=')[1] === meta.id
   if (meta.optionLabels.length > 0) {
     return (
@@ -172,7 +172,7 @@ const FieldRender = ({
           <Label meta={meta}>
             <FocusableCheckbox
               autoFocus={autoFocus}
-              checked={field.value}
+              checked={field.value as unknown as boolean}
               onChange={(e: any) => {
                 // @ts-ignore
                 const newVal = e.target.checked
@@ -189,7 +189,7 @@ const FieldRender = ({
       if (meta.cardinality > 0) {
         if (field.value === undefined) {
         }
-        const value = field.value as string[]
+        const value = field.value as unknown as string[]
         return (
           <div>
             <Label meta={meta} />
@@ -212,7 +212,7 @@ const FieldRender = ({
                       onChange={e => {
                         // @ts-ignore
                         const newSubVal = e.target.value
-                        const newVal = field.value.slice(0)
+                        const newVal = (field.value as unknown as string[]).slice(0)
                         newVal.splice(index, 1, newSubVal)
                         formikBag.setFieldValue(field.name, newVal)
                       }}
@@ -224,7 +224,7 @@ const FieldRender = ({
                       variant="outlined"
                       color="secondary"
                       onClick={() => {
-                        const newVal = field.value.slice(0)
+                        const newVal = (field.value as unknown as string[]).slice(0)
                         newVal.splice(index, 1)
                         formikBag.setFieldValue(field.name, newVal)
                       }}
@@ -241,7 +241,7 @@ const FieldRender = ({
               variant="outlined"
               color="primary"
               onClick={() => {
-                const newVal = field.value.slice(0)
+                const newVal = (field.value as unknown as string[]).slice(0)
                 newVal.push('')
                 formikBag.setFieldValue(field.name, newVal)
               }}
@@ -564,7 +564,7 @@ const ConfigurationEditRender = ({
                     <Field
                       key={meta.id}
                       name={meta.id.split('.').join(DOT_REPLACEMENT)}
-                      render={({ field, form }: FieldProps<MyFormValues>) => {
+                      render={({ field, form }: FieldProps<string[], MyFormValues>) => {
                         return (
                           <div>
                             <FieldRender
