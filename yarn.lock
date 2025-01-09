@@ -1211,8 +1211,9 @@
   version "1.0.0"
   resolved "git+https://github.com/connexta/eslint-config-connexta.git#3f0caece6210d25c16863d472026fbfa069521a6"
 
-"@connexta/logviewer@file:../logviewer":
+"@connexta/logviewer@git+https://github.com/connexta/logviewer.git#c55ba445e875d3aa99afc8aa9cbec0037c787fa3":
   version "0.2.0"
+  resolved "git+https://github.com/connexta/logviewer.git#c55ba445e875d3aa99afc8aa9cbec0037c787fa3"
   dependencies:
     es6-promise "3.2.1"
     isomorphic-fetch "3.0.0"
