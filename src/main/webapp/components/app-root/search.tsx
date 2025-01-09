@@ -356,7 +356,7 @@ const determineSuggestions = ({
       }
     })
   })
-  propertyMatches.forEach(propertyMatch => {
+  propertyMatches.forEach((propertyMatch) => {
     propertyPossibles.push({
       why: ({ isSelected }: { isSelected: boolean }) => {
         return (
@@ -378,8 +378,6 @@ const determineSuggestions = ({
                 <Typography
                   noWrap={false}
                   style={{
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
                     ...GENERAL_TYPOGRAPHY_STYLES,
                   }}
                 >
@@ -486,7 +484,7 @@ const determineSuggestions = ({
   const configurationMatches = configurationTypeFuse.search(
     value
   ) as FuseResponse<ConfigurationType>
-  configurationMatches.forEach(configurationMatch => {
+  configurationMatches.forEach((configurationMatch) => {
     servicePossibles.push({
       why: ({ isSelected }: { isSelected: boolean }) => {
         return (
@@ -508,8 +506,6 @@ const determineSuggestions = ({
                 <Typography
                   noWrap={false}
                   style={{
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
                     ...GENERAL_TYPOGRAPHY_STYLES,
                   }}
                 >

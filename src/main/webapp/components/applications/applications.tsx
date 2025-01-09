@@ -17,7 +17,6 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
-import { hot } from 'react-hot-loader'
 import { getDisplayName } from '../../types/App'
 import Application from '../application/application'
 import { useAppRootContext } from '../app-root/app-root.pure'
@@ -39,7 +38,7 @@ const TopLevel = () => {
   return (
     <Paper style={{ padding: '20px' }}>
       <Grid container alignItems="center" spacing={3}>
-        {applications.map(app => {
+        {applications.map((app) => {
           return (
             <Grid item key={app.name} xs={4} md={3}>
               <Link to={`/admin/applications/${encodeURIComponent(app.name)}`}>
@@ -87,12 +86,12 @@ const Applications = () => {
     <Switch>
       <Route
         path="/admin/applications/:applicationId"
-        render={routeComponentProps => {
+        render={(routeComponentProps) => {
           const decodedApplicationId = decodeURIComponent(
             routeComponentProps.match.params.applicationId
           )
           const app = applications.find(
-            app => app.name === decodedApplicationId
+            (app) => app.name === decodedApplicationId
           )
           if (app === undefined) {
             return <NoMatch {...routeComponentProps} />
@@ -109,4 +108,4 @@ const Applications = () => {
   )
 }
 
-export default hot(module)(Applications)
+export default Applications
