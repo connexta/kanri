@@ -13,6 +13,7 @@ import { COMMANDS } from '../fetch/fetch'
 import BackIcon from '@material-ui/icons/ArrowBackIos'
 
 import Button from '@material-ui/core/Button'
+import { SecurityCertificates } from '../security-certificates/security-certificates'
 
 const DYNAMIC_PLUGINS_URL =
   '/admin/jolokia/exec/org.codice.ddf.admin.application.service.ApplicationService:service=application-service/getPluginsForApplication(java.lang.String)/'
@@ -53,11 +54,23 @@ const TabContent = ({
       )
     case 'Configuration':
       return <Services app={app} />
+    case 'Certificates':
+      if (app.name === 'security-services-app') {
+        return <SecurityCertificates />
+      }
     default:
-      const srcUrl = collectionJSON.filter(tab => tab.displayName === value)[0]
-        .iframeLocation
+      const srcUrl = collectionJSON.filter(
+        (tab) => tab.displayName === value
+      )[0].iframeLocation
       return <Iframe url={srcUrl} />
   }
+}
+
+function getPluginsForApplication(app: ApplicationType) {
+  if (app.name === 'security-services-app') {
+    return ['Info', 'Configuration', 'Certificates']
+  }
+  return ['Info', 'Configuration']
 }
 
 const Application = ({ app }: Props) => {
@@ -67,16 +80,21 @@ const Application = ({ app }: Props) => {
   const [collection, setCollection] = React.useState([] as TabType[])
   React.useEffect(() => {
     COMMANDS.FETCH(DYNAMIC_PLUGINS_URL + app.name)
-      .then(response => response.json())
-      .then(data => {
-        const plugins = [
-          {
-            displayName: 'Info',
-          },
-          {
-            displayName: 'Configuration',
-          },
-        ].concat(data.value)
+      .then((response) => response.json())
+      .then((data) => {
+        const backendTabs = data.value as TabType[]
+        const tabNames = getPluginsForApplication(app)
+        const plugins = tabNames.map((name) => ({
+          displayName: name,
+        }))
+        // only add tabs that are not already known
+        backendTabs.forEach((val) => {
+          if (
+            !plugins.find((plugin) => plugin.displayName === val.displayName)
+          ) {
+            plugins.push(val)
+          }
+        })
         setCollection(plugins)
         setLoading(false)
       })
@@ -120,7 +138,7 @@ const Application = ({ app }: Props) => {
                 onChange={handleChange}
                 aria-label="simple tabs example"
               >
-                {collection.map(tab => {
+                {collection.map((tab) => {
                   return (
                     <Tab
                       key={tab.displayName}

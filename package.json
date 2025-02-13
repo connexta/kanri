@@ -29,7 +29,7 @@
     "@types/socket.io": "2.1.3",
     "@types/socket.io-client": "1.4.32",
     "@types/styled-components": "4.0.3",
-    "@connexta/ace": "git+https://github.com/connexta/ace.git#45cc73f03a3f52662e48e6070139992045753974",
+    "@connexta/ace": "git+https://github.com/connexta/ace.git#37a0052298d788aff5836551a4d578a758ea3575",
     "@connexta/eslint-config-connexta": "git+https://github.com/connexta/eslint-config-connexta.git#3f0caece6210d25c16863d472026fbfa069521a6",
     "chokidar": "3.0.2",
     "cpx": "1.5.0",
