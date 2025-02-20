@@ -1,4 +1,6 @@
 import * as React from 'react'
+import '../tailwind/tailwind.css'
+
 import { AppRootContextProvider, ExtensionType } from './app-root.pure'
 import { HashRouter as Router } from 'react-router-dom'
 

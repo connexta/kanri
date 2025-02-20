@@ -27,7 +27,7 @@ import Typography from '@material-ui/core/Typography'
 import styled from 'styled-components'
 import { COMMANDS } from '../fetch/fetch'
 import { useServicesContext } from '../services/services.pure'
-import { LinearProgress } from '@material-ui/core'
+import { FormHelperText, LinearProgress } from '@material-ui/core'
 import Tooltip from '@material-ui/core/Tooltip'
 import { CheckboxProps } from '@material-ui/core/Checkbox/Checkbox'
 import { ButtonBaseActions } from '@material-ui/core/ButtonBase/ButtonBase'
@@ -36,6 +36,7 @@ import {
   useSnackbar,
   generateDismissSnackbarAction,
 } from '../snackbar/snackbar.provider'
+import { isSourceFactoryId } from '../sources/sources'
 // todo, make a pr or open an issue with formik
 const FormikFormFix = FormikForm as React.ComponentType<FormikFormProps>
 type Props = (
@@ -46,7 +47,8 @@ type Props = (
   | {
       configuration?: undefined
       service: ConfigurationType
-    }) & {
+    }
+) & {
   onClose: () => void
 }
 
@@ -65,18 +67,15 @@ const CustomGrid = styled(Grid)`
  */
 const FocusableCheckbox = (props: CheckboxProps) => {
   const sideEffectActions = React.useRef(null as null | ButtonBaseActions)
-  React.useEffect(
-    () => {
-      if (sideEffectActions.current !== null && props.autoFocus) {
-        sideEffectActions.current.focusVisible()
-      }
-    },
-    [sideEffectActions]
-  )
+  React.useEffect(() => {
+    if (sideEffectActions.current !== null && props.autoFocus) {
+      sideEffectActions.current.focusVisible()
+    }
+  }, [sideEffectActions])
   return (
     <Checkbox
       {...props}
-      action={actions => {
+      action={(actions) => {
         sideEffectActions.current = actions
       }}
     />
@@ -161,9 +160,9 @@ const FieldRender = ({
             {...field}
             disabled={loading}
           />
-          {form.touched.firstName &&
-            form.errors.firstName &&
-            form.errors.firstName}
+          {form.touched[field.name] &&
+            form.errors[field.name] &&
+            form.errors[field.name]}
         </div>
       )
     case 11:
@@ -209,10 +208,12 @@ const FieldRender = ({
                       fullWidth
                       autoFocus={autoFocus}
                       value={subval}
-                      onChange={e => {
+                      onChange={(e) => {
                         // @ts-ignore
                         const newSubVal = e.target.value
-                        const newVal = (field.value as unknown as string[]).slice(0)
+                        const newVal = (
+                          field.value as unknown as string[]
+                        ).slice(0)
                         newVal.splice(index, 1, newSubVal)
                         formikBag.setFieldValue(field.name, newVal)
                       }}
@@ -224,7 +225,9 @@ const FieldRender = ({
                       variant="outlined"
                       color="secondary"
                       onClick={() => {
-                        const newVal = (field.value as unknown as string[]).slice(0)
+                        const newVal = (
+                          field.value as unknown as string[]
+                        ).slice(0)
                         newVal.splice(index, 1)
                         formikBag.setFieldValue(field.name, newVal)
                       }}
@@ -261,10 +264,13 @@ const FieldRender = ({
             type="text"
             {...field}
             disabled={loading}
+            error={!!(form.touched[field.name] && form.errors[field.name])}
           />
-          {form.touched.firstName &&
-            form.errors.firstName &&
-            form.errors.firstName}
+          <FormHelperText error>
+            {form.touched[field.name] &&
+              form.errors[field.name] &&
+              form.errors[field.name]}
+          </FormHelperText>
         </div>
       )
   }
@@ -280,13 +286,14 @@ export const ConfigurationEdit = ({
   const [loading, setLoading] = React.useState(false)
   if (configuration !== undefined && configuration.service !== undefined) {
     return ConfigurationEditRender({
+      configuration,
       id: configuration.service.id,
       displayName: configuration.service.name,
       service: configuration.service,
       initialValues: configuration.properties,
       loading,
       onClose,
-      onSubmit: values => {
+      onSubmit: (values) => {
         if (loading) {
           return
         }
@@ -306,7 +313,7 @@ export const ConfigurationEdit = ({
             mbean:
               'org.codice.ddf.ui.admin.api.ConfigurationAdmin:service=ui,version=2.3.0',
           },
-        }).then(response => {
+        }).then((response) => {
           if (!response.success) {
             enqueueSnackbar(`${configuration.name} update failed`, {
               variant: 'error',
@@ -343,23 +350,20 @@ export const ConfigurationEdit = ({
         service,
         loading,
         onClose,
-        initialValues: service.metatype.reduce(
-          (blob, meta) => {
-            blob[meta.id] = meta.defaultValue
-            if (meta.cardinality > 0 && blob[meta.id] === null) {
-              blob[meta.id] = []
-            }
-            if (meta.cardinality === 0 && blob[meta.id] instanceof Array) {
-              blob[meta.id] = (blob[meta.id] as any[])[0]
-            }
-            if (meta.type === 11) {
-              blob[meta.id] = blob[meta.id] === 'true'
-            }
-            return blob
-          },
-          {} as ExistingConfigurationType['properties']
-        ),
-        onSubmit: async values => {
+        initialValues: service.metatype.reduce((blob, meta) => {
+          blob[meta.id] = meta.defaultValue
+          if (meta.cardinality > 0 && blob[meta.id] === null) {
+            blob[meta.id] = []
+          }
+          if (meta.cardinality === 0 && blob[meta.id] instanceof Array) {
+            blob[meta.id] = (blob[meta.id] as any[])[0]
+          }
+          if (meta.type === 11) {
+            blob[meta.id] = blob[meta.id] === 'true'
+          }
+          return blob
+        }, {} as ExistingConfigurationType['properties']),
+        onSubmit: async (values) => {
           if (loading) {
             return
           }
@@ -428,23 +432,20 @@ export const ConfigurationEdit = ({
         service,
         loading,
         onClose,
-        initialValues: service.metatype.reduce(
-          (blob, meta) => {
-            blob[meta.id] = meta.defaultValue
-            if (meta.cardinality > 0 && blob[meta.id] === null) {
-              blob[meta.id] = []
-            }
-            if (meta.cardinality === 0 && blob[meta.id] instanceof Array) {
-              blob[meta.id] = (blob[meta.id] as any[])[0]
-            }
-            if (meta.type === 11) {
-              blob[meta.id] = blob[meta.id] === 'true'
-            }
-            return blob
-          },
-          {} as ExistingConfigurationType['properties']
-        ),
-        onSubmit: async values => {
+        initialValues: service.metatype.reduce((blob, meta) => {
+          blob[meta.id] = meta.defaultValue
+          if (meta.cardinality > 0 && blob[meta.id] === null) {
+            blob[meta.id] = []
+          }
+          if (meta.cardinality === 0 && blob[meta.id] instanceof Array) {
+            blob[meta.id] = (blob[meta.id] as any[])[0]
+          }
+          if (meta.type === 11) {
+            blob[meta.id] = blob[meta.id] === 'true'
+          }
+          return blob
+        }, {} as ExistingConfigurationType['properties']),
+        onSubmit: async (values) => {
           if (loading) {
             return
           }
@@ -495,33 +496,85 @@ export const ConfigurationEdit = ({
  */
 const DOT_REPLACEMENT = '_dot_'
 const toFormikNotation = (values: ExistingConfigurationType['properties']) => {
-  return Object.keys(values).reduce(
-    (blob, key) => {
-      const newKey = key.split('.').join(DOT_REPLACEMENT)
-      blob[newKey] = values[key]
-      return blob
-    },
-    {} as ExistingConfigurationType['properties']
-  )
+  return Object.keys(values).reduce((blob, key) => {
+    const newKey = key.split('.').join(DOT_REPLACEMENT)
+    blob[newKey] = values[key]
+    return blob
+  }, {} as ExistingConfigurationType['properties'])
 }
 
 const fromFormikNotation = (
   values: ExistingConfigurationType['properties']
 ) => {
-  return Object.keys(values).reduce(
-    (blob, key) => {
-      const newKey = key.split(DOT_REPLACEMENT).join('.')
-      blob[newKey] = values[key]
-      return blob
-    },
-    {} as ExistingConfigurationType['properties']
+  return Object.keys(values).reduce((blob, key) => {
+    const newKey = key.split(DOT_REPLACEMENT).join('.')
+    blob[newKey] = values[key]
+    return blob
+  }, {} as ExistingConfigurationType['properties'])
+}
+
+const ConfigurationContext = React.createContext<{
+  id: string
+  displayName: string
+  service: ConfigurationType
+}>({
+  id: '',
+  displayName: '',
+  service: {} as ConfigurationType,
+})
+
+async function validateSourceId({
+  value,
+  configuration: currentConfiguration,
+}: {
+  value: string
+  configuration?: ExistingConfigurationType
+}) {
+  const sources = await COMMANDS.SOURCES.ALLSOURCEINFO()
+  const existingConfigurations: ExistingConfigurationType[] = []
+  sources.forEach((source) => {
+    if (source.configurations) {
+      source.configurations.forEach((configuration) => {
+        if (configuration.id !== currentConfiguration?.id) {
+          existingConfigurations.push(configuration)
+        }
+      })
+    }
+  })
+  const idTaken = existingConfigurations.find(
+    (configuration) => configuration.properties.id === value
   )
+  if (idTaken) {
+    return 'Source id already exists, this field must be unique'
+  }
+  if (value === '') {
+    return 'The source id field is required'
+  }
+  return undefined
+}
+
+async function validateField({
+  id,
+  meta,
+  value,
+  configuration,
+}: {
+  id: string
+  meta: MetatypeType
+  value: string
+  configuration?: ExistingConfigurationType
+}) {
+  if (isSourceFactoryId(id) && meta.id === 'id') {
+    return await validateSourceId({ value, configuration })
+  }
+  return undefined
 }
 
 const ConfigurationEditRender = ({
   displayName,
   id,
   service,
+  configuration,
   initialValues,
   onSubmit,
   loading,
@@ -530,13 +583,15 @@ const ConfigurationEditRender = ({
   displayName: string
   id: string
   service: ConfigurationType
+  configuration?: ExistingConfigurationType
   initialValues: ExistingConfigurationType['properties']
   onSubmit: (values: MyFormValues, actions: FormikActions<MyFormValues>) => void
   loading: boolean
   onClose: () => void
 }) => {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   return (
-    <>
+    <ConfigurationContext.Provider value={{ id, displayName, service }}>
       <Formik
         initialValues={toFormikNotation(initialValues)}
         onSubmit={(values, actions) => {
@@ -559,12 +614,23 @@ const ConfigurationEditRender = ({
             </Grid>
             <CustomGrid item style={{ padding: '0px 10px' }}>
               <FormikFormFix>
-                {service.metatype.map(meta => {
+                {service.metatype.map((meta) => {
                   return (
                     <Field
+                      validate={async (value: string) => {
+                        return await validateField({
+                          id,
+                          meta,
+                          value,
+                          configuration,
+                        })
+                      }}
                       key={meta.id}
                       name={meta.id.split('.').join(DOT_REPLACEMENT)}
-                      render={({ field, form }: FieldProps<string[], MyFormValues>) => {
+                      render={({
+                        field,
+                        form,
+                      }: FieldProps<string[], MyFormValues>) => {
                         return (
                           <div>
                             <FieldRender
@@ -608,8 +674,27 @@ const ConfigurationEditRender = ({
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => {
-                      formikBag.submitForm()
+                    onClick={async () => {
+                      try {
+                        await formikBag.submitForm()
+                        if (!formikBag.isValid && formikBag.errors) {
+                          Object.values(formikBag.errors).forEach((error) => {
+                            enqueueSnackbar(error, {
+                              variant: 'error',
+                              action: generateDismissSnackbarAction({
+                                closeSnackbar,
+                              }),
+                            })
+                          })
+                        }
+                      } catch (err) {
+                        enqueueSnackbar('Failed to save form', {
+                          variant: 'error',
+                          action: generateDismissSnackbarAction({
+                            closeSnackbar,
+                          }),
+                        })
+                      }
                     }}
                     disabled={loading}
                     style={{ position: 'relative' }}
@@ -638,6 +723,6 @@ const ConfigurationEditRender = ({
           </Grid>
         )}
       />
-    </>
+    </ConfigurationContext.Provider>
   )
 }

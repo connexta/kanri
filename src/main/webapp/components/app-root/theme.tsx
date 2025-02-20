@@ -65,6 +65,11 @@ export const Theme = ({ children }: Props) => {
           fontSize: '1rem',
         },
       }),
+      MuiButton: {
+        root: {
+          textTransform: 'none',
+        },
+      },
     },
   })
   return (
