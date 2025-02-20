@@ -83,10 +83,6 @@ const useStyles = makeStyles((theme: Theme) =>
       },
       ...theme.mixins.toolbar,
     },
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
-    },
     branding: {
       transition: theme.transitions.create(['width'], {
         easing: theme.transitions.easing.sharp,
@@ -117,48 +113,35 @@ export const Shell = () => {
   }
 
   return (
-    <Grid
-      container
-      direction="column"
-      justify="space-between"
-      wrap="nowrap"
-      style={{ height: '100%', width: '100%', overflow: 'hidden' }}
-    >
-      <Grid item style={{ width: '100%' }}>
+    <div className="flex flex-col h-full w-full overflow-hidden">
+      <div className="w-full flex-shrink-0 flex-grow-0">
         <BannerHeader />
-      </Grid>
-      <Grid
-        item
-        style={{
-          overflow: 'hidden',
-          position: 'relative',
-          height: '100%',
-          width: '100%',
-        }}
-      >
-        <div className={classes.root} style={{ height: '100%', width: '100%' }}>
-          <AppBar
-            position="absolute"
-            className={clsx(classes.appBar, {
-              [classes.appBarShift]: open,
-            })}
-          >
-            <Toolbar style={{ height: '64px' }}>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                className={clsx(classes.menuButton, {
-                  [classes.hide]: open,
-                })}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Header />
-            </Toolbar>
-          </AppBar>
+      </div>
 
+      <div className="flex flex-col flex-grow overflow-hidden">
+        <AppBar
+          position="static"
+          className={clsx(classes.appBar, {
+            [classes.appBarShift]: open,
+          })}
+        >
+          <Toolbar style={{ height: '64px' }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, {
+                [classes.hide]: open,
+              })}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Header />
+          </Toolbar>
+        </AppBar>
+
+        <div className="flex flex-grow overflow-hidden">
           <Drawer
             variant="permanent"
             className={clsx(classes.drawer, {
@@ -170,11 +153,6 @@ export const Shell = () => {
                 [classes.drawerOpen]: open,
                 [classes.drawerClose]: !open,
               }),
-            }}
-            PaperProps={{
-              style: {
-                position: 'absolute',
-              },
             }}
             open={open}
           >
@@ -216,19 +194,16 @@ export const Shell = () => {
               </div>
             ) : null}
           </Drawer>
-          <main
-            className={classes.content}
-            style={{ overflow: 'auto', height: '100%', width: '100%' }}
-          >
-            <div className={classes.toolbar} />
 
+          <main className={` flex-grow overflow-auto`}>
             <Content />
           </main>
         </div>
-      </Grid>
-      <Grid item style={{ width: '100%' }}>
+      </div>
+
+      <div className="w-full flex-shrink-0 flex-grow-0">
         <BannerFooter />
-      </Grid>
-    </Grid>
+      </div>
+    </div>
   )
 }

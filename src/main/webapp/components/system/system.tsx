@@ -9,6 +9,7 @@ import { LogViewer } from '../log-viewer/log-viewer'
 import { useRouteContext } from '../app-root/app-root.pure'
 import { Features } from '../features'
 import { COMMANDS } from '../fetch/fetch'
+import { Paper } from '@material-ui/core'
 
 const DYNAMIC_PLUGINS_URL =
   '/admin/jolokia/exec/org.codice.ddf.admin.application.service.ApplicationService:service=application-service/getPluginsForApplication(java.lang.String)/'
@@ -76,7 +77,7 @@ export const System = () => {
     history.push(`/admin/system/${newValue}`)
   }
   return (
-    <>
+    <Paper style={{ padding: '20px' }}>
       {loading ? (
         <CircularProgress />
       ) : (
@@ -86,7 +87,7 @@ export const System = () => {
             onChange={handleChange}
             aria-label="simple tabs example"
           >
-            {collection.map(module => {
+            {collection.map((module) => {
               return (
                 <Tab
                   key={module.displayName}
@@ -100,6 +101,6 @@ export const System = () => {
           <TabContent value={value} />
         </>
       )}
-    </>
+    </Paper>
   )
 }

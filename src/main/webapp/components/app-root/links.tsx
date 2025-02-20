@@ -8,6 +8,7 @@ import InstallerIcon from '@material-ui/icons/SettingsApplications'
 import AppsIcon from '@material-ui/icons/Apps'
 import CardModeIcon from '@material-ui/icons/ViewModule'
 import SourcesIcon from '@material-ui/icons/Cloud'
+import MapLayersIcon from '@material-ui/icons/Map'
 
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -35,6 +36,7 @@ const ID_TO_ICON = {
   configurations: InfoIcon,
   setup: CardModeIcon,
   sources: SourcesIcon,
+  mapLayers: MapLayersIcon,
 } as { [key: string]: any }
 
 export const ID_TO_NAME = {
@@ -44,6 +46,7 @@ export const ID_TO_NAME = {
   configurations: 'System',
   setup: 'Wizards',
   sources: 'Sources',
+  mapLayers: 'Map Layers',
 } as { [key: string]: any }
 
 export const ID_TO_SHORT_NAME = {
@@ -53,6 +56,7 @@ export const ID_TO_SHORT_NAME = {
   configurations: 'System',
   setup: 'Wizards',
   sources: 'Sources',
+  mapLayers: 'Map Layers',
 } as { [key: string]: any }
 
 function SourcesLink({ open }: { open: boolean }) {
@@ -101,6 +105,51 @@ function SourcesLink({ open }: { open: boolean }) {
   )
 }
 
+function MapLayersLink({ open }: { open: boolean }) {
+  const classes = useStyles()
+  const Icon = ID_TO_ICON['mapLayers'] as any
+  const url = `/admin/map-layers`
+  const isCurrentUrl = location.pathname.indexOf(url) !== -1
+  return (
+    <Link to={url} key={url}>
+      <ListItem
+        button
+        selected={isCurrentUrl}
+        tabIndex={-1}
+        style={{ position: 'relative' }}
+      >
+        <ListItemIcon>
+          {Icon ? (
+            <>
+              <Icon
+                className={classes.shortName}
+                style={{
+                  transform: open ? 'none' : 'translateY(-6px)',
+                }}
+              />
+              <Typography
+                className={classes.shortName}
+                style={{
+                  opacity: open ? 0 : 1,
+                  fontSize: '.8rem',
+                  position: 'absolute',
+                  bottom: '2px',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                }}
+              >
+                {ID_TO_SHORT_NAME['mapLayers']}
+              </Typography>
+            </>
+          ) : (
+            <></>
+          )}
+        </ListItemIcon>
+        <ListItemText primary={ID_TO_NAME['mapLayers']} />
+      </ListItem>
+    </Link>
+  )
+}
 export const Links = ({ open }: { open: boolean }) => {
   const classes = useStyles()
   const { modules, extension } = useAppRootContext()
@@ -155,6 +204,7 @@ export const Links = ({ open }: { open: boolean }) => {
           )
         })}
         <SourcesLink open={open} />
+        <MapLayersLink open={open} />
         {extension &&
           extension.links &&
           extension.links.map(({ url, Icon, name, shortName }) => {

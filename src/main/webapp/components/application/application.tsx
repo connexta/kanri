@@ -15,6 +15,7 @@ import BackIcon from '@material-ui/icons/ArrowBackIos'
 import Button from '@material-ui/core/Button'
 import { SecurityCertificates } from '../security-certificates/security-certificates'
 import { SourcesPage } from '../sources/sources'
+import { MapLayersApp } from '../map-layers-app/app'
 
 const DYNAMIC_PLUGINS_URL =
   '/admin/jolokia/exec/org.codice.ddf.admin.application.service.ApplicationService:service=application-service/getPluginsForApplication(java.lang.String)/'
@@ -59,6 +60,8 @@ const TabContent = ({
       if (app.name === 'security-services-app') {
         return <SecurityCertificates />
       }
+    case 'Map Layers':
+      return <MapLayersApp />
     case 'Sources':
       return <SourcesPage />
     default:
