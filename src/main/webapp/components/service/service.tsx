@@ -18,21 +18,23 @@ import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
 import { ConfigurationType } from '../app-root/app-root.pure'
 import { Link } from 'react-router-dom'
+import { isSourceFactoryId, SourceService } from '../sources/sources'
+
 type Props = {
   service: ConfigurationType
 }
 
-const generateUrl = (displayName: string, hash: boolean) => {
+export const generateUrlForEditing = (displayName: string, hash: boolean) => {
   const firstPart = hash
-    ? location.hash.split('/Configuration')[0].substring(1)
-    : location.pathname.split('/Configuration')[0]
-  return `${firstPart}/Configuration/${encodeURIComponent(displayName)}`
+    ? location.hash.split('/Edit')[0].substring(1)
+    : location.pathname.split('/Edit')[0]
+  return `${firstPart}/Edit/${encodeURIComponent(displayName)}`
 }
 
-export const Service = ({ service }: Props) => {
+const DefaultService = ({ service }: Props) => {
   const { name, configurations } = service
 
-  const url = generateUrl(name, true)
+  const url = generateUrlForEditing(name, true)
 
   return (
     <div style={{ padding: '10px' }}>
@@ -41,7 +43,7 @@ export const Service = ({ service }: Props) => {
       </Link>
       <Divider />
       {configurations
-        ? configurations.map(configuration => {
+        ? configurations.map((configuration) => {
             return (
               <Configuration
                 key={configuration.id}
@@ -52,4 +54,12 @@ export const Service = ({ service }: Props) => {
         : null}
     </div>
   )
+}
+
+export const Service = ({ service }: Props) => {
+  if (isSourceFactoryId(service.id)) {
+    return <SourceService service={service} />
+  }
+
+  return <DefaultService service={service} />
 }

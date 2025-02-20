@@ -26,6 +26,7 @@ import Typography from '@material-ui/core/Typography'
 
 type Props = {
   app?: ApplicationType
+  fetchServices?: () => Promise<ConfigurationType[]>
 }
 
 const Header = styled.div`
@@ -42,7 +43,7 @@ const MemoServices = React.memo(
             <Typography variant="h5">Loading Configurations</Typography>
           </Header>
         ) : (
-          services.map(service => {
+          services.map((service) => {
             /**
              *  todo Look into why we have a Schematron Validation Services that's a factory and one that isn't
              */
@@ -61,12 +62,12 @@ const Subservices = () => {
   return <MemoServices services={services} />
 }
 
-export const Services = ({ app }: Props) => {
+export const Services = ({ app, fetchServices }: Props) => {
   const path = app
-    ? `/admin/applications/${app.name}/Configuration/:configurationId`
-    : `/admin/system/Configuration/:configurationId`
+    ? `/admin/applications/${app.name}/Configuration/Edit/:configurationId`
+    : `/admin/system/Configuration/Edit/:configurationId`
   return (
-    <ExtractedServicesProvider app={app}>
+    <ExtractedServicesProvider app={app} fetchServices={fetchServices}>
       <Route path={path} component={ServiceRoute} />
       <Subservices />
     </ExtractedServicesProvider>

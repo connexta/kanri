@@ -85,7 +85,9 @@ export type ExistingConfigurationType = {
   properties: {
     [key: string]: string | boolean | number | string[] | boolean[] | number[]
   }
-  // Let the child access parent info like metatype
+  operation_actions?: any[] // these appear unique to source configurations
+  report_actions?: any[] // these appear unique to source configurations
+  // Let the child access parent info like metatype (we do this in our parsing, it's not a default prop from backend)
   service?: ConfigurationType
 }
 

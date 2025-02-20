@@ -218,7 +218,7 @@ export const Shell = () => {
           </Drawer>
           <main
             className={classes.content}
-            style={{ overflow: 'auto', height: '100%' }}
+            style={{ overflow: 'auto', height: '100%', width: '100%' }}
           >
             <div className={classes.toolbar} />
 

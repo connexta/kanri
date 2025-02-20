@@ -167,6 +167,24 @@ export const URLS = {
      */
     DELETE:
       '/admin/jolokia/exec/org.codice.ddf.ui.admin.api.ConfigurationAdmin:service=ui,version=2.3.0/delete',
+    /**
+     * Add the /id on the end to disable a configuration
+     */
+    DISABLE:
+      '/admin/jolokia/exec/org.codice.ddf.ui.admin.api.ConfigurationAdmin:service=ui,version=2.3.0/disableConfiguration',
+    /**
+     * Add the /id on the end to enable a configuration
+     */
+    ENABLE:
+      '/admin/jolokia/exec/org.codice.ddf.ui.admin.api.ConfigurationAdmin:service=ui,version=2.3.0/enableConfiguration',
+  },
+  SOURCES: {
+    // fetch all sources with metatypes and configurations
+    ALLSOURCEINFO:
+      '/admin/jolokia/exec/org.codice.ddf.catalog.admin.poller.AdminPollerServiceBean:service=admin-source-poller-service/allSourceInfo/',
+    // fetch the status of a source -> put configuration.id such as /Wfs_v110_Federated_Source.131c989d-607a-4869-91fe-b0203a1e00c6 on the end
+    SOURCESTATUS:
+      '/admin/jolokia/exec/org.codice.ddf.catalog.admin.poller.AdminPollerServiceBean:service=admin-source-poller-service/sourceStatus/',
   },
 }
 
@@ -265,10 +283,82 @@ export interface CertificateResponseType {
   value: CertificateDetails[]
 }
 
+interface SourceResponseType {
+  request: {
+    mbean: string
+    type: string
+    operation: string
+  }
+  value: ConfigurationType[]
+  timestamp: number
+  status: number
+}
+
+interface SourceStatusResponseType {
+  request: {
+    arguments: [string]
+    mbean: string
+    type: string
+    operation: string
+  }
+  timestamp: number
+  status: number
+  value: boolean
+}
+
 // to handle non latin characters
 const safeBase64Encode = (str: string): string => {
   // Convert string to UTF-8 bytes, then to base64
   return btoa(unescape(encodeURIComponent(str)))
+}
+
+function parseAndTransformConfigurationTypes(data: ConfigurationType[]) {
+  data
+    .sort((a: ConfigurationType, b: ConfigurationType) => {
+      if (a.name < b.name) {
+        return -1
+      } else {
+        return 1
+      }
+    })
+    .forEach((service) => {
+      // apache felix declarative service implementation and other high level patches for convenience, also the long standing jolokia bug with serialization being borked
+      service.metatype.forEach((meta) => {
+        if (meta.optionLabels === null) {
+          meta.optionLabels = []
+        }
+        if (meta.optionValues === null) {
+          meta.optionValues = []
+        }
+        if (meta.cardinality > 0 && meta.defaultValue === null) {
+          meta.defaultValue = []
+        }
+        if (meta.cardinality === 0 && meta.defaultValue === null) {
+          meta.defaultValue = ['']
+        }
+      })
+      if (service.configurations) {
+        service.configurations.forEach((config) => {
+          config.service = service
+          service.metatype.forEach((meta) => {
+            if (
+              config.properties[meta.id] === null ||
+              config.properties[meta.id] === undefined
+            ) {
+              config.properties[meta.id] = meta.defaultValue
+            }
+            if (
+              meta.cardinality > 0 &&
+              !(config.properties[meta.id] instanceof Array)
+            ) {
+              let propval = config.properties[meta.id] as string
+              config.properties[meta.id] = [propval]
+            }
+          })
+        })
+      }
+    })
+  return data
 }
 
 export const COMMANDS = {
@@ -280,6 +370,22 @@ export const COMMANDS = {
     }
     return fetch(handleReverseProxy(url), options)
   }) as FetchProps,
+  SOURCES: {
+    ALLSOURCEINFO: (): Promise<SourceResponseType['value']> => {
+      return COMMANDS.FETCH(URLS.SOURCES.ALLSOURCEINFO)
+        .then((response) => response.json())
+        .then((data) => {
+          return parseAndTransformConfigurationTypes(data.value)
+        })
+    },
+    SOURCESTATUS: (id: string): Promise<boolean> => {
+      return COMMANDS.FETCH(`${URLS.SOURCES.SOURCESTATUS}${id}`)
+        .then((response) => response.json())
+        .then((data: SourceStatusResponseType) => {
+          return data.value
+        })
+    },
+  },
   TRUSTSTORE: {
     GET: (): Promise<TrustStoreResponseType> => {
       return COMMANDS.FETCH(URLS.TRUSTSTORE.GET)
@@ -472,52 +578,7 @@ export const COMMANDS = {
         .then(parseJolokiaJSON)
         .then((data) => {
           const servicesData = data.value as ConfigurationType[]
-          servicesData
-            .sort((a: ConfigurationType, b: ConfigurationType) => {
-              if (a.name < b.name) {
-                return -1
-              } else {
-                return 1
-              }
-            })
-            .forEach((service) => {
-              // apache felix declarative service implementation and other high level patches for convenience, also the long standing jolokia bug with serialization being borked
-              service.metatype.forEach((meta) => {
-                if (meta.optionLabels === null) {
-                  meta.optionLabels = []
-                }
-                if (meta.optionValues === null) {
-                  meta.optionValues = []
-                }
-                if (meta.cardinality > 0 && meta.defaultValue === null) {
-                  meta.defaultValue = []
-                }
-                if (meta.cardinality === 0 && meta.defaultValue === null) {
-                  meta.defaultValue = ['']
-                }
-              })
-              if (service.configurations) {
-                service.configurations.forEach((config) => {
-                  config.service = service
-                  service.metatype.forEach((meta) => {
-                    if (
-                      config.properties[meta.id] === null ||
-                      config.properties[meta.id] === undefined
-                    ) {
-                      config.properties[meta.id] = meta.defaultValue
-                    }
-                    if (
-                      meta.cardinality > 0 &&
-                      !(config.properties[meta.id] instanceof Array)
-                    ) {
-                      let propval = config.properties[meta.id] as string
-                      config.properties[meta.id] = [propval]
-                    }
-                  })
-                })
-              }
-            })
-          return servicesData
+          return parseAndTransformConfigurationTypes(servicesData)
         })
     },
   },
@@ -576,6 +637,12 @@ export const COMMANDS = {
           }
         })
     },
+    DISABLE: (id: string) => {
+      return COMMANDS.FETCH(`${URLS.CONFIGURATION.DISABLE}/${id}`)
+    },
+    ENABLE: (id: string) => {
+      return COMMANDS.FETCH(`${URLS.CONFIGURATION.ENABLE}/${id}`)
+    },
   },
   URLCERTIFICATE: {
     GET: ({ url }: { url: string }): Promise<CertificateResponseType> => {
@@ -626,9 +693,27 @@ export const COMMANDS = {
 // since we don't care about the arguments for our parsing needs
 export const parseJolokiaJSON = (text: string) => {
   try {
+    // First attempt to parse as-is
     return JSON.parse(text.toString().trim())
   } catch (e) {
-    text = text.replace(/\[L[\w.;@]*/g, '""')
-    return JSON.parse(text.toString().trim())
+    return cleanAndParseJson(text.toString().trim())
+  }
+}
+function cleanAndParseJson(jsonString: string): any {
+  try {
+    // Ensure proper escaping of special characters
+    jsonString = jsonString
+      .replace(/"wildcardChar":\s*\*/, '"wildcardChar": "*"') // Fix wildcard character
+      .replace(/"singleChar":\s*\?/, '"singleChar": "?"') // Fix single character
+      .replace(/"escapeChar":\s*\\/, '"escapeChar": "\\\\"') // Fix escape character
+
+    // Remove Java-style object references (like [Ljava.lang.String;@195f846d)
+    jsonString = jsonString.replace(/\[L[\w.;@]*/g, '""')
+
+    // Parse and return cleaned JSON
+    return JSON.parse(jsonString)
+  } catch (error) {
+    console.error('Error parsing JSON:', error)
+    return null
   }
 }

@@ -8,24 +8,49 @@ import { COMMANDS } from '../fetch/fetch'
 type Props = {
   app?: ApplicationType
   children: any
+  fetchServices?: () => Promise<ConfigurationType[]>
 }
 
-export const ExtractedServicesProvider = ({ app, children }: Props) => {
+async function defaultFetchServices({ app }: { app?: ApplicationType }) {
+  const services = await COMMANDS.SERVICES.LIST({
+    appName: app ? app.name : undefined,
+  })
+  return services
+}
+
+export const ExtractedServicesProvider = ({
+  app,
+  children,
+  fetchServices,
+}: Props) => {
+  const [loading, setLoading] = React.useState(true)
   const [services, setServices] = React.useState([] as ConfigurationType[])
-  const fetchServices = async () => {
-    const serviceData = await COMMANDS.SERVICES.LIST({
-      appName: app ? app.name : undefined,
-    })
-    setServices(serviceData)
+
+  const determinedFetchServices = async () => {
+    setLoading(true)
+    try {
+      if (fetchServices) {
+        const services = await fetchServices()
+        setServices(services)
+      } else {
+        const services = await defaultFetchServices({ app })
+        setServices(services)
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
   }
   React.useEffect(() => {
-    fetchServices()
+    determinedFetchServices()
   }, [])
   return (
     <ServicesContextProvider
       value={{
         services,
-        fetchServices,
+        fetchServices: determinedFetchServices,
+        loading,
       }}
     >
       {children}

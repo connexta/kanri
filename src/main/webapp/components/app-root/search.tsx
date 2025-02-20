@@ -472,7 +472,7 @@ const determineSuggestions = ({
         )
       },
       match: '',
-      to: `/admin/system/Configuration/${encodeURIComponent(
+      to: `/admin/system/Configuration/Edit/${encodeURIComponent(
         propertyMatch.item.parent.name
       )}?focus=${encodeURIComponent(propertyMatch.item.id)}`,
     })
@@ -551,7 +551,7 @@ const determineSuggestions = ({
         )
       },
       match: '',
-      to: `/admin/system/Configuration/${encodeURIComponent(
+      to: `/admin/system/Configuration/Edit/${encodeURIComponent(
         configurationMatch.item.name
       )}`,
     })

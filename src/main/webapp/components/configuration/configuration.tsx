@@ -14,10 +14,8 @@
  **/
 import * as React from 'react'
 import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
 import { ExistingConfigurationType } from '../app-root/app-root.pure'
 import { useServicesContext } from '../services/services.pure'
-import Typography from '@material-ui/core/Typography'
 import { Link } from 'react-router-dom'
 import CloseIcon from '@material-ui/icons/Close'
 import { COMMANDS } from '../fetch/fetch'
@@ -25,6 +23,7 @@ import {
   useSnackbar,
   generateDismissSnackbarAction,
 } from '../snackbar/snackbar.provider'
+
 const getHintName = ({
   configuration,
 }: {
@@ -41,7 +40,7 @@ const getHintName = ({
         (name, meta) => {
           if (meta.id === 'processingMechanism') {
             const index = meta.optionValues.findIndex(
-              opt => opt === currentProcessingMechanism
+              (opt) => opt === currentProcessingMechanism
             )
             return meta.optionLabels[index]
           }
@@ -59,14 +58,14 @@ const getHintName = ({
   }
 }
 
-const generateUrl = (displayName: string, hash: boolean) => {
+export const generateUrl = (displayName: string, hash: boolean) => {
   const firstPart = hash
-    ? location.hash.split('/Configuration')[0].substring(1)
-    : location.pathname.split('/Configuration')[0]
-  return `${firstPart}/Configuration/${encodeURIComponent(displayName)}`
+    ? location.hash.split('/Edit')[0].substring(1)
+    : location.pathname.split('/Edit')[0]
+  return `${firstPart}/Edit/${encodeURIComponent(displayName)}`
 }
 
-export const Configuration = ({
+export const DefaultConfigurationDisplay = ({
   configuration,
 }: {
   configuration: ExistingConfigurationType
@@ -77,30 +76,15 @@ export const Configuration = ({
   const hintName = getHintName({ configuration })
   const url = generateUrl(displayName, true)
   return (
-    <Grid
-      container
-      justify="space-between"
-      alignItems="center"
-      style={{
-        padding: '10px',
-        marginLeft: '10px',
-      }}
-      spacing={3}
-      wrap="nowrap"
-    >
-      <Grid item md={6}>
+    <div className="flex flex-row items-center gap-3 px-10 py-2.5 ml-10 flex-nowrap w-full">
+      <div className="flex-grow flex-shrink overflow-hidden">
         <Link to={url}>
-          <Button style={{ wordBreak: 'break-all' }}>
+          <Button className="break-all">
             {hintName !== null ? hintName : displayName}
           </Button>
         </Link>
-      </Grid>
-      <Grid item md={3} zeroMinWidth>
-        <Typography style={{ wordBreak: 'break-all' }}>
-          {configuration.fpid ? configuration.fpid : null}
-        </Typography>
-      </Grid>
-      <Grid item md="auto">
+      </div>
+      <div className="flex-grow-0 flex-shrink-0">
         {configuration.fpid ? (
           <Button
             fullWidth
@@ -125,7 +109,15 @@ export const Configuration = ({
             <CloseIcon />
           </Button>
         ) : null}
-      </Grid>
-    </Grid>
+      </div>
+    </div>
   )
+}
+
+export const Configuration = ({
+  configuration,
+}: {
+  configuration: ExistingConfigurationType
+}) => {
+  return <DefaultConfigurationDisplay configuration={configuration} />
 }

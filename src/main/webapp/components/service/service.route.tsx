@@ -28,7 +28,7 @@ export const ServiceRoute = ({
     return null
   }
 
-  const goBackUrl = match.url.split(`/${match.params.configurationId}`)[0]
+  const goBackUrl = match.url.split(`/Edit/${match.params.configurationId}`)[0]
   const decodedConfigurationId = decodeURIComponent(
     match.params.configurationId
   )

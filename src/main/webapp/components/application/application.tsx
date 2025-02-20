@@ -14,6 +14,7 @@ import BackIcon from '@material-ui/icons/ArrowBackIos'
 
 import Button from '@material-ui/core/Button'
 import { SecurityCertificates } from '../security-certificates/security-certificates'
+import { SourcesPage } from '../sources/sources'
 
 const DYNAMIC_PLUGINS_URL =
   '/admin/jolokia/exec/org.codice.ddf.admin.application.service.ApplicationService:service=application-service/getPluginsForApplication(java.lang.String)/'
@@ -58,6 +59,8 @@ const TabContent = ({
       if (app.name === 'security-services-app') {
         return <SecurityCertificates />
       }
+    case 'Sources':
+      return <SourcesPage />
     default:
       const srcUrl = collectionJSON.filter(
         (tab) => tab.displayName === value
@@ -110,9 +113,9 @@ const Application = ({ app }: Props) => {
     history.push(`/admin/applications/${app.name}/${newValue}`)
   }
   return (
-    <Paper style={{ padding: '20px' }}>
-      <Grid container direction="column" spacing={3}>
-        <Grid item>
+    <Paper style={{ padding: '20px', width: '100%' }}>
+      <Grid container direction="column" spacing={3} className="w-full">
+        <Grid item className="w-full">
           <Grid container alignItems="center" spacing={3}>
             <Grid item>
               <Button
@@ -128,7 +131,7 @@ const Application = ({ app }: Props) => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
+        <Grid item className="w-full">
           {loading ? (
             <CircularProgress />
           ) : (
