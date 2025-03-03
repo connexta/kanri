@@ -48,8 +48,8 @@ import { useTheme, withTheme } from '@material-ui/core/styles'
 import options from './options'
 
 import AceEditor from 'react-ace'
-import 'brace/mode/json'
-import 'brace/theme/github'
+import 'ace-builds/src-noconflict/mode-json'
+import 'ace-builds/src-noconflict/theme-github'
 
 import {
   // actions
@@ -353,7 +353,6 @@ const ProviderEditor = ({
                       .filter((msg) => msg !== undefined)[0]
                   }
                 >
-                  {/* @ts-ignore */}
                   <AceEditor
                     mode="json"
                     theme="github"

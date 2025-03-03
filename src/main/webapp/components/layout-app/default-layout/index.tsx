@@ -20,10 +20,9 @@ import Button from '@material-ui/core/Button'
 import Snackbar from '@material-ui/core/Snackbar'
 import { useTheme, withTheme, WithTheme } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
-// @ts-ignore
-import * as AceEditorNS from 'react-ace'
-import 'brace/mode/json'
-import 'brace/theme/github'
+import AceEditor from 'react-ace'
+import 'ace-builds/src-noconflict/mode-json'
+import 'ace-builds/src-noconflict/theme-github'
 import { Map } from 'immutable'
 
 import {
@@ -42,8 +41,6 @@ import {
   hasChanges,
   getMessage,
 } from './reducer'
-
-const AceEditor = AceEditorNS.default
 
 interface SpinnerProps {
   submitting?: boolean
@@ -154,7 +151,6 @@ const ConfigEditor = ({ buffer, onEdit, error }: ConfigEditorProps) => (
     </div>
     <div className="mx-4">
       <Error errorText={error}>
-        {/* @ts-ignore */}
         <AceEditor
           mode="json"
           theme="github"
