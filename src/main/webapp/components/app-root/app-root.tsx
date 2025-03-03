@@ -1,13 +1,11 @@
 import * as React from 'react'
-import { hot } from 'react-hot-loader/root'
-import { setConfig } from 'react-hot-loader'
+import '../tailwind/tailwind.css'
+
 import { AppRootContextProvider, ExtensionType } from './app-root.pure'
 import { HashRouter as Router } from 'react-router-dom'
 
 import { Shell } from './shell'
 import { Theme } from './theme'
-
-setConfig({ logLevel: 'debug' })
 
 const PLATFORM_CONFIG_URL = '/services/platform/config/ui'
 const ADMIN_CONFIG_URL = '/services/admin/config'
@@ -45,34 +43,34 @@ const AppRoot = ({ extension }: { extension?: ExtensionType }) => {
   )
   const fetchAlerts = () => {
     return COMMANDS.FETCH(ALERTS_GET_URL)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         setAlerts(data.value)
       })
   }
   const fetchModules = () => {
     return COMMANDS.FETCH(MODULES_URL)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         setModules(data.value)
       })
   }
   const fetchApplications = () => {
     return COMMANDS.FETCH(APPLICATIONS_URL)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         setApplications(data.value)
       })
   }
   React.useEffect(() => {
     COMMANDS.FETCH(PLATFORM_CONFIG_URL)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         setPlatformConfig(data)
       })
     COMMANDS.FETCH(ADMIN_CONFIG_URL)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         setAdminConfig(data)
       })
     fetchAlerts()
@@ -137,4 +135,4 @@ const AppRoot = ({ extension }: { extension?: ExtensionType }) => {
   )
 }
 
-export default hot(AppRoot)
+export default AppRoot

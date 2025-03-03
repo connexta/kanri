@@ -8,10 +8,13 @@ import { Route, Switch } from 'react-router-dom'
 import { InstanceRouteContextProvider } from './route'
 import { Iframe } from '../iframe/iframe'
 import { ID_TO_NAME } from './links'
+import { SourcesPage } from '../sources/sources'
+import { MapLayersApp } from '../map-layers-app/app'
+import { LayoutApp } from '../layout-app/app'
 
 const Wizards = () => {
   const { modules } = useAppRootContext()
-  const wizardsModule = modules.filter(module => module.id === 'setup')[0]
+  const wizardsModule = modules.filter((module) => module.id === 'setup')[0]
   if (wizardsModule === undefined) {
     return <div>Docs not yet available</div>
   }
@@ -22,7 +25,7 @@ const Wizards = () => {
 const Docs = () => {
   const { modules } = useAppRootContext()
   const docsModule = modules.filter(
-    module => module.name === 'Documentation'
+    (module) => module.name === 'Documentation'
   )[0]
   if (docsModule === undefined) {
     return <div>Docs not yet available</div>
@@ -34,9 +37,9 @@ const Docs = () => {
 const HomeMatch = () => {
   const { modules } = useAppRootContext()
   const applicationsInstalled =
-    modules.filter(module => module.name === 'Applications')[0] !== undefined
+    modules.filter((module) => module.name === 'Applications')[0] !== undefined
   const installerInstalled =
-    modules.filter(module => module.name === 'Setup')[0] !== undefined
+    modules.filter((module) => module.name === 'Setup')[0] !== undefined
   if (applicationsInstalled) {
     return <Applications />
   } else if (installerInstalled) {
@@ -66,11 +69,11 @@ export const Content = () => {
     <Switch>
       <Route
         path="/admin/:moduleId"
-        render={routeProps => {
+        render={(routeProps) => {
+          const moduleId = routeProps.match.params.moduleId
+
           const currentModule = modules.filter(
-            module =>
-              ID_TO_NAME[module.id].toLowerCase() ===
-              routeProps.match.params.moduleId
+            (module) => ID_TO_NAME[module.id].toLowerCase() === moduleId
           )[0]
           if (currentModule !== undefined) {
             switch (ID_TO_NAME[currentModule.id]) {
@@ -96,7 +99,18 @@ export const Content = () => {
                 )
               case 'Wizards':
                 return <Wizards />
+              case 'Sources':
+                return <SourcesPage />
             }
+          }
+          if (moduleId === 'sources') {
+            return <SourcesPage />
+          }
+          if (moduleId === 'map-layers') {
+            return <MapLayersApp />
+          }
+          if (moduleId === 'layout') {
+            return <LayoutApp />
           }
           return (
             (extension &&

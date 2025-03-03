@@ -9,7 +9,7 @@ type Props = {
 export const InstanceRouteContextProvider = ({ children }: Props) => {
   return (
     <Route>
-      {routeProps => {
+      {(routeProps: any) => {
         return (
           <RouteContextProvider value={{ routeProps }}>
             {children}

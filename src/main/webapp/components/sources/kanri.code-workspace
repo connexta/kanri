@@ -1,0 +1,10 @@
+{
+  "folders": [
+    {
+      "path": "../../../../.."
+    },
+    {
+      "path": "../../../../../../vuln-work/ddf-admin-ui/ui/packages/catalog-admin-module-layout"
+    }
+  ]
+}
