@@ -10,6 +10,7 @@ import { Iframe } from '../iframe/iframe'
 import { ID_TO_NAME } from './links'
 import { SourcesPage } from '../sources/sources'
 import { MapLayersApp } from '../map-layers-app/app'
+import { LayoutApp } from '../layout-app/app'
 
 const Wizards = () => {
   const { modules } = useAppRootContext()
@@ -107,6 +108,9 @@ export const Content = () => {
           }
           if (moduleId === 'map-layers') {
             return <MapLayersApp />
+          }
+          if (moduleId === 'layout') {
+            return <LayoutApp />
           }
           return (
             (extension &&

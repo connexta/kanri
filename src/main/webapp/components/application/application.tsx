@@ -16,6 +16,7 @@ import Button from '@material-ui/core/Button'
 import { SecurityCertificates } from '../security-certificates/security-certificates'
 import { SourcesPage } from '../sources/sources'
 import { MapLayersApp } from '../map-layers-app/app'
+import { LayoutApp } from '../layout-app/app'
 
 const DYNAMIC_PLUGINS_URL =
   '/admin/jolokia/exec/org.codice.ddf.admin.application.service.ApplicationService:service=application-service/getPluginsForApplication(java.lang.String)/'
@@ -64,6 +65,8 @@ const TabContent = ({
       return <MapLayersApp />
     case 'Sources':
       return <SourcesPage />
+    case 'Layout':
+      return <LayoutApp />
     default:
       const srcUrl = collectionJSON.filter(
         (tab) => tab.displayName === value

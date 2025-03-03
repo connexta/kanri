@@ -38,9 +38,15 @@ const GlobalStyles = createGlobalStyle<ThemeInterface>`
   }
 `
 
+let globalTheme = createMuiTheme({
+  palette: {
+    type: 'light',
+  },
+})
+
 export const Theme = ({ children }: Props) => {
   const { theme } = useAppRootContext()
-  const muiTheme = createMuiTheme({
+  globalTheme = createMuiTheme({
     palette: {
       type: theme,
       primary: {
@@ -74,8 +80,17 @@ export const Theme = ({ children }: Props) => {
   })
   return (
     <>
-      <GlobalStyles {...muiTheme} />
-      <ThemeProvider theme={muiTheme}>{children}</ThemeProvider>
+      <GlobalStyles {...globalTheme} />
+      <ThemeProvider theme={globalTheme}>{children}</ThemeProvider>
+    </>
+  )
+}
+
+export const DetachedRootTheme = ({ children }: Props) => {
+  return (
+    <>
+      <GlobalStyles {...globalTheme} />
+      <ThemeProvider theme={globalTheme}>{children}</ThemeProvider>
     </>
   )
 }
