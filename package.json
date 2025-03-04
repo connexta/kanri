@@ -78,7 +78,7 @@
     "iframe-resizer": "4.1.1",
     "immutable": "3.8.2",
     "lodash.throttle": "4.1.1",
-    "@connexta/logviewer": "git+https://github.com/connexta/logviewer.git#c55ba445e875d3aa99afc8aa9cbec0037c787fa3",
+    "@connexta/logviewer": "0.3.0",
     "postcss-focus-visible": "8.0.2",
     "prop-types": "15.7.2",
     "react-ace": "14.0.1",

@@ -1026,9 +1026,10 @@
   version "1.0.0"
   resolved "git+https://github.com/connexta/eslint-config-connexta.git#3f0caece6210d25c16863d472026fbfa069521a6"
 
-"@connexta/logviewer@git+https://github.com/connexta/logviewer.git#c55ba445e875d3aa99afc8aa9cbec0037c787fa3":
-  version "0.2.0"
-  resolved "git+https://github.com/connexta/logviewer.git#c55ba445e875d3aa99afc8aa9cbec0037c787fa3"
+"@connexta/logviewer@0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@connexta/logviewer/-/logviewer-0.3.0.tgz#7c451a18a4ec351365fd1e14d18ac8500617e060"
+  integrity sha512-7R7/lzuqnw5TeNOr6PBK3M2ED4h9yX/9f6UeuqL3crprcKHbiMLFj9fIo57dy7hEs96yimHb5HhJSBAG+EBLfw==
   dependencies:
     es6-promise "3.2.1"
     isomorphic-fetch "3.0.0"
