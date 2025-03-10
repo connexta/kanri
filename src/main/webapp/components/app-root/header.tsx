@@ -51,7 +51,7 @@ const NotificationsComp = ({ setOpen }: { setOpen: setType<boolean> }) => {
   const { alerts } = useAppRootContext()
   return (
     <Badge
-      badgeContent={alerts.length}
+      badgeContent={alerts?.length}
       color="secondary"
       variant="standard"
       overlap="circle"
