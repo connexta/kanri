@@ -2,7 +2,7 @@ import { exec } from "child_process";
 let compiling = false;
 let followOn = false;
 const chokidar = require("chokidar");
-const debounce = require("lodash.debounce");
+const debounce = require("lodash/debounce");
 
 const recompileTypescript = debounce(() => {
   if (compiling) {

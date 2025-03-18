@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { URLS } from '../fetch/fetch'
 import { useAppRootContext } from '../app-root/app-root.pure'
-import throttle from 'lodash.throttle'
+import throttle from 'lodash/throttle'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'

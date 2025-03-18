@@ -18,7 +18,7 @@ import {
 } from './app-root.pure'
 import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
-import _debounce from 'lodash.debounce'
+import _debounce from 'lodash/debounce'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Fuse from 'fuse.js'
 import scrollIntoView from 'scroll-into-view-if-needed'

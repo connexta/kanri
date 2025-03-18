@@ -26,6 +26,7 @@ module.exports = {
         ping: "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
         bounce: "bounce 1s infinite",
         wiggle: "wiggle 1s ease-in-out infinite",
+        slideAnimation: "slideAnimationKeyframes ease 0.25s",
       },
       keyframes: {
         wiggle: {
@@ -47,6 +48,10 @@ module.exports = {
             transform: "none",
             animationTimingFunction: "cubic-bezier(0,0,0.2,1)",
           },
+        },
+        slideAnimation: {
+          "0%": { opacity: "0", transform: "translateY(50px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
         },
       },
     },
