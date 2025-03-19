@@ -1498,11 +1498,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/iframe-resizer@3.5.7":
-  version "3.5.7"
-  resolved "https://registry.yarnpkg.com/@types/iframe-resizer/-/iframe-resizer-3.5.7.tgz#a30de6f049fe2475fe9288e783f814e8c3b627ca"
-  integrity sha512-SMDeDi0c5HdAtfgJ/UVMCllJyYLWpnnCrufl/E7BOfG2KQvRAmWTE7xK3u6xJHeOlHTpOHo3Ps7tQzsHUSyoWQ==
-
 "@types/jquery@*":
   version "3.3.36"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.3.36.tgz#a868c1c244a9f7b988d8fc56a3234f22e73c57b8"
@@ -4833,11 +4828,6 @@ ieee754@^1.1.13, ieee754@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
   integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
-
-iframe-resizer@4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/iframe-resizer/-/iframe-resizer-4.1.1.tgz#607c36edfb4547ecce8247226ef062e269a4eccc"
-  integrity sha512-+cs/M4ivpLyKYDs9AZWK0eRA1FKXut0yQr0iaEqdMKuk5yZJeF9H691q1qW1Cz5D3wHmiT+cTubWEsaSJBLUJA==
 
 ignore@^5.2.4:
   version "5.3.2"

@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
     drawer: {
       width: drawerWidth,
       flexShrink: 0,
+      flexGrow: 0,
       whiteSpace: 'nowrap',
     },
     drawerOpen: {
@@ -195,7 +196,9 @@ export const Shell = () => {
             ) : null}
           </Drawer>
 
-          <main className={` flex-grow overflow-auto`}>
+          <main
+            className={`flex-shrink flex-grow overflow-y-auto w-full h-full overflow-x-hidden`}
+          >
             <Content />
           </main>
         </div>

@@ -1,6 +1,4 @@
 import * as React from 'react'
-// @ts-ignore
-import { iframeResizer } from 'iframe-resizer'
 import { useAppRootContext } from '../app-root/app-root.pure'
 import { handleReverseProxy } from '../fetch/fetch'
 type Props = {
@@ -9,10 +7,6 @@ type Props = {
 
 export const Iframe = ({ url }: Props) => {
   const { theme } = useAppRootContext()
-
-  React.useLayoutEffect(() => {
-    iframeResizer(null, 'iframe')
-  })
   // only some iframes are brought in as relative
   const isRelativeUrl = url && url.startsWith('./')
   let fixedUrl = ''
@@ -24,8 +18,7 @@ export const Iframe = ({ url }: Props) => {
   return (
     <iframe
       src={handleReverseProxy(fixedUrl)}
-      width="100%"
-      scrolling="no"
+      className="w-full h-full"
       style={{
         border: 'none',
         filter: theme === 'dark' ? 'invert(100%) hue-rotate(180deg)' : '', //emulates dark mode for iframes
